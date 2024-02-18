@@ -1,7 +1,10 @@
 import Image from "next/image";
-import React from "react";
+import React, { useRef, useState } from "react";
 
 const Play = () => {
+  const audioRef = useRef<HTMLAudioElement>(null);
+  const [isPlaying, setIsPlaying] = useState(false);
+
   const soundInfo = {
     name: "本日の音声",
     createdDate: new Date("2024/1/1"),
@@ -12,6 +15,7 @@ const Play = () => {
     },
     url: "/sound/test.mp3",
   };
+
   return (
     <div className="p-7">
       <div>
@@ -52,8 +56,59 @@ const Play = () => {
         </svg>
       </div>
 
+      <audio
+        controls
+        ref={audioRef}
+        src={soundInfo.url}
+        className="bg-slate-50"
+      ></audio>
+
       <div className="h-20 mt-10 flex justify-center">
-        <audio controls src={soundInfo.url}></audio>
+        <button
+          className="border-4 border-emerald-400 h-16 w-16 rounded-full flex justify-center items-center"
+          onClick={() => {
+            if (isPlaying) {
+              audioRef.current?.pause();
+              setIsPlaying(false);
+            } else {
+              audioRef.current?.play();
+              setIsPlaying(true);
+            }
+          }}
+        >
+          {isPlaying ? (
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              strokeWidth={1.5}
+              stroke="currentColor"
+              className="w-10 h-10 text-emerald-400 stroke-2"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M15.75 5.25v13.5m-7.5-13.5v13.5"
+              />
+            </svg>
+          ) : (
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              strokeWidth={1.5}
+              stroke="currentColor"
+              className="w-10 h-10 text-emerald-400 stroke-2"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M5.25 5.653c0-.856.917-1.398 1.667-.986l11.54 6.347a1.125 1.125 0 0 1 0 1.972l-11.54 6.347a1.125 1.125 0 0 1-1.667-.986V5.653Z"
+              />
+            </svg>
+          )}
+        </button>
+        <input type="range" name="speed" min="0" max="100" step={1}></input>
       </div>
     </div>
   );
