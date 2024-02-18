@@ -3,7 +3,7 @@ import { secondFormat } from "@/utils/usefulFunctions";
 import Image from "next/image";
 import React, { useEffect, useRef, useState } from "react";
 
-const Play = () => {
+const PlayPage = () => {
   const audioRef = useRef<HTMLAudioElement>(null);
   const [isPlaying, setIsPlaying] = useState(false);
   const [duration, setDuration] = useState("0:00");
@@ -92,4 +92,4 @@ const Play = () => {
   );
 };
 
-export default Play;
+export default PlayPage;
