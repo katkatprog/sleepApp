@@ -28,14 +28,12 @@ const Play = () => {
   return (
     <div className="p-7">
       <div>
-        <h1 className="text-gray-300 text-2xl font-bold">{soundInfo.name}</h1>
+        <h1 className=" text-2xl font-bold">{soundInfo.name}</h1>
         <div className="flex justify-between mt-3">
-          <p className="text-gray-300">
-            {soundInfo.createdDate.toLocaleDateString()}
-          </p>
+          <p className="">{soundInfo.createdDate.toLocaleDateString()}</p>
           {soundInfo.requestedBy.userId && (
             <div className="flex">
-              <p className="text-gray-300 mr-1">
+              <p className=" mr-1">
                 Requested by {soundInfo.requestedBy.userName}
               </p>
               <Image

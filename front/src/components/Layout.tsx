@@ -2,7 +2,7 @@ import React from "react";
 
 export const Layout = ({ children }: { children: React.ReactNode }) => {
   return (
-    <div className="bg-neutral-800 h-full">
+    <div className="h-full">
       <header className="h-16 bg-neutral-800 border-gray-300 border-b flex items-center justify-center fixed w-full left-0 top-0">
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -26,7 +26,7 @@ export const Layout = ({ children }: { children: React.ReactNode }) => {
             viewBox="0 0 24 24"
             strokeWidth={1.5}
             stroke="currentColor"
-            className="w-7 h-7 text-gray-300 stroke-2"
+            className="w-7 h-7 stroke-2"
           >
             <path
               strokeLinecap="round"
@@ -38,7 +38,7 @@ export const Layout = ({ children }: { children: React.ReactNode }) => {
             xmlns="http://www.w3.org/2000/svg"
             viewBox="0 0 24 24"
             fill="currentColor"
-            className="w-7 h-7 text-gray-300 stroke-2"
+            className="w-7 h-7 stroke-2"
           >
             <path
               fillRule="evenodd"
@@ -53,7 +53,7 @@ export const Layout = ({ children }: { children: React.ReactNode }) => {
             viewBox="0 0 24 24"
             strokeWidth={1.5}
             stroke="currentColor"
-            className="w-7 h-7 text-gray-300 stroke-2"
+            className="w-7 h-7 stroke-2"
           >
             <path
               strokeLinecap="round"
