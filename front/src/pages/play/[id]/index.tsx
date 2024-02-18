@@ -1,9 +1,18 @@
+import { secondFormat } from "@/utils/usefulFunctions";
 import Image from "next/image";
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 
 const Play = () => {
   const audioRef = useRef<HTMLAudioElement>(null);
   const [isPlaying, setIsPlaying] = useState(false);
+  const [duration, setDuration] = useState("0:00");
+  const [currentTime, setCurrentTime] = useState("0:00");
+
+  // 音声の全体時間が明らかになったとき、ステートにセットする
+  useEffect(() => {
+    const strDuration = secondFormat(audioRef.current?.duration || 0);
+    setDuration(strDuration);
+  }, [audioRef.current?.duration]);
 
   const soundInfo = {
     name: "本日の音声",
@@ -57,58 +66,67 @@ const Play = () => {
       </div>
 
       <audio
-        controls
         ref={audioRef}
         src={soundInfo.url}
-        className="bg-slate-50"
+        onTimeUpdate={() => {
+          const strCurrentTime = secondFormat(
+            audioRef.current?.currentTime || 0,
+          );
+          setCurrentTime(strCurrentTime);
+        }}
+        onEnded={() => {
+          setIsPlaying(false);
+        }}
       ></audio>
 
-      <div className="h-20 mt-10 flex justify-center">
-        <button
-          className="border-4 border-emerald-400 h-16 w-16 rounded-full flex justify-center items-center"
-          onClick={() => {
-            if (isPlaying) {
-              audioRef.current?.pause();
-              setIsPlaying(false);
-            } else {
-              audioRef.current?.play();
-              setIsPlaying(true);
-            }
-          }}
-        >
-          {isPlaying ? (
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              strokeWidth={1.5}
-              stroke="currentColor"
-              className="w-10 h-10 text-emerald-400 stroke-2"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M15.75 5.25v13.5m-7.5-13.5v13.5"
-              />
-            </svg>
-          ) : (
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              strokeWidth={1.5}
-              stroke="currentColor"
-              className="w-10 h-10 text-emerald-400 stroke-2"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M5.25 5.653c0-.856.917-1.398 1.667-.986l11.54 6.347a1.125 1.125 0 0 1 0 1.972l-11.54 6.347a1.125 1.125 0 0 1-1.667-.986V5.653Z"
-              />
-            </svg>
-          )}
-        </button>
-        <input type="range" name="speed" min="0" max="100" step={1}></input>
+      <div className="flex justify-center">
+        <div className="h-20 mt-10 flex justify-between items-center w-60">
+          <button
+            className="border-4 border-emerald-400 h-16 w-16 rounded-full flex justify-center items-center"
+            onClick={() => {
+              if (isPlaying) {
+                audioRef.current?.pause();
+                setIsPlaying(false);
+              } else {
+                audioRef.current?.play();
+                setIsPlaying(true);
+              }
+            }}
+          >
+            {isPlaying ? (
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                strokeWidth={1.5}
+                stroke="currentColor"
+                className="w-10 h-10 text-emerald-400 stroke-2"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M15.75 5.25v13.5m-7.5-13.5v13.5"
+                />
+              </svg>
+            ) : (
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                strokeWidth={1.5}
+                stroke="currentColor"
+                className="w-10 h-10 text-emerald-400 stroke-2"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M5.25 5.653c0-.856.917-1.398 1.667-.986l11.54 6.347a1.125 1.125 0 0 1 0 1.972l-11.54 6.347a1.125 1.125 0 0 1-1.667-.986V5.653Z"
+                />
+              </svg>
+            )}
+          </button>
+          <p className="text-emerald-400 ml-6">{`${currentTime} / ${duration}`}</p>
+        </div>
       </div>
     </div>
   );
