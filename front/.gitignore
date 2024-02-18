@@ -34,3 +34,9 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# 開発時に使う音声がおいてあるフォルダ
+public/sound
+
+# 開発時に使う画像がおいてあるフォルダ
+public/image
