@@ -1,8 +1,9 @@
+import { PlayButton } from "@/components/PlayButton";
 import { secondFormat } from "@/utils/usefulFunctions";
 import Image from "next/image";
 import React, { useEffect, useRef, useState } from "react";
 
-const Play = () => {
+const PlayPage = () => {
   const audioRef = useRef<HTMLAudioElement>(null);
   const [isPlaying, setIsPlaying] = useState(false);
   const [duration, setDuration] = useState("0:00");
@@ -28,14 +29,12 @@ const Play = () => {
   return (
     <div className="p-7">
       <div>
-        <h1 className="text-gray-300 text-2xl font-bold">{soundInfo.name}</h1>
+        <h1 className=" text-2xl font-bold">{soundInfo.name}</h1>
         <div className="flex justify-between mt-3">
-          <p className="text-gray-300">
-            {soundInfo.createdDate.toLocaleDateString()}
-          </p>
+          <p className="">{soundInfo.createdDate.toLocaleDateString()}</p>
           {soundInfo.requestedBy.userId && (
             <div className="flex">
-              <p className="text-gray-300 mr-1">
+              <p className=" mr-1">
                 Requested by {soundInfo.requestedBy.userName}
               </p>
               <Image
@@ -81,50 +80,11 @@ const Play = () => {
 
       <div className="flex justify-center">
         <div className="h-20 mt-10 flex justify-between items-center w-60">
-          <button
-            className="border-4 border-emerald-400 h-16 w-16 rounded-full flex justify-center items-center"
-            onClick={() => {
-              if (isPlaying) {
-                audioRef.current?.pause();
-                setIsPlaying(false);
-              } else {
-                audioRef.current?.play();
-                setIsPlaying(true);
-              }
-            }}
-          >
-            {isPlaying ? (
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                strokeWidth={1.5}
-                stroke="currentColor"
-                className="w-10 h-10 text-emerald-400 stroke-2"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M15.75 5.25v13.5m-7.5-13.5v13.5"
-                />
-              </svg>
-            ) : (
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                strokeWidth={1.5}
-                stroke="currentColor"
-                className="w-10 h-10 text-emerald-400 stroke-2"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M5.25 5.653c0-.856.917-1.398 1.667-.986l11.54 6.347a1.125 1.125 0 0 1 0 1.972l-11.54 6.347a1.125 1.125 0 0 1-1.667-.986V5.653Z"
-                />
-              </svg>
-            )}
-          </button>
+          <PlayButton
+            audioRef={audioRef}
+            isPlaying={isPlaying}
+            setIsPlaying={setIsPlaying}
+          ></PlayButton>
           <p className="text-emerald-400 ml-6">{`${currentTime} / ${duration}`}</p>
         </div>
       </div>
@@ -132,4 +92,4 @@ const Play = () => {
   );
 };
 
-export default Play;
+export default PlayPage;
