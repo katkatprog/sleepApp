@@ -1,9 +1,10 @@
 import { PlayButton } from "@/components/PlayButton";
 import { secondFormat } from "@/utils/usefulFunctions";
+import { GetServerSideProps } from "next";
 import Image from "next/image";
 import React, { useEffect, useRef, useState } from "react";
 
-const PlayPage = () => {
+const PlayPage = ({ soundInfo }: SoundInfoProps) => {
   const audioRef = useRef<HTMLAudioElement>(null);
   const [isPlaying, setIsPlaying] = useState(false);
   const [duration, setDuration] = useState("0:00");
@@ -15,24 +16,13 @@ const PlayPage = () => {
     setDuration(strDuration);
   }, [audioRef.current?.duration]);
 
-  const soundInfo = {
-    name: "本日の音声",
-    createdDate: new Date("2024/1/1"),
-    requestedBy: {
-      userId: 1,
-      userName: "Taro",
-      image: "/image/1.jpg",
-    },
-    url: process.env.AUDIO_URL,
-  };
-
   return (
     <div className="p-7">
       <div>
         <h1 className=" text-2xl font-bold">{soundInfo.name}</h1>
         <div className="flex justify-between mt-3">
-          <p className="">{soundInfo.createdDate.toLocaleDateString()}</p>
-          {soundInfo.requestedBy.userId && (
+          <p className="">{soundInfo.createdDate}</p>
+          {soundInfo.requestedBy && (
             <div className="flex">
               <p className=" mr-1">
                 Requested by {soundInfo.requestedBy.userName}
@@ -91,5 +81,45 @@ const PlayPage = () => {
     </div>
   );
 };
-
 export default PlayPage;
+
+export const getServerSideProps: GetServerSideProps<SoundInfoProps> = async (
+  context,
+) => {
+  const soundInfo = {
+    name: "本日の音声",
+    createdDate: new Date("2024/1/1"),
+    requestedBy: {
+      userId: 1,
+      userName: "Taro",
+      image: "/image/1.jpg",
+    },
+    url: process.env.AUDIO_URL,
+  };
+
+  return {
+    props: {
+      soundInfo: {
+        ...soundInfo,
+        createdDate: soundInfo.createdDate.toLocaleDateString(),
+      },
+    },
+  };
+};
+
+interface SoundInfo {
+  name: string;
+  createdDate: string;
+  requestedBy:
+    | {
+        userId: number;
+        userName: string;
+        image: string;
+      }
+    | undefined;
+  url: string | undefined;
+}
+
+interface SoundInfoProps {
+  soundInfo: SoundInfo;
+}
