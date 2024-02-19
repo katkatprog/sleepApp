@@ -23,7 +23,7 @@ const PlayPage = () => {
       userName: "Taro",
       image: "/image/1.jpg",
     },
-    url: "/sound/test.mp3",
+    url: process.env.AUDIO_URL,
   };
 
   return (
