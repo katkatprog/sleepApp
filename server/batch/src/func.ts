@@ -3,6 +3,8 @@ import {
   StartSpeechSynthesisTaskCommand,
 } from "@aws-sdk/client-polly";
 
+import { PrismaClient } from "@prisma/client";
+
 // 単語配列を、Amazon Pollyに読み上げを依頼するためのフォーマットであるSSMLに変換
 export const wordsToSSML = (words: string[]) => {
   let ssml = "<speak>";
@@ -29,4 +31,15 @@ export const generateAudio = async (ssml: string) => {
 
   const result = await client.send(command);
   return result.SynthesisTask?.OutputUri;
+};
+
+// 本日の音声情報をDBに保存する
+export const saveTodaysSoundInfo = async (url: string) => {
+  const prisma = new PrismaClient();
+  await prisma.soundInfo.create({
+    data: {
+      name: "本日の音声",
+      url,
+    },
+  });
 };
