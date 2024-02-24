@@ -1,0 +1,29 @@
+{
+  "name": "batch",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "scripts": {
+    "build": "tsc",
+    "start": "node --env-file=.env dist/index.js",
+    "format": "prettier --write ./src/**/*.ts",
+    "lint": "eslint ./src/**/*.ts",
+    "ci": "yarn lint && yarn format"
+  },
+  "devDependencies": {
+    "@types/node": "^20.11.19",
+    "@typescript-eslint/eslint-plugin": "^7.0.2",
+    "@typescript-eslint/parser": "^7.0.2",
+    "eslint": "^8.56.0",
+    "eslint-config-prettier": "^9.1.0",
+    "prettier": "^3.2.5",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.3.3"
+  },
+  "dependencies": {
+    "@aws-sdk/client-polly": "^3.515.0",
+    "@prisma/client": "^5.10.1",
+    "openai": "^4.0.0",
+    "prisma": "^5.10.1"
+  }
+}
