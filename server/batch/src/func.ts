@@ -10,7 +10,7 @@ import OpenAI from "openai";
 export const generateDailyWordsList = async () => {
   // ChatGPT連携準備
   const openai = new OpenAI({
-    apiKey: process.env.OPENAI_API_KEY, // This is the default and can be omitted
+    apiKey: process.env.OPENAI_API_KEY,
   });
   // ChatGPTに単語リスト作成依頼
   const chatCompletion = await openai.chat.completions.create({
