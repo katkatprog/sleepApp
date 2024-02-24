@@ -4,6 +4,43 @@ import {
 } from "@aws-sdk/client-polly";
 
 import { PrismaClient } from "@prisma/client";
+import OpenAI from "openai";
+
+// [日次]単語リストを作成する
+export const generateDailyWordsList = async () => {
+  // ChatGPT連携準備
+  const openai = new OpenAI({
+    apiKey: process.env.OPENAI_API_KEY, // This is the default and can be omitted
+  });
+  // ChatGPTに単語リスト作成依頼
+  const chatCompletion = await openai.chat.completions.create({
+    messages: [
+      {
+        role: "system",
+        content: "日本語で返答してください。",
+      },
+      {
+        role: "user",
+        content:
+          "100個の名詞をJSONの配列形式で表示してください。※ただし重複させてはいけません。※改行なしで表示してください。",
+      },
+    ],
+    model: "gpt-3.5-turbo",
+  });
+  // 返答
+  const resContent = chatCompletion.choices[0].message.content;
+  if (!resContent) {
+    throw new Error("GPTからの返答の文字列がありません");
+  }
+  // 返答(文字列)から配列部分を抜き出し、それをJavaScriptの配列に変換
+  const indexOfStartArr = resContent.indexOf("[");
+  const indexOfEndArr = resContent.indexOf("]");
+  const wordsList: string[] = JSON.parse(
+    resContent.substring(indexOfStartArr, indexOfEndArr + 1),
+  );
+
+  return wordsList;
+};
 
 // 単語配列を、Amazon Pollyに読み上げを依頼するためのフォーマットであるSSMLに変換
 export const wordsToSSML = (words: string[]) => {
