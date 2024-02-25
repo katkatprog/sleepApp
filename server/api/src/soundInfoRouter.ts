@@ -20,3 +20,12 @@ soundInfoRouter.get("/:id", async (req, res) => {
     return res.status(500).send("Something went wrong...");
   }
 });
+
+soundInfoRouter.get("/", async (req, res) => {
+  try {
+    const result = await prisma.soundInfo.findMany();
+    return res.send(result);
+  } catch (error) {
+    return res.status(500).send("Something went wrong...");
+  }
+});
