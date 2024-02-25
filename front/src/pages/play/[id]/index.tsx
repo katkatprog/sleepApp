@@ -3,6 +3,7 @@ import { secondFormat } from "@/utils/usefulFunctions";
 import { GetServerSideProps } from "next";
 import Image from "next/image";
 import React, { useEffect, useRef, useState } from "react";
+import { SoundInfo } from "@prisma/client";
 
 const PlayPage = ({ soundInfo }: SoundInfoProps) => {
   const audioRef = useRef<HTMLAudioElement>(null);
@@ -21,7 +22,9 @@ const PlayPage = ({ soundInfo }: SoundInfoProps) => {
       <div>
         <h1 className=" text-2xl font-bold">{soundInfo.name}</h1>
         <div className="flex justify-between mt-3">
-          <p className="">{soundInfo.createdDate}</p>
+          <p className="">
+            {new Date(soundInfo.createdAt).toLocaleDateString()}
+          </p>
           {soundInfo.requestedBy && (
             <div className="flex">
               <p className=" mr-1">
@@ -86,40 +89,38 @@ export default PlayPage;
 export const getServerSideProps: GetServerSideProps<SoundInfoProps> = async (
   context,
 ) => {
-  const soundInfo = {
-    name: "本日の音声",
-    createdDate: new Date("2024/1/1"),
-    requestedBy: {
-      userId: 1,
-      userName: "Taro",
-      image: "/image/1.jpg",
-    },
-    url: process.env.AUDIO_URL,
-  };
+  // APIから音声情報を取得
+  const response = await fetch(
+    `${process.env.API_URL}/sound-info/${context.params?.id}`,
+  );
+  const soundInfo: SoundInfo = await response.json();
 
   return {
     props: {
       soundInfo: {
         ...soundInfo,
-        createdDate: soundInfo.createdDate.toLocaleDateString(),
+        requestedBy: {
+          userId: 1,
+          userName: "Taro",
+          image: "/image/1.jpg",
+        },
       },
     },
   };
 };
 
-interface SoundInfo {
-  name: string;
-  createdDate: string;
-  requestedBy:
-    | {
-        userId: number;
-        userName: string;
-        image: string;
-      }
-    | undefined;
-  url: string | undefined;
-}
-
 interface SoundInfoProps {
-  soundInfo: SoundInfo;
+  soundInfo: {
+    name: string;
+    createdAt: Date;
+    requestedBy:
+      | {
+          userId: number;
+          userName: string;
+          image: string;
+        }
+      | undefined;
+    url: string | undefined;
+    isMaleVoice: boolean | null;
+  };
 }
