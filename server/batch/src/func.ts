@@ -3,7 +3,8 @@ import {
   StartSpeechSynthesisTaskCommand,
 } from "@aws-sdk/client-polly";
 
-import { PrismaClient } from "@prisma/client";
+import { Prisma, PrismaClient } from "@prisma/client";
+import { DefaultArgs } from "@prisma/client/runtime/library";
 import OpenAI from "openai";
 
 // [日次]単語リストを作成する
@@ -71,8 +72,10 @@ export const generateAudio = async (ssml: string) => {
 };
 
 // 本日の音声情報をDBに保存する
-export const saveTodaysSoundInfo = async (url: string) => {
-  const prisma = new PrismaClient();
+export const saveTodaysSoundInfo = async (
+  url: string,
+  prisma: PrismaClient<Prisma.PrismaClientOptions, never, DefaultArgs>,
+) => {
   await prisma.soundInfo.create({
     data: {
       name: "本日の音声",
