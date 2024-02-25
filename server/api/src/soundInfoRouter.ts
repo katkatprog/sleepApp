@@ -3,6 +3,7 @@ import express from "express";
 const prisma = new PrismaClient();
 export const soundInfoRouter = express.Router();
 
+// 音声情報取得(個別)
 soundInfoRouter.get("/:id", async (req, res) => {
   const numParam = Number(req.params.id);
   if (isNaN(numParam)) {
@@ -21,9 +22,18 @@ soundInfoRouter.get("/:id", async (req, res) => {
   }
 });
 
+// 音声情報取得(一覧)
 soundInfoRouter.get("/", async (req, res) => {
   try {
-    const result = await prisma.soundInfo.findMany();
+    // url以外を取得
+    const result = await prisma.soundInfo.findMany({
+      select: {
+        id: true,
+        name: true,
+        createdAt: true,
+        isMaleVoice: true,
+      },
+    });
     return res.send(result);
   } catch (error) {
     return res.status(500).send("Something went wrong...");
