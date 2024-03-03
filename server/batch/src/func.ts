@@ -6,6 +6,7 @@ import {
 import { Prisma, PrismaClient } from "@prisma/client";
 import { DefaultArgs } from "@prisma/client/runtime/library";
 import OpenAI from "openai";
+import "dotenv/config";
 
 // [日次]単語リストを作成する
 export const generateDailyWordsList = async () => {
