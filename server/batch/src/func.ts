@@ -17,13 +17,9 @@ export const generateDailyWordsList = async () => {
   const chatCompletion = await openai.chat.completions.create({
     messages: [
       {
-        role: "system",
-        content: "日本語で返答してください。",
-      },
-      {
         role: "user",
         content:
-          "100個の名詞をJSONの配列形式で表示してください。※ただし重複させてはいけません。※改行なしで表示してください。",
+          "Please pickup 200 random nouns.\n※Show them in Japanese\n※Show them using array format(JSON) with no indentation.\n※Avoid duplicates as far as possible.",
       },
     ],
     model: "gpt-3.5-turbo",
