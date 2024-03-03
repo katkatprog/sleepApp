@@ -3,8 +3,10 @@ import {
   StartSpeechSynthesisTaskCommand,
 } from "@aws-sdk/client-polly";
 
-import { PrismaClient } from "@prisma/client";
+import { Prisma, PrismaClient } from "@prisma/client";
+import { DefaultArgs } from "@prisma/client/runtime/library";
 import OpenAI from "openai";
+import "dotenv/config";
 
 // [日次]単語リストを作成する
 export const generateDailyWordsList = async () => {
@@ -16,13 +18,9 @@ export const generateDailyWordsList = async () => {
   const chatCompletion = await openai.chat.completions.create({
     messages: [
       {
-        role: "system",
-        content: "日本語で返答してください。",
-      },
-      {
         role: "user",
         content:
-          "100個の名詞をJSONの配列形式で表示してください。※ただし重複させてはいけません。※改行なしで表示してください。",
+          "Please pickup 200 random nouns.\n※Show them in Japanese\n※Show them using array format(JSON) with no indentation.\n※Avoid duplicates as far as possible.",
       },
     ],
     model: "gpt-3.5-turbo",
@@ -71,8 +69,10 @@ export const generateAudio = async (ssml: string) => {
 };
 
 // 本日の音声情報をDBに保存する
-export const saveTodaysSoundInfo = async (url: string) => {
-  const prisma = new PrismaClient();
+export const saveTodaysSoundInfo = async (
+  url: string,
+  prisma: PrismaClient<Prisma.PrismaClientOptions, never, DefaultArgs>,
+) => {
   await prisma.soundInfo.create({
     data: {
       name: "本日の音声",

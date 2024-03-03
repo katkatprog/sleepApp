@@ -4,8 +4,7 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
-    "build": "tsc",
-    "start": "node --env-file=.env dist/index.js",
+    "start": "ts-node src/index.ts",
     "format": "prettier --write ./src/**/*.ts",
     "lint": "eslint ./src/**/*.ts",
     "ci": "yarn lint && yarn format"
@@ -23,6 +22,7 @@
   "dependencies": {
     "@aws-sdk/client-polly": "^3.515.0",
     "@prisma/client": "^5.10.1",
+    "dotenv": "^16.4.5",
     "openai": "^4.0.0",
     "prisma": "^5.10.1"
   }
