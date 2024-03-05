@@ -1,6 +1,36 @@
 version: "3.8"
 
 services:
+  api:
+    build:
+      context: ./api
+    tty: true
+    stdin_open: true
+    volumes:
+      - ..:/workspace
+      - api_store:/workspace/server/api/node_modules
+    command: >
+      sh -c 
+        "tail -f /dev/null"
+    ports:
+      - "8080:8080"
+    depends_on:
+      - db
+
+  batch:
+    build:
+      context: ./batch
+    tty: true
+    stdin_open: true
+    volumes:
+      - ..:/workspace
+      - batch_store:/workspace/server/batch/node_modules
+    command: >
+      sh -c 
+        "tail -f /dev/null"
+    depends_on:
+      - db
+
   db:
     image: postgres:16-alpine
     restart: always
@@ -16,3 +46,5 @@ services:
 
 volumes:
   db_store:
+  api_store:
+  batch_store:
