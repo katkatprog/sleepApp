@@ -11,7 +11,7 @@ services:
       - api_store:/workspace/server/api/node_modules
     command: >
       sh -c 
-        "tail -f /dev/null"
+        "yarn && yarn dev"
     ports:
       - "8080:8080"
     depends_on:
@@ -27,7 +27,7 @@ services:
       - batch_store:/workspace/server/batch/node_modules
     command: >
       sh -c 
-        "tail -f /dev/null"
+        "yarn && tail -f /dev/null"
     depends_on:
       - db
 
