@@ -7,6 +7,6 @@ app.use(express.json());
 
 app.use("/sound-info", soundInfoRouter);
 
-app.listen(process.env.PORT || 3001, () => {
-  console.log(`Server started at ${process.env.PORT} port!`);
+app.listen(8080, () => {
+  console.log(`API Server started...`);
 });
