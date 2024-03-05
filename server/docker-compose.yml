@@ -12,6 +12,8 @@ services:
     command: >
       sh -c 
         "tail -f /dev/null"
+    ports:
+      - "5501:5500"
     depends_on:
       - db
 
