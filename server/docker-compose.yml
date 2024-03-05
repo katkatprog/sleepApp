@@ -1,6 +1,22 @@
 version: "3.8"
 
 services:
+  api:
+    build:
+      context: ./api
+    tty: true
+    stdin_open: true
+    volumes:
+      - ..:/workspace
+      - api_store:/workspace/server/api/node_modules
+    command: >
+      sh -c 
+        "tail -f /dev/null"
+    ports:
+      - "3001:3001"
+    depends_on:
+      - db
+
   batch:
     build:
       context: ./batch
@@ -12,8 +28,6 @@ services:
     command: >
       sh -c 
         "tail -f /dev/null"
-    ports:
-      - "5501:5500"
     depends_on:
       - db
 
@@ -32,4 +46,5 @@ services:
 
 volumes:
   db_store:
+  api_store:
   batch_store:
