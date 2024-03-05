@@ -53,7 +53,21 @@ export const wordsToSSML = (words: string[]) => {
 
 // SSMLをPollyに送信し、音声ファイルの作成 & S3への格納を行う
 export const generateAudio = async (ssml: string) => {
-  const client = new PollyClient({ region: "ap-northeast-1" });
+  // awsアクセスキー
+  const accessKeyId = process.env.AWS_ACCESS_KEY_ID 
+  const secretAccessKey = process.env.AWS_SECRET_ACCESS_KEY
+  // アクセスキーが空欄ならエラーにする
+  if(!accessKeyId || !secretAccessKey){
+    throw new Error("アクセスキーが空欄");
+  }
+  
+  const client = new PollyClient({
+    region: "ap-northeast-1",
+    credentials: {
+      accessKeyId,
+      secretAccessKey,
+    },
+  });
   const command = new StartSpeechSynthesisTaskCommand({
     Engine: "standard",
     LanguageCode: "ja-JP",
