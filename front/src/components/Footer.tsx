@@ -12,7 +12,7 @@ export const Footer = () => {
             viewBox="0 0 24 24"
             strokeWidth={1.5}
             stroke="currentColor"
-            className="w-7 h-7 stroke-2"
+            className="w-9 h-9 p-1 rounded-full stroke-2 hover:bg-neutral-700 transition"
           >
             <path
               strokeLinecap="round"
@@ -25,7 +25,7 @@ export const Footer = () => {
           xmlns="http://www.w3.org/2000/svg"
           viewBox="0 0 24 24"
           fill="currentColor"
-          className="w-7 h-7 stroke-2"
+          className="w-9 h-9 p-1 rounded-full stroke-2 hover:bg-neutral-700 transition"
         >
           <path
             fillRule="evenodd"
@@ -40,7 +40,7 @@ export const Footer = () => {
           viewBox="0 0 24 24"
           strokeWidth={1.5}
           stroke="currentColor"
-          className="w-7 h-7 stroke-2"
+          className="w-9 h-9 p-1 rounded-full stroke-2 hover:bg-neutral-700 transition"
         >
           <path
             strokeLinecap="round"
