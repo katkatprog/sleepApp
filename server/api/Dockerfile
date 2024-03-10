@@ -1,4 +1,14 @@
 FROM node:20-alpine
-WORKDIR "/workspace/server/api"
+
+# ----------本番用設定(start)-----------
+WORKDIR /root/api
+COPY . .
+# ----------本番用設定(end)-------------
+
 RUN apk update && apk upgrade
 RUN apk add vim git
+
+# ----------本番用設定(start)-----------
+RUN yarn
+CMD ["yarn", "start"]
+# ----------本番用設定(end)-------------
