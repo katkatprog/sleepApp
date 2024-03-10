@@ -11,7 +11,7 @@ const HomePage = () => {
           </h3>
           <h3 className="text-lg font-bold">昨日と違う入眠を...</h3>
           <Link href={"/explore"}>
-            <button className="mt-6 bg-emerald-600 hover:bg-emerald-400 font-bold px-12 py-4 rounded-md">
+            <button className="mt-6 bg-emerald-600 hover:bg-emerald-500 font-bold px-12 py-4 rounded-md">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
@@ -60,7 +60,7 @@ const HomePage = () => {
         </h3>
 
         <div className="flex items-center justify-center">
-          <button className="mt-6 bg-emerald-600 hover:bg-emerald-400 font-bold px-12 py-4 rounded-md">
+          <button className="mt-6 bg-emerald-600 hover:bg-emerald-500 font-bold px-12 py-4 rounded-md">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
