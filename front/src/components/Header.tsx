@@ -9,7 +9,7 @@ export const Header = () => {
           xmlns="http://www.w3.org/2000/svg"
           viewBox="0 0 24 24"
           fill="currentColor"
-          className="w-10 h-10 text-emerald-400"
+          className="w-14 h-14 p-1 text-emerald-400 hover:bg-neutral-700 rounded-full transition"
         >
           <path
             fillRule="evenodd"

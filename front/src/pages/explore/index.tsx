@@ -7,7 +7,7 @@ const ExplorePage = ({ soundsList }: SoundsListProps) => {
     <>
       {soundsList.map((sound) => (
         <Link href={`/play/${sound.id}`} key={sound.id}>
-          <div className="h-20 mx-4 border-b flex justify-between border-neutral-700">
+          <div className="h-20 px-4 border-b flex justify-between border-neutral-700 hover:bg-neutral-700 transition">
             <h1 className="font-bold mt-4">{sound.name}</h1>
             <div className="mt-2">
               {sound.isMaleVoice !== null && (
