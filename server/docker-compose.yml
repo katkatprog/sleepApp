@@ -4,6 +4,7 @@ services:
   api:
     build:
       context: ./api
+      dockerfile: Dockerfile.dev
     tty: true
     stdin_open: true
     volumes:
@@ -20,6 +21,7 @@ services:
   batch:
     build:
       context: ./batch
+      dockerfile: Dockerfile.dev
     tty: true
     stdin_open: true
     volumes:
