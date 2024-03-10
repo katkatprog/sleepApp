@@ -18,6 +18,8 @@ soundInfoRouter.get("/:id", async (req, res) => {
     }
     return res.send(result);
   } catch (error) {
+    console.log("エラー発生");
+    console.log(error);
     return res.status(500).send("Something went wrong...");
   }
 });
@@ -36,6 +38,8 @@ soundInfoRouter.get("/", async (req, res) => {
     });
     return res.send(result);
   } catch (error) {
+    console.log("エラー発生");
+    console.log(error);
     return res.status(500).send("Something went wrong...");
   }
 });
