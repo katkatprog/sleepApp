@@ -1,3 +1,5 @@
+import { LoginIcon } from "@/components/icons/LoginIcon";
+import { SearchIcon } from "@/components/icons/SearchIcon";
 import Link from "next/link";
 
 const HomePage = () => {
@@ -12,20 +14,7 @@ const HomePage = () => {
           <h3 className="text-lg font-bold">今日も快適な睡眠を...</h3>
           <Link href={"/explore"}>
             <button className="mt-6 bg-emerald-600 hover:bg-emerald-500 font-bold px-12 py-4 rounded-md transition">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                strokeWidth={1.5}
-                stroke="currentColor"
-                className="w-7 h-7 stroke-2 inline mr-2"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z"
-                />
-              </svg>
+              <SearchIcon propClassName="w-7 h-7 stroke-2 inline mr-2"></SearchIcon>
               音声を探す
             </button>
           </Link>
@@ -61,20 +50,7 @@ const HomePage = () => {
 
         <div className="flex items-center justify-center">
           <button className="mt-6 bg-emerald-600 hover:bg-emerald-500 font-bold px-12 py-4 rounded-md transition">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              strokeWidth={1.5}
-              stroke="currentColor"
-              className="w-7 h-7 stroke-2 inline-block mr-2"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M15.75 9V5.25A2.25 2.25 0 0 0 13.5 3h-6a2.25 2.25 0 0 0-2.25 2.25v13.5A2.25 2.25 0 0 0 7.5 21h6a2.25 2.25 0 0 0 2.25-2.25V15M12 9l-3 3m0 0 3 3m-3-3h12.75"
-              />
-            </svg>
+            <LoginIcon propClassName="w-7 h-7 stroke-2 inline-block mr-2"></LoginIcon>
             ログイン / 新規登録
           </button>
         </div>
