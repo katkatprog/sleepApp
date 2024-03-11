@@ -9,7 +9,7 @@ const HomePage = () => {
           <h3 className="text-lg mt-4 font-bold">
             新しい認知シャッフル睡眠法で、
           </h3>
-          <h3 className="text-lg font-bold">昨日と違う入眠を...</h3>
+          <h3 className="text-lg font-bold">今日も快適な睡眠を...</h3>
           <Link href={"/explore"}>
             <button className="mt-6 bg-emerald-600 hover:bg-emerald-500 font-bold px-12 py-4 rounded-md transition">
               <svg
@@ -35,24 +35,24 @@ const HomePage = () => {
           Prehniteとは？
         </h1>
         <h3 className="mt-4">
-          Prehnite(プレナイト)は、認知シャッフル睡眠法を行うためのアプリです。
+          Prehnite(プレナイト)は、認知シャッフル睡眠法を行うための音声プレイヤーです。
         </h3>
         <h3 className="mt-4">
-          認知シャッフル睡眠法とは、入眠の際、ランダムに単語を思い浮かべる動作を繰り返す睡眠方法です。
+          認知シャッフル睡眠法とは、ランダムに単語を思い浮かべる動作を繰り返しながら眠りにつく方法です。
           <br />
-          それを行うことで、眠りにつきやすくなります。
+          それを行うことで、眠りに入りやすくなります。
         </h3>
         <h3 className="mt-4">
-          Prehniteは、認知シャッフル睡眠法のための、単語を読み上げる音声を提供します。
+          Prehniteは、認知シャッフル睡眠法のための単語を読み上げる音声を再生できます。
           <br />
-          音声は毎日自動生成されるため、日々違った音声で認知シャッフル睡眠法を行うことができます。
+          音声は毎日自動生成されるため、日々異なる音声を用いて、効果の落ちにくい認知シャッフル睡眠法を実現できます。
         </h3>
 
         <h1 className="text-emerald-400 text-2xl font-black mt-10">
           ログインすると？
         </h1>
         <h3 className="mt-4">
-          ログインすることで、以下のことを行うことができ、アプリを使いこなせるようになります。
+          ログインすることで、以下のことを行うことができ、より快適にアプリを使うことができます。
         </h3>
         <h3 className="mt-4">
           <li>自分の好きなテーマの音声作成をリクエスト</li>
