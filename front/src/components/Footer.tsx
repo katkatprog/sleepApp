@@ -6,8 +6,8 @@ import { LoginIcon } from "./icons/LoginIcon";
 
 export const Footer = () => {
   return (
-    <footer className="h-20 bg-neutral-800 border-gray-300 border-t fixed w-full left-0 bottom-0">
-      <div className="h-14 flex items-center justify-around">
+    <footer className="h-20 bg-neutral-800 border-gray-300 border-t fixed w-full left-0 bottom-0 flex justify-center">
+      <div className="h-14 flex items-center justify-around max-w-2xl w-full">
         <Link href={"/explore"}>
           <SearchIcon propClassName="w-9 h-9 p-1 rounded-full stroke-2 hover:bg-neutral-700 transition"></SearchIcon>
         </Link>
