@@ -54,6 +54,8 @@ export const wordsToSSML = (words: string[]) => {
 
 // SSMLをPollyに送信し、音声ファイルの作成 & S3への格納を行う
 export const generateAudio = async (ssml: string, speaker: VoiceId) => {
+  console.log(`音声作成を開始します。(読み手：${speaker})`);
+
   // awsアクセスキー
   const accessKeyId = process.env.AWS_ACCESS_KEY_ID;
   const secretAccessKey = process.env.AWS_SECRET_ACCESS_KEY;
@@ -80,7 +82,13 @@ export const generateAudio = async (ssml: string, speaker: VoiceId) => {
   });
 
   const result = await client.send(command);
-  return result.SynthesisTask?.OutputUri;
+  const s3Url = result.SynthesisTask?.OutputUri;
+  if (!s3Url) {
+    throw new Error("音声ファイルの作成に失敗しました。");
+  }
+  console.log(`音声作成に成功しました。(読み手：${speaker})`);
+
+  return s3Url;
 };
 
 // 本日の音声情報をDBに保存する
@@ -96,4 +104,5 @@ export const saveTodaysSoundInfo = async (
       isMaleVoice,
     },
   });
+  console.log("音声URLのDB保存が成功しました。");
 };
