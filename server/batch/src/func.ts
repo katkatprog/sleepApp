@@ -106,3 +106,18 @@ export const saveTodaysSoundInfo = async (
   });
   console.log("音声URLのDB保存が成功しました。");
 };
+
+// 配列をシャッフルする
+export const arrayShuffle = (inArray: string[]) => {
+  const outArray = [...inArray];
+  for (let i = outArray.length - 1; 0 < i; i--) {
+    // 0〜(i+1)の範囲で値を取得
+    const r = Math.floor(Math.random() * (i + 1));
+
+    // 要素の並び替えを実行
+    const tmp = outArray[i];
+    outArray[i] = outArray[r];
+    outArray[r] = tmp;
+  }
+  return outArray;
+};

@@ -1,11 +1,11 @@
 import { PrismaClient } from ".prisma/client";
 import {
+  arrayShuffle,
   generateAudio,
   generateDailyWordsList,
   saveTodaysSoundInfo,
   wordsToSSML,
 } from "./func";
-import arrayShuffle from "array-shuffle";
 
 const main = async () => {
   const prisma = new PrismaClient();
