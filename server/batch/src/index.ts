@@ -27,7 +27,10 @@ const main = async () => {
 
     // 女性ボイス作成
     console.log("音声作成を開始します。(読み手：女性)");
-    const s3UrlFemale = await generateAudio(ssml, "Kazuha");
+    const s3UrlFemale = await generateAudio(
+      ssml,
+      Math.random() > 0.5 ? "Kazuha" : "Tomoko",
+    );
     if (!s3UrlFemale) {
       throw new Error("音声ファイルの作成に失敗しました。");
     }
