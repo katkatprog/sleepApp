@@ -5,14 +5,18 @@ import {
   saveTodaysSoundInfo,
   wordsToSSML,
 } from "./func";
+import arrayShuffle from "array-shuffle";
 
 const main = async () => {
   const prisma = new PrismaClient();
   try {
     console.log("音声作成＆DB保存処理を開始します。");
 
+    // 生成AIで単語リストを作成
     const wordsList = await generateDailyWordsList();
-    const ssml = wordsToSSML(wordsList);
+    const shuffledWordsList = arrayShuffle(wordsList);
+    // ssml(AmazonPollyに登録できる形式)に変換
+    const ssml = wordsToSSML(shuffledWordsList);
     console.log("単語生成処理が成功しました。");
 
     // 男性ボイス作成
