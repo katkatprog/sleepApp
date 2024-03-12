@@ -12,15 +12,16 @@ const main = async () => {
     console.log("音声作成＆DB保存処理を開始します。");
 
     const wordsList = await generateDailyWordsList();
+    const ssml = wordsToSSML(wordsList);
     console.log("単語生成処理が成功しました。");
 
-    const ssml = wordsToSSML(wordsList);
-    const s3Url = await generateAudio(ssml);
+    // 男性ボイス作成
+    console.log("音声作成を開始します。(読み手：男性)");
+    const s3Url = await generateAudio(ssml, "Takumi");
     if (!s3Url) {
-      throw new Error("S3のURL生成に失敗しました。");
+      throw new Error("音声ファイルの作成に失敗しました。");
     }
-    console.log("音声生成処理が成功しました。");
-
+    console.log("音声作成に成功しました。(読み手：男性)");
     await saveTodaysSoundInfo(s3Url, true, prisma);
     console.log("音声URLのDB保存が成功しました。");
 
