@@ -21,7 +21,7 @@ const main = async () => {
     }
     console.log("音声生成処理が成功しました。");
 
-    await saveTodaysSoundInfo(s3Url, prisma);
+    await saveTodaysSoundInfo(s3Url, true, prisma);
     console.log("音声URLのDB保存が成功しました。");
 
     console.log("全処理が完了しました。");

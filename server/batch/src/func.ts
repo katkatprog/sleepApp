@@ -85,12 +85,14 @@ export const generateAudio = async (ssml: string) => {
 // 本日の音声情報をDBに保存する
 export const saveTodaysSoundInfo = async (
   url: string,
+  isMaleVoice: boolean,
   prisma: PrismaClient<Prisma.PrismaClientOptions, never, DefaultArgs>,
 ) => {
   await prisma.soundInfo.create({
     data: {
       name: "本日の音声",
       url,
+      isMaleVoice,
     },
   });
 };
