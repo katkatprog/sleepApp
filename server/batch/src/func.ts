@@ -69,7 +69,7 @@ export const generateAudio = async (ssml: string) => {
     },
   });
   const command = new StartSpeechSynthesisTaskCommand({
-    Engine: "standard",
+    Engine: "neural",
     LanguageCode: "ja-JP",
     OutputFormat: "mp3",
     OutputS3BucketName: process.env.S3_BUCKET_NAME,
