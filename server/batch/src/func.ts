@@ -31,6 +31,8 @@ export const generateDailyWordsList = async () => {
   if (!resContent) {
     throw new Error("GPTからの返答の文字列がありません");
   }
+  console.log(`GPTからの返答：${resContent}`);
+
   // 文字列整形
   resContent = resContent.replaceAll(" ", "").replaceAll("\n", "");
 
