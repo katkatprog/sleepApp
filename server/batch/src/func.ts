@@ -31,6 +31,8 @@ export const generateDailyWordsList = async () => {
   if (!resContent) {
     throw new Error("GPTからの返答の文字列がありません");
   }
+  console.log(`GPTからの返答：${resContent}`);
+
   // 返答(文字列)から配列部分を抜き出し、それをJavaScriptの配列に変換
   const indexOfStartArr = resContent.indexOf("[");
   const indexOfEndArr = resContent.indexOf("]");
