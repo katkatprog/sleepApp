@@ -27,11 +27,13 @@ export const generateDailyWordsList = async () => {
     model: "gpt-3.5-turbo",
   });
   // 返答
-  const resContent = chatCompletion.choices[0].message.content;
+  let resContent = chatCompletion.choices[0].message.content;
   if (!resContent) {
     throw new Error("GPTからの返答の文字列がありません");
   }
   console.log(`GPTからの返答：${resContent}`);
+  // 文字列整形
+  resContent = resContent.replaceAll(" ", "").replaceAll("\n", "");
 
   // 返答(文字列)から配列部分を抜き出し、それをJavaScriptの配列に変換
   const indexOfStartArr = resContent.indexOf("[");
