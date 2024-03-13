@@ -21,7 +21,7 @@ export const generateDailyWordsList = async () => {
       {
         role: "user",
         content:
-          "Please pickup 200 random nouns.\n※Show them in Japanese\n※Show them using array format(JSON) with no indentation.\n※Avoid duplicates as far as possible.",
+          "名詞を無作為に200個表示してください。\n※表示方法は、配列形式（JSON）で表示してください。\n※名詞は、できる限り形状のあるものを選んでください。\n※重複はできる限り避けてください。",
       },
     ],
     model: "gpt-3.5-turbo",
