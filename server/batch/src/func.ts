@@ -25,6 +25,7 @@ export const generateDailyWordsList = async () => {
       },
     ],
     model: "gpt-3.5-turbo",
+    max_tokens: 5000,
   });
   // 返答
   let resContent = chatCompletion.choices[0].message.content;
