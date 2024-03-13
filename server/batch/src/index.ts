@@ -14,7 +14,7 @@ const main = async () => {
 
     // 生成AIで単語リストを作成
     const wordsList = await generateDailyWordsList();
-    const shuffledWordsList = arrayShuffle(wordsList);
+    const shuffledWordsList = arrayShuffle([...wordsList, ...wordsList]);
     // ssml(AmazonPollyに登録できる形式)に変換
     const ssml = wordsToSSML(shuffledWordsList);
     console.log("単語生成処理が成功しました。");
