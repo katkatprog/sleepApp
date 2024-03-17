@@ -6,7 +6,9 @@ const HomePage = () => {
   return (
     <>
       <div className="px-8 pt-10">
-        <div className="flex flex-col items-center justify-center">
+        <div
+          className={`flex flex-col items-center justify-center bg-[url('/prehnite-theme.svg')] h-80 w-80 bg-center bg-cover`}
+        >
           <h1 className="text-emerald-400 text-6xl font-black">Prehnite</h1>
           <h3 className="text-lg mt-4 font-bold text-center">
             新しい認知シャッフル睡眠法で、
