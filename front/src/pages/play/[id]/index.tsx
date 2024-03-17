@@ -44,7 +44,12 @@ const PlayPage = ({ soundInfo }: SoundInfoProps) => {
       </div>
 
       <div className="flex justify-center mt-8">
-        <MoonIcon propClassName="w-40 h-40 text-emerald-400"></MoonIcon>
+        <Image
+          src={"/prehnite_icon.svg"}
+          alt="#"
+          width={"180"}
+          height={"180"}
+        ></Image>
       </div>
 
       <audio

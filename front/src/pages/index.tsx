@@ -6,35 +6,48 @@ const HomePage = () => {
   return (
     <>
       <div className="px-8 pt-10">
-        <div className="flex flex-col items-center justify-center">
-          <h1 className="text-emerald-400 text-6xl font-black">Prehnite</h1>
-          <h3 className="text-lg mt-4 font-bold">
-            新しい認知シャッフル睡眠法で、
-          </h3>
-          <h3 className="text-lg font-bold">今日も快適な睡眠を...</h3>
-          <Link href={"/explore"}>
-            <button className="mt-6 bg-emerald-600 hover:bg-emerald-500 font-bold px-12 py-4 rounded-md transition">
-              <SearchIcon propClassName="w-7 h-7 stroke-2 inline mr-2"></SearchIcon>
-              音声を探す
-            </button>
-          </Link>
+        <div className="flex justify-center">
+          <div
+            className={`flex flex-col items-center justify-center bg-[url('/prehnite-theme.svg')] h-80 w-80 bg-center bg-cover`}
+          >
+            <h1 className="text-emerald-400 text-6xl font-black">Prehnite</h1>
+            <h3 className="text-lg mt-4 font-bold text-center">
+              新しい認知シャッフル睡眠法で、
+              <br />
+              今日も快適な睡眠を...
+            </h3>
+            <Link href={"/explore"}>
+              <button className="mt-6 bg-emerald-600 hover:bg-emerald-500 font-bold px-12 py-4 rounded-md transition">
+                <SearchIcon propClassName="w-7 h-7 stroke-2 inline mr-2"></SearchIcon>
+                音声を探す
+              </button>
+            </Link>
+          </div>
         </div>
 
         <h1 className="text-emerald-400 text-2xl font-black mt-10">
           Prehniteとは？
         </h1>
         <h3 className="mt-4">
-          Prehnite(プレナイト)は、認知シャッフル睡眠法を行うための音声プレイヤーです。
-        </h3>
-        <h3 className="mt-4">
-          認知シャッフル睡眠法とは、ランダムに単語を思い浮かべる動作を繰り返しながら眠りにつく方法です。
+          Prehnite(プレナイト)は、
+          <b>認知シャッフル睡眠法</b>
+          を行うための音声プレイヤーで、ランダムに単語を読み上げる音声を再生できます。
           <br />
-          それを行うことで、眠りに入りやすくなります。
+          音声は毎日自動生成されるため、
+          <b>日替わりの音声による効果の落ちにくい</b>
+          認知シャッフル睡眠法を実現できます。
         </h3>
+
+        <h1 className="text-emerald-400 text-2xl font-black mt-10">
+          認知シャッフル睡眠法とは？
+        </h1>
         <h3 className="mt-4">
-          Prehniteは、認知シャッフル睡眠法のための単語を読み上げる音声を再生できます。
+          認知シャッフル睡眠法とは、
+          <b>ランダムに単語を思い浮かべる動作を繰り返しながら</b>
+          眠りにつく方法です。
           <br />
-          音声は毎日自動生成されるため、日々異なる音声を用いて、効果の落ちにくい認知シャッフル睡眠法を実現できます。
+          それを行うことで、
+          <b>眠りに入りやすくなります。</b>
         </h3>
 
         <h1 className="text-emerald-400 text-2xl font-black mt-10">
