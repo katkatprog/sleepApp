@@ -6,21 +6,23 @@ const HomePage = () => {
   return (
     <>
       <div className="px-8 pt-10">
-        <div
-          className={`flex flex-col items-center justify-center bg-[url('/prehnite-theme.svg')] h-80 w-80 bg-center bg-cover`}
-        >
-          <h1 className="text-emerald-400 text-6xl font-black">Prehnite</h1>
-          <h3 className="text-lg mt-4 font-bold text-center">
-            新しい認知シャッフル睡眠法で、
-            <br />
-            今日も快適な睡眠を...
-          </h3>
-          <Link href={"/explore"}>
-            <button className="mt-6 bg-emerald-600 hover:bg-emerald-500 font-bold px-12 py-4 rounded-md transition">
-              <SearchIcon propClassName="w-7 h-7 stroke-2 inline mr-2"></SearchIcon>
-              音声を探す
-            </button>
-          </Link>
+        <div className="flex justify-center">
+          <div
+            className={`flex flex-col items-center justify-center bg-[url('/prehnite-theme.svg')] h-80 w-80 bg-center bg-cover`}
+          >
+            <h1 className="text-emerald-400 text-6xl font-black">Prehnite</h1>
+            <h3 className="text-lg mt-4 font-bold text-center">
+              新しい認知シャッフル睡眠法で、
+              <br />
+              今日も快適な睡眠を...
+            </h3>
+            <Link href={"/explore"}>
+              <button className="mt-6 bg-emerald-600 hover:bg-emerald-500 font-bold px-12 py-4 rounded-md transition">
+                <SearchIcon propClassName="w-7 h-7 stroke-2 inline mr-2"></SearchIcon>
+                音声を探す
+              </button>
+            </Link>
+          </div>
         </div>
 
         <h1 className="text-emerald-400 text-2xl font-black mt-10">
