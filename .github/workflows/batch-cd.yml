@@ -3,6 +3,9 @@ name: batch-cd
 on:
   push:
     branches: dev/CD_Pipeline
+    paths:
+      - 'server/batch/**'
+      - '.github/**'
 
 defaults:
   run:
