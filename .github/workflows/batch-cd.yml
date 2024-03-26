@@ -1,0 +1,41 @@
+name: batch-cd
+
+on:
+  push:
+    branches: dev/CD_Pipeline
+
+defaults:
+  run:
+    working-directory: server/batch
+
+permissions:
+  id-token: write
+  contents: read
+
+  # ECRへのイメージデプロイ
+jobs:
+  deploy-ecr:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
+          aws-region: ap-northeast-1
+
+      - name: Login to ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v1
+        with:
+          mask-password: true
+      
+      - name: Build and push image to ECR
+        id: build-image
+        env:
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+        run: |
+          docker build -t $ECR_REGISTRY/prehnite-batch:latest .
+          docker push $ECR_REGISTRY/prehnite-batch:latest
+          echo "::set-output name=image::$ECR_REGISTRY/prehnite-batch:latest"
