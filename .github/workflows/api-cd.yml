@@ -1,15 +1,15 @@
-name: batch-cd
+name: api-cd
 
 on:
   push:
     branches: main
     paths:
-      - 'server/batch/**'
+      - 'server/api/**'
       - '.github/**'
 
 defaults:
   run:
-    working-directory: server/batch
+    working-directory: server/api
 
 permissions:
   id-token: write
@@ -39,6 +39,6 @@ jobs:
         env:
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
         run: |
-          docker build -t $ECR_REGISTRY/prehnite-batch:latest .
-          docker push $ECR_REGISTRY/prehnite-batch:latest
-          echo "::set-output name=image::$ECR_REGISTRY/prehnite-batch:latest"
+          docker build -t $ECR_REGISTRY/prehnite-api:latest .
+          docker push $ECR_REGISTRY/prehnite-api:latest
+          echo "::set-output name=image::$ECR_REGISTRY/prehnite-api:latest"
