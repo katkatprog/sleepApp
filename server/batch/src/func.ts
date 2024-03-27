@@ -52,11 +52,11 @@ export const generateDailyWordsList = async () => {
 
 // 単語配列を、Amazon Pollyに読み上げを依頼するためのフォーマットであるSSMLに変換
 export const wordsToSSML = (words: string[]) => {
-  let ssml = "<speak>";
+  let ssml = `<speak><prosody rate="95%">`;
   words.forEach((word) => {
-    ssml += `${word}<break time="5s"/>`;
+    ssml += `${word}<break time="6s"/>`;
   });
-  ssml += "</speak>";
+  ssml += `</prosody></speak>`;
 
   return ssml;
 };
