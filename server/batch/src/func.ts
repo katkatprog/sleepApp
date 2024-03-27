@@ -118,15 +118,15 @@ export const saveTodaysSoundInfo = async (
 
 // 配列をシャッフルする
 export const arrayShuffle = (inArray: string[]) => {
-  const outArray = [...inArray];
-  for (let i = outArray.length - 1; 0 < i; i--) {
-    // 0〜(i+1)の範囲で値を取得
-    const r = Math.floor(Math.random() * (i + 1));
+  const tmpArray = [...inArray]; // 引数の配列をコピー(関数の呼び出し元に影響が出ないようにコピーする)
+  const outArray: string[] = []; // 出力用の配列
 
-    // 要素の並び替えを実行
-    const tmp = outArray[i];
-    outArray[i] = outArray[r];
-    outArray[r] = tmp;
+  // ランダムに配列番号を指定、その配列番号の値をtmpArrayからoutArrayの末尾に移動
+  // それをtmpArrayの長さが０になるまで繰り返す
+  while (tmpArray.length > 0) {
+    const indexMoveVal = Math.floor(Math.random() * tmpArray.length);
+    outArray.push(tmpArray[indexMoveVal]);
+    tmpArray.splice(indexMoveVal, 1);
   }
   return outArray;
 };
