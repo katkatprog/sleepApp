@@ -9,7 +9,7 @@ app.use("/sound-info", soundInfoRouter);
 app.get("/api/health", async (req, res)=>{
   return res.json({
     status: "OK",
-    message: "自動デプロイの成功を確認"
+    message: "update at 20240328"
   })
 })
 
