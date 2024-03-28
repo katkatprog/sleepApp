@@ -26,6 +26,11 @@ soundInfoRouter.get("/:id", async (req, res) => {
 
 // 音声情報取得(一覧)
 soundInfoRouter.get("/list/:page", async (req, res) => {
+  const numPage = Number(req.params.page);
+  if (isNaN(numPage)) {
+    return res.status(400).send("Request Param is not valid...");
+  }
+
   try {
     // url以外を取得
     const result = await prisma.soundInfo.findMany({
@@ -36,9 +41,10 @@ soundInfoRouter.get("/list/:page", async (req, res) => {
         isMaleVoice: true,
       },
       orderBy: {
-        createdAt: "desc"
+        createdAt: "desc",
       },
-      take: 20
+      take: 20,
+      skip: 20 * (numPage - 1),
     });
     return res.send(result);
   } catch (error) {
