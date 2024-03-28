@@ -73,7 +73,7 @@ const PlayPage = ({ soundInfo }: SoundInfoProps) => {
             isPlaying={isPlaying}
             setIsPlaying={setIsPlaying}
           ></PlayButton>
-          <p className="text-emerald-400 ml-6">{`${currentTime} / ${duration}`}</p>
+          <p className="text-green-400 ml-6">{`${currentTime} / ${duration}`}</p>
         </div>
       </div>
     </div>
