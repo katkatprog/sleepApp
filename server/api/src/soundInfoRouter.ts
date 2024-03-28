@@ -25,7 +25,7 @@ soundInfoRouter.get("/:id", async (req, res) => {
 });
 
 // 音声情報取得(一覧)
-soundInfoRouter.get("/", async (req, res) => {
+soundInfoRouter.get("/list/:page", async (req, res) => {
   try {
     // url以外を取得
     const result = await prisma.soundInfo.findMany({
@@ -37,7 +37,8 @@ soundInfoRouter.get("/", async (req, res) => {
       },
       orderBy: {
         createdAt: "desc"
-      }
+      },
+      take: 20
     });
     return res.send(result);
   } catch (error) {
