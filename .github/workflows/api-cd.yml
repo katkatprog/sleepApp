@@ -42,3 +42,7 @@ jobs:
           docker build -t $ECR_REGISTRY/prehnite-api:latest .
           docker push $ECR_REGISTRY/prehnite-api:latest
           echo "::set-output name=image::$ECR_REGISTRY/prehnite-api:latest"
+
+      - name: Update service
+        run: |
+          aws ecs update-service --cluster prehnite-cluster --service prehnite-api-service --force-new-deployment
