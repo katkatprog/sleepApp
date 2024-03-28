@@ -35,6 +35,9 @@ soundInfoRouter.get("/", async (req, res) => {
         createdAt: true,
         isMaleVoice: true,
       },
+      orderBy: {
+        createdAt: "desc"
+      }
     });
     return res.send(result);
   } catch (error) {
