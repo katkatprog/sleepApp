@@ -3,10 +3,10 @@ import { GetServerSideProps } from "next";
 import Image from "next/image";
 import Link from "next/link";
 
-const ExplorePage = ({ soundsList }: SoundsListProps) => {
+const ExplorePage = (props: SoundsListProps) => {
   return (
     <>
-      {soundsList.map((sound) => (
+      {props.soundsList.map((sound) => (
         <Link href={`/play/${sound.id}`} key={sound.id}>
           <div className="h-20 px-4 border-b flex justify-between border-neutral-700 hover:bg-neutral-700 transition">
             <h1 className="font-bold mt-4">{sound.name}</h1>
@@ -15,14 +15,14 @@ const ExplorePage = ({ soundsList }: SoundsListProps) => {
                 (sound.isMaleVoice ? (
                   <Image
                     alt="#"
-                    src={"male_icon.svg"}
+                    src={"/male_icon.svg"}
                     width={32}
                     height={32}
                   ></Image>
                 ) : (
                   <Image
                     alt="#"
-                    src={"female_icon.svg"}
+                    src={"/female_icon.svg"}
                     width={32}
                     height={32}
                   ></Image>
@@ -32,6 +32,18 @@ const ExplorePage = ({ soundsList }: SoundsListProps) => {
           </div>
         </Link>
       ))}
+      <div className="h-28 pt-4 flex items-start justify-center">
+        <Link href={`/explore/${props.page - 1}`}>
+          <button className="rounded-md px-4 py-2 border border-neutral-700 hover:bg-neutral-700 transition">
+            Prev
+          </button>
+        </Link>
+        <Link href={`/explore/${props.page + 1}`}>
+          <button className="rounded-md px-4 py-2 border border-neutral-700 hover:bg-neutral-700 transition ml-2">
+            Next
+          </button>
+        </Link>
+      </div>
     </>
   );
 };
@@ -42,16 +54,20 @@ export const getServerSideProps: GetServerSideProps<SoundsListProps> = async (
   context,
 ) => {
   // APIから音声リストを取得
-  const response = await fetch(`${process.env.API_URL}/sound-info`);
+  const response = await fetch(
+    `${process.env.API_URL}/sound-info/list/${context.params?.page}`,
+  );
   const soundsList: Omit<SoundInfo, "url">[] = await response.json();
 
   return {
     props: {
       soundsList,
+      page: Number(context.params?.page),
     },
   };
 };
 
 interface SoundsListProps {
   soundsList: Omit<SoundInfo, "url">[];
+  page: number;
 }
