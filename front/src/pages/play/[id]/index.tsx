@@ -4,7 +4,6 @@ import { GetServerSideProps } from "next";
 import Image from "next/image";
 import React, { useEffect, useRef, useState } from "react";
 import { SoundInfo } from "@prisma/client";
-import { MoonIcon } from "@/components/icons/MoonIcon";
 
 const PlayPage = ({ soundInfo }: SoundInfoProps) => {
   const audioRef = useRef<HTMLAudioElement>(null);
@@ -73,7 +72,7 @@ const PlayPage = ({ soundInfo }: SoundInfoProps) => {
             isPlaying={isPlaying}
             setIsPlaying={setIsPlaying}
           ></PlayButton>
-          <p className="text-emerald-400 ml-6">{`${currentTime} / ${duration}`}</p>
+          <p className="text-green-400 ml-6">{`${currentTime} / ${duration}`}</p>
         </div>
       </div>
     </div>

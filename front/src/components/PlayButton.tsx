@@ -13,7 +13,7 @@ export const PlayButton = ({
 }) => {
   return (
     <button
-      className="border-4 border-emerald-400 h-16 w-16 rounded-full flex justify-center items-center hover:bg-neutral-700"
+      className="border-4 border-green-400 h-16 w-16 rounded-full flex justify-center items-center hover:bg-neutral-700 transition"
       onClick={() => {
         if (isPlaying) {
           audioRef.current?.pause();
@@ -25,9 +25,9 @@ export const PlayButton = ({
       }}
     >
       {isPlaying ? (
-        <PauseIcon propClassName="w-10 h-10 text-emerald-400 stroke-2"></PauseIcon>
+        <PauseIcon propClassName="w-10 h-10 text-green-400 stroke-2"></PauseIcon>
       ) : (
-        <PlayIcon prosClassName="w-10 h-10 text-emerald-400 stroke-2"></PlayIcon>
+        <PlayIcon prosClassName="w-10 h-10 text-green-400 stroke-2"></PlayIcon>
       )}
     </button>
   );

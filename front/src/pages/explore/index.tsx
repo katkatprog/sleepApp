@@ -1,5 +1,6 @@
 import { SoundInfo } from "@prisma/client";
 import { GetServerSideProps } from "next";
+import Image from "next/image";
 import Link from "next/link";
 
 const ExplorePage = ({ soundsList }: SoundsListProps) => {
@@ -10,13 +11,22 @@ const ExplorePage = ({ soundsList }: SoundsListProps) => {
           <div className="h-20 px-4 border-b flex justify-between border-neutral-700 hover:bg-neutral-700 transition">
             <h1 className="font-bold mt-4">{sound.name}</h1>
             <div className="mt-2">
-              {sound.isMaleVoice !== null && (
-                <span
-                  className={`px-1 rounded-md font-semibold ${sound.isMaleVoice ? "bg-blue-600" : "bg-rose-500"}`}
-                >
-                  {sound.isMaleVoice ? "male" : "female"}
-                </span>
-              )}
+              {sound.isMaleVoice !== null &&
+                (sound.isMaleVoice ? (
+                  <Image
+                    alt="#"
+                    src={"male_icon.svg"}
+                    width={32}
+                    height={32}
+                  ></Image>
+                ) : (
+                  <Image
+                    alt="#"
+                    src={"female_icon.svg"}
+                    width={32}
+                    height={32}
+                  ></Image>
+                ))}
               <p>{new Date(sound.createdAt).toLocaleDateString()}</p>
             </div>
           </div>
