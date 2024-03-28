@@ -15,14 +15,14 @@ const ExplorePage = ({ soundsList }: SoundsListProps) => {
                 (sound.isMaleVoice ? (
                   <Image
                     alt="#"
-                    src={"male_icon.svg"}
+                    src={"/male_icon.svg"}
                     width={32}
                     height={32}
                   ></Image>
                 ) : (
                   <Image
                     alt="#"
-                    src={"female_icon.svg"}
+                    src={"/female_icon.svg"}
                     width={32}
                     height={32}
                   ></Image>
