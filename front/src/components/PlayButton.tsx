@@ -13,7 +13,7 @@ export const PlayButton = ({
 }) => {
   return (
     <button
-      className="border-4 border-green-400 h-16 w-16 rounded-full flex justify-center items-center hover:bg-neutral-700"
+      className="border-4 border-green-400 h-16 w-16 rounded-full flex justify-center items-center hover:bg-neutral-700 transition"
       onClick={() => {
         if (isPlaying) {
           audioRef.current?.pause();

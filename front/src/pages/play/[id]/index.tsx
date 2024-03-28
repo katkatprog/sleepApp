@@ -4,7 +4,6 @@ import { GetServerSideProps } from "next";
 import Image from "next/image";
 import React, { useEffect, useRef, useState } from "react";
 import { SoundInfo } from "@prisma/client";
-import { MoonIcon } from "@/components/icons/MoonIcon";
 
 const PlayPage = ({ soundInfo }: SoundInfoProps) => {
   const audioRef = useRef<HTMLAudioElement>(null);
