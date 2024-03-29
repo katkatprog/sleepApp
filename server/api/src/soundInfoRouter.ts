@@ -49,8 +49,8 @@ soundInfoRouter.get("/list/:page", async (req, res) => {
   }
 });
 
-// 音声検索ページの総数を計算
-soundInfoRouter.get("/num-of-explore-pages", async (req, res) => {
+// 音声検索結果の総ページ数を計算
+soundInfoRouter.get("/total-search-result-pages", async (req, res) => {
   try {
     const numSounds = await prisma.soundInfo.count();
     const numPages = Math.ceil(numSounds / numSoundsPerPage);
