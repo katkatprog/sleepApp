@@ -85,7 +85,7 @@ export const getServerSideProps: GetServerSideProps<SoundInfoProps> = async (
 ) => {
   // APIから音声情報を取得
   const response = await fetch(
-    `${process.env.API_URL}/sound-info/${context.params?.id}`,
+    `${process.env.API_URL}/sound-info/single/${context.params?.id}`,
   );
   const soundInfo: SoundInfo = await response.json();
 
