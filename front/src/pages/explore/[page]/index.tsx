@@ -57,7 +57,7 @@ export const getServerSideProps: GetServerSideProps<SoundsListProps> = async (
   const response = await fetch(
     `${process.env.API_URL}/sound-info/list/${context.params?.page}`,
   );
-  const soundsList: Omit<SoundInfo, "url">[] = await response.json();
+  const soundsList: SoundInfo[] = await response.json();
 
   return {
     props: {
@@ -68,6 +68,6 @@ export const getServerSideProps: GetServerSideProps<SoundsListProps> = async (
 };
 
 interface SoundsListProps {
-  soundsList: Omit<SoundInfo, "url">[];
+  soundsList: SoundInfo[];
   page: number;
 }
