@@ -33,12 +33,12 @@ const ExplorePage = (props: SoundsListProps) => {
         </Link>
       ))}
       <div className="h-28 pt-4 flex items-start justify-center">
-        <Link href={`/explore/${props.page - 1}`}>
+        <Link href={`/explore/${props.currentPage - 1}`}>
           <button className="rounded-md px-4 py-2 border border-neutral-700 hover:bg-neutral-700 transition">
             Prev
           </button>
         </Link>
-        <Link href={`/explore/${props.page + 1}`}>
+        <Link href={`/explore/${props.currentPage + 1}`}>
           <button className="rounded-md px-4 py-2 border border-neutral-700 hover:bg-neutral-700 transition ml-2">
             Next
           </button>
@@ -65,12 +65,12 @@ export const getServerSideProps: GetServerSideProps<SoundsListProps> = async (
   return {
     props: {
       soundsList,
-      page: Number(context.params?.page),
+      currentPage: Number(context.params?.page),
     },
   };
 };
 
 interface SoundsListProps {
   soundsList: SoundInfo[];
-  page: number;
+  currentPage: number;
 }
