@@ -14,19 +14,22 @@ const SearchPage = (props: SoundsListProps) => {
 
   return (
     <>
-      <input
-        type="text"
-        onChange={(e) => {
-          setSearchQuery(e.target.value);
-        }}
-      />
-      <button
-        onClick={(e) => {
-          router.push(`/search?page=1&q=${searchQuery}`);
+      <form
+        onSubmit={(e) => {
+          e.preventDefault();
+          router.push(
+            `/search?page=1${searchQuery ? `&q=${searchQuery}` : ""}`,
+          );
         }}
       >
-        検索
-      </button>
+        <input
+          type="text"
+          className="rounded-lg m-4 px-2 py-1 border bg-neutral-800 border-neutral-700 outline-none"
+          onChange={(e) => {
+            setSearchQuery(e.target.value);
+          }}
+        />
+      </form>
       {props.soundsList.map((sound) => (
         <Link href={`/play/${sound.id}`} key={sound.id}>
           <div className="h-20 px-4 border-b flex justify-between border-neutral-700 hover:bg-neutral-700 transition">
