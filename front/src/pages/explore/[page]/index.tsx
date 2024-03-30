@@ -33,16 +33,19 @@ const ExplorePage = (props: SoundsListProps) => {
         </Link>
       ))}
       <div className="h-28 pt-4 flex items-start justify-center">
-        <Link href={`/explore/${props.currentPage - 1}`}>
-          <button className="rounded-md px-4 py-2 border border-neutral-700 hover:bg-neutral-700 transition">
-            Prev
-          </button>
-        </Link>
-        <Link href={`/explore/${props.currentPage + 1}`}>
-          <button className="rounded-md px-4 py-2 border border-neutral-700 hover:bg-neutral-700 transition ml-2">
-            Next
-          </button>
-        </Link>
+        <div>
+          <Link href={`/explore/${props.currentPage - 1}`}>
+            <button className="rounded-md px-4 py-2 border border-neutral-700 hover:bg-neutral-700 transition mr-4">
+              Prev
+            </button>
+          </Link>
+          {`${props.currentPage} / ${props.totalPages}`}
+          <Link href={`/explore/${props.currentPage + 1}`}>
+            <button className="rounded-md px-4 py-2 border border-neutral-700 hover:bg-neutral-700 transition ml-4">
+              Next
+            </button>
+          </Link>
+        </div>
       </div>
     </>
   );
@@ -59,13 +62,14 @@ export const getServerSideProps: GetServerSideProps<SoundsListProps> = async (
     fetch(`${process.env.API_URL}/sound-info/total-search-result-pages`),
   ]);
   const soundsList: SoundInfo[] = await response[0].json();
-  const totalPages: number = await response[1].json();
+  const totalPages: { numPages: number } = await response[1].json();
   console.log(totalPages);
 
   return {
     props: {
       soundsList,
       currentPage: Number(context.params?.page),
+      totalPages: totalPages.numPages,
     },
   };
 };
@@ -73,4 +77,5 @@ export const getServerSideProps: GetServerSideProps<SoundsListProps> = async (
 interface SoundsListProps {
   soundsList: SoundInfo[];
   currentPage: number;
+  totalPages: number;
 }
