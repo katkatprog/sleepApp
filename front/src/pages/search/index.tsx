@@ -107,7 +107,9 @@ export const getServerSideProps: GetServerSideProps<SoundsListProps> = async (
     fetch(
       `${process.env.API_URL}/sound-info/search?page=${context.query?.page}&q=${context.query?.q || ""}`,
     ),
-    fetch(`${process.env.API_URL}/sound-info/total-search-result-pages`),
+    fetch(
+      `${process.env.API_URL}/sound-info/total-search-result-pages?q=${context.query?.q || ""}`,
+    ),
   ]);
   const soundsList: SoundInfo[] = await response[0].json();
   const totalPages: number = await response[1].json();

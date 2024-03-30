@@ -68,8 +68,22 @@ soundInfoRouter.get("/search", async (req, res) => {
 
 // 音声検索結果の総ページ数を計算
 soundInfoRouter.get("/total-search-result-pages", async (req, res) => {
+  // 検索キーワードを元に検索条件を作成
+  const searchWord = String(req.query.q || "");
+  let wordsConditions: { name: { contains: string } }[] = [];
+  const wordsArray: string[] = searchWord.split(" ");
+  wordsConditions = wordsArray.map((word) => ({
+    name: {
+      contains: word,
+    },
+  }));
+
   try {
-    const totalSounds = await prisma.soundInfo.count();
+    const totalSounds = await prisma.soundInfo.count({
+      where: {
+        OR: [...wordsConditions],
+      },
+    });
     const totalPages = Math.ceil(totalSounds / soundsPerPage);
     return res.json(totalPages);
   } catch (error) {
