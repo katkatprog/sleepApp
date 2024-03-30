@@ -61,23 +61,35 @@ const SearchPage = (props: SoundsListProps) => {
       <div className="h-28 pt-4 flex items-start justify-center">
         <div className="flex items-center">
           {currentPage > 1 && (
-            <Link
-              href={`/search?page=${currentPage - 1}&q=${router.query.q || ""}`}
+            <button
+              className="rounded-md px-2 py-2 border border-neutral-700 hover:bg-neutral-700 transition mr-4"
+              onClick={() => {
+                if (inputRef.current) {
+                  inputRef.current.value = (router.query.q || "").toString();
+                }
+                router.push(
+                  `/search?page=${currentPage - 1}&q=${router.query.q || ""}`,
+                );
+              }}
             >
-              <button className="rounded-md px-2 py-2 border border-neutral-700 hover:bg-neutral-700 transition mr-4">
-                <ArrowLongLeftIcon propClassName=""></ArrowLongLeftIcon>
-              </button>
-            </Link>
+              <ArrowLongLeftIcon propClassName=""></ArrowLongLeftIcon>
+            </button>
           )}
           {`${currentPage} / ${props.totalPages}`}
           {currentPage < props.totalPages && (
-            <Link
-              href={`/search?page=${currentPage + 1}&q=${router.query.q || ""}`}
+            <button
+              className="rounded-md px-2 py-2 border border-neutral-700 hover:bg-neutral-700 transition ml-4"
+              onClick={() => {
+                if (inputRef.current) {
+                  inputRef.current.value = (router.query.q || "").toString();
+                }
+                router.push(
+                  `/search?page=${currentPage + 1}&q=${router.query.q || ""}`,
+                );
+              }}
             >
-              <button className="rounded-md px-2 py-2 border border-neutral-700 hover:bg-neutral-700 transition ml-4">
-                <ArrowLongRightIcon propClassName=""></ArrowLongRightIcon>
-              </button>
-            </Link>
+              <ArrowLongRightIcon propClassName=""></ArrowLongRightIcon>
+            </button>
           )}
         </div>
       </div>
