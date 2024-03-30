@@ -20,17 +20,18 @@ const SearchPage = (props: SoundsListProps) => {
           e.preventDefault();
           router.push(`/search?page=1&q=${inputRef.current?.value || ""}`);
         }}
+        className="flex justify-center items-center mx-3 my-6"
       >
-        <div className="rounded-lg my-6 px-2 py-1 border border-neutral-700">
-          <SearchIcon propClassName="w-5 h-5 stroke-2 inline-block"></SearchIcon>
-          <input
-            ref={inputRef}
-            type="text"
-            className="h-8 bg-neutral-800 outline-none border-none ml-1 w-11/12 placeholder:text-gray-500"
-            placeholder="検索"
-            defaultValue={router.query.q || ""}
-          />
-        </div>
+        <input
+          ref={inputRef}
+          type="text"
+          className="h-10 bg-neutral-800 border border-neutral-700 placeholder:text-gray-600 rounded-l-lg pl-2 outline-neutral-500 w-full"
+          placeholder="検索"
+          defaultValue={router.query.q || ""}
+        />
+        <button className="h-10 px-4 bg-neutral-700 hover:bg-neutral-500 rounded-r-lg">
+          <SearchIcon propClassName="w-5 h-5 stroke-2"></SearchIcon>
+        </button>
       </form>
       {props.soundsList.map((sound) => (
         <Link href={`/play/${sound.id}`} key={sound.id}>
