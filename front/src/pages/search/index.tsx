@@ -1,5 +1,6 @@
 import { ArrowLongLeftIcon } from "@/components/icons/ArrowLongLeftIcon";
 import { ArrowLongRightIcon } from "@/components/icons/ArrowLongRightIcon";
+import { SearchIcon } from "@/components/icons/SearchIcon";
 import { SoundInfo } from "@prisma/client";
 import { GetServerSideProps } from "next";
 import Image from "next/image";
@@ -22,13 +23,16 @@ const SearchPage = (props: SoundsListProps) => {
           );
         }}
       >
-        <input
-          type="text"
-          className="rounded-lg m-4 px-2 py-1 border bg-neutral-800 border-neutral-700 outline-none"
-          onChange={(e) => {
-            setSearchQuery(e.target.value);
-          }}
-        />
+        <div className="rounded-lg m-4 px-2 py-1 border border-neutral-700">
+          <SearchIcon propClassName="w-5 h-5 stroke-2 inline-block"></SearchIcon>
+          <input
+            type="text"
+            className="h-8 bg-neutral-800 outline-none border-none ml-1 w-11/12"
+            onChange={(e) => {
+              setSearchQuery(e.target.value);
+            }}
+          />
+        </div>
       </form>
       {props.soundsList.map((sound) => (
         <Link href={`/play/${sound.id}`} key={sound.id}>
