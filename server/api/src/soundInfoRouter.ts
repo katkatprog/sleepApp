@@ -36,25 +36,21 @@ soundInfoRouter.get("/search", async (req, res) => {
   }
 
   // 検索キーワードを元に検索条件を作成
+  const searchWord = String(req.query.q || "");
   let wordsConditions: { name: { contains: string } }[] = [];
-  if (typeof req.query.q === "string") {
-    const wordsArray: string[] = req.query.q.split(" ");
-    wordsConditions = wordsArray.map((word) => ({
-      name: {
-        contains: word,
-      },
-    }));
-  }
+  const wordsArray: string[] = searchWord.split(" ");
+  wordsConditions = wordsArray.map((word) => ({
+    name: {
+      contains: word,
+    },
+  }));
 
   try {
     // 音声情報リストを取得
     const result = await prisma.soundInfo.findMany({
-      where:
-        wordsConditions.length > 0
-          ? {
-              OR: [...wordsConditions],
-            }
-          : {},
+      where: {
+        OR: [...wordsConditions],
+      },
       orderBy: {
         createdAt: "desc",
       },
