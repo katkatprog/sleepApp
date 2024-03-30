@@ -18,9 +18,7 @@ const SearchPage = (props: SoundsListProps) => {
       <form
         onSubmit={(e) => {
           e.preventDefault();
-          router.push(
-            `/search?page=1${searchQuery ? `&q=${searchQuery}` : ""}`,
-          );
+          router.push(`/search?page=1&q=${searchQuery || ""}`);
         }}
       >
         <div className="rounded-lg my-6 px-2 py-1 border border-neutral-700">
@@ -65,7 +63,7 @@ const SearchPage = (props: SoundsListProps) => {
         <div className="flex items-center">
           {currentPage > 1 && (
             <Link
-              href={`/search?page=${currentPage - 1}${router.query.q ? `&q=${router.query.q}` : ""}`}
+              href={`/search?page=${currentPage - 1}&q=${router.query.q || ""}`}
             >
               <button className="rounded-md px-2 py-2 border border-neutral-700 hover:bg-neutral-700 transition mr-4">
                 <ArrowLongLeftIcon propClassName=""></ArrowLongLeftIcon>
@@ -75,7 +73,7 @@ const SearchPage = (props: SoundsListProps) => {
           {`${currentPage} / ${props.totalPages}`}
           {currentPage < props.totalPages && (
             <Link
-              href={`/search?page=${currentPage + 1}${router.query.q ? `&q=${router.query.q}` : ""}`}
+              href={`/search?page=${currentPage + 1}&q=${router.query.q || ""}`}
             >
               <button className="rounded-md px-2 py-2 border border-neutral-700 hover:bg-neutral-700 transition ml-4">
                 <ArrowLongRightIcon propClassName=""></ArrowLongRightIcon>
@@ -96,7 +94,7 @@ export const getServerSideProps: GetServerSideProps<SoundsListProps> = async (
   // APIから音声リストを取得
   const response = await Promise.all([
     fetch(
-      `${process.env.API_URL}/sound-info/search?page=${context.query?.page}${context.query?.q ? `&q=${context.query?.q}` : ""}`,
+      `${process.env.API_URL}/sound-info/search?page=${context.query?.page}&q=${context.query?.q || ""}`,
     ),
     fetch(`${process.env.API_URL}/sound-info/total-search-result-pages`),
   ]);
