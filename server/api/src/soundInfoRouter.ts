@@ -46,27 +46,32 @@ soundInfoRouter.get("/search", async (req, res) => {
   }));
 
   try {
-    // 音声情報リストを取得
-    const result = await prisma.soundInfo.findMany({
-      where: {
-        OR: [...wordsConditions],
-      },
-      orderBy: {
-        createdAt: "desc",
-      },
-      take: soundsPerPage,
-      skip: soundsPerPage * (currentPage - 1),
-    });
+    // 下記を同時に行う
+    // ・音声情報リストを取得
+    // ・音声情報検索結果 総ページ数
+    const result = await Promise.all([
+      prisma.soundInfo.findMany({
+        where: {
+          OR: [...wordsConditions],
+        },
+        orderBy: {
+          createdAt: "desc",
+        },
+        take: soundsPerPage,
+        skip: soundsPerPage * (currentPage - 1),
+      }),
+      prisma.soundInfo.count({
+        where: {
+          OR: [...wordsConditions],
+        },
+      }),
+    ]);
 
-    // 音声情報検索結果 総ページ数
-    const totalSounds = await prisma.soundInfo.count({
-      where: {
-        OR: [...wordsConditions],
-      },
-    });
+    const soundsList = result[0];
+    const totalSounds = result[1];
     const totalPages = Math.ceil(totalSounds / soundsPerPage);
 
-    return res.send({ soundsList: result, totalPages });
+    return res.send({ soundsList, totalPages });
   } catch (error) {
     console.log("エラー発生");
     console.log(error);
