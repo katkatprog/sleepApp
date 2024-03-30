@@ -58,34 +58,15 @@ soundInfoRouter.get("/search", async (req, res) => {
       skip: soundsPerPage * (currentPage - 1),
     });
 
-    return res.send(result);
-  } catch (error) {
-    console.log("エラー発生");
-    console.log(error);
-    return res.status(500).send("Something went wrong...");
-  }
-});
-
-// 音声検索結果の総ページ数を計算
-soundInfoRouter.get("/total-search-result-pages", async (req, res) => {
-  // 検索キーワードを元に検索条件を作成
-  const searchWord = String(req.query.q || "");
-  let wordsConditions: { name: { contains: string } }[] = [];
-  const wordsArray: string[] = searchWord.split(" ");
-  wordsConditions = wordsArray.map((word) => ({
-    name: {
-      contains: word,
-    },
-  }));
-
-  try {
+    // 音声情報検索結果 総ページ数
     const totalSounds = await prisma.soundInfo.count({
       where: {
         OR: [...wordsConditions],
       },
     });
     const totalPages = Math.ceil(totalSounds / soundsPerPage);
-    return res.json(totalPages);
+
+    return res.send({ soundsList: result, totalPages });
   } catch (error) {
     console.log("エラー発生");
     console.log(error);
