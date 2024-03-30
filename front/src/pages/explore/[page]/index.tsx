@@ -36,17 +36,21 @@ const ExplorePage = (props: SoundsListProps) => {
       ))}
       <div className="h-28 pt-4 flex items-start justify-center">
         <div className="flex items-center">
-          <Link href={`/explore/${props.currentPage - 1}`}>
-            <button className="rounded-md px-4 py-2 border border-neutral-700 hover:bg-neutral-700 transition mr-4">
-              <ArrowLongLeftIcon propClassName=""></ArrowLongLeftIcon>
-            </button>
-          </Link>
+          {props.currentPage > 1 && (
+            <Link href={`/explore/${props.currentPage - 1}`}>
+              <button className="rounded-md px-2 py-2 border border-neutral-700 hover:bg-neutral-700 transition mr-4">
+                <ArrowLongLeftIcon propClassName=""></ArrowLongLeftIcon>
+              </button>
+            </Link>
+          )}
           {`${props.currentPage} / ${props.totalPages}`}
-          <Link href={`/explore/${props.currentPage + 1}`}>
-            <button className="rounded-md px-4 py-2 border border-neutral-700 hover:bg-neutral-700 transition ml-4">
-              <ArrowLongRightIcon propClassName=""></ArrowLongRightIcon>
-            </button>
-          </Link>
+          {props.currentPage < props.totalPages && (
+            <Link href={`/explore/${props.currentPage + 1}`}>
+              <button className="rounded-md px-2 py-2 border border-neutral-700 hover:bg-neutral-700 transition ml-4">
+                <ArrowLongRightIcon propClassName=""></ArrowLongRightIcon>
+              </button>
+            </Link>
+          )}
         </div>
       </div>
     </>
