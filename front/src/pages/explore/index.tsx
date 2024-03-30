@@ -1,9 +1,15 @@
+import { ArrowLongLeftIcon } from "@/components/icons/ArrowLongLeftIcon";
+import { ArrowLongRightIcon } from "@/components/icons/ArrowLongRightIcon";
 import { SoundInfo } from "@prisma/client";
 import { GetServerSideProps } from "next";
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/router";
 
 const ExplorePage = (props: SoundsListProps) => {
+  const router = useRouter();
+  const currentPage = Number(router.query.page);
+
   return (
     <>
       {props.soundsList.map((sound) => (
@@ -33,16 +39,23 @@ const ExplorePage = (props: SoundsListProps) => {
         </Link>
       ))}
       <div className="h-28 pt-4 flex items-start justify-center">
-        <Link href={`/explore/${props.page - 1}`}>
-          <button className="rounded-md px-4 py-2 border border-neutral-700 hover:bg-neutral-700 transition">
-            Prev
-          </button>
-        </Link>
-        <Link href={`/explore/${props.page + 1}`}>
-          <button className="rounded-md px-4 py-2 border border-neutral-700 hover:bg-neutral-700 transition ml-2">
-            Next
-          </button>
-        </Link>
+        <div className="flex items-center">
+          {currentPage > 1 && (
+            <Link href={`/explore?page=${currentPage - 1}`}>
+              <button className="rounded-md px-2 py-2 border border-neutral-700 hover:bg-neutral-700 transition mr-4">
+                <ArrowLongLeftIcon propClassName=""></ArrowLongLeftIcon>
+              </button>
+            </Link>
+          )}
+          {`${currentPage} / ${props.totalPages}`}
+          {currentPage < props.totalPages && (
+            <Link href={`/explore?page=${currentPage + 1}`}>
+              <button className="rounded-md px-2 py-2 border border-neutral-700 hover:bg-neutral-700 transition ml-4">
+                <ArrowLongRightIcon propClassName=""></ArrowLongRightIcon>
+              </button>
+            </Link>
+          )}
+        </div>
       </div>
     </>
   );
@@ -54,20 +67,22 @@ export const getServerSideProps: GetServerSideProps<SoundsListProps> = async (
   context,
 ) => {
   // APIから音声リストを取得
-  const response = await fetch(
-    `${process.env.API_URL}/sound-info/list/${context.params?.page}`,
-  );
-  const soundsList: Omit<SoundInfo, "url">[] = await response.json();
+  const response = await Promise.all([
+    fetch(`${process.env.API_URL}/sound-info/list?page=${context.query?.page}`),
+    fetch(`${process.env.API_URL}/sound-info/total-search-result-pages`),
+  ]);
+  const soundsList: SoundInfo[] = await response[0].json();
+  const totalPages: number = await response[1].json();
 
   return {
     props: {
       soundsList,
-      page: Number(context.params?.page),
+      totalPages,
     },
   };
 };
 
 interface SoundsListProps {
-  soundsList: Omit<SoundInfo, "url">[];
-  page: number;
+  soundsList: SoundInfo[];
+  totalPages: number;
 }
