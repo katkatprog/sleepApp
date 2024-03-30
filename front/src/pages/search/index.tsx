@@ -6,30 +6,29 @@ import { GetServerSideProps } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { useState } from "react";
+import { useRef } from "react";
 
 const SearchPage = (props: SoundsListProps) => {
   const router = useRouter();
   const currentPage = Number(router.query.page);
-  const [searchQuery, setSearchQuery] = useState(router.query.q);
+  const inputRef = useRef<HTMLInputElement>(null);
 
   return (
     <>
       <form
         onSubmit={(e) => {
           e.preventDefault();
-          router.push(`/search?page=1&q=${searchQuery || ""}`);
+          router.push(`/search?page=1&q=${inputRef.current?.value || ""}`);
         }}
       >
         <div className="rounded-lg my-6 px-2 py-1 border border-neutral-700">
           <SearchIcon propClassName="w-5 h-5 stroke-2 inline-block"></SearchIcon>
           <input
+            ref={inputRef}
             type="text"
             className="h-8 bg-neutral-800 outline-none border-none ml-1 w-11/12 placeholder:text-gray-500"
             placeholder="検索"
-            onChange={(e) => {
-              setSearchQuery(e.target.value);
-            }}
+            defaultValue={router.query.q || ""}
           />
         </div>
       </form>
