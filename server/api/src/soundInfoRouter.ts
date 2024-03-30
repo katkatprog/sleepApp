@@ -2,17 +2,17 @@ import { PrismaClient } from "@prisma/client";
 import express from "express";
 const prisma = new PrismaClient();
 export const soundInfoRouter = express.Router();
-const numSoundsPerPage = 20;
+const soundsPerPage = 20;
 
 // 音声情報取得(個別)
 soundInfoRouter.get("/single/:id", async (req, res) => {
-  const numParam = Number(req.params.id);
-  if (isNaN(numParam)) {
+  const soundId = Number(req.params.id);
+  if (isNaN(soundId)) {
     return res.status(400).send("Request Param is not valid...");
   }
   try {
     const result = await prisma.soundInfo.findUnique({
-      where: { id: numParam },
+      where: { id: soundId },
     });
     if (!result) {
       return res.status(404).send("Sound info was not found...");
@@ -27,12 +27,12 @@ soundInfoRouter.get("/single/:id", async (req, res) => {
 
 // 音声情報取得(一覧)
 soundInfoRouter.get("/list", async (req, res) => {
-  const numCurrentPage = Number(req.query.page);
-  if (isNaN(numCurrentPage)) {
+  const currentPage = Number(req.query.page);
+  if (isNaN(currentPage)) {
     return res.status(400).send("Request Param is not valid...");
   }
 
-  if (numCurrentPage <= 0) {
+  if (currentPage <= 0) {
     return res.status(404).send("Page is not found...");
   }
 
@@ -42,8 +42,8 @@ soundInfoRouter.get("/list", async (req, res) => {
       orderBy: {
         createdAt: "desc",
       },
-      take: numSoundsPerPage,
-      skip: numSoundsPerPage * (numCurrentPage - 1),
+      take: soundsPerPage,
+      skip: soundsPerPage * (currentPage - 1),
     });
 
     if (result.length === 0) {
@@ -61,8 +61,8 @@ soundInfoRouter.get("/list", async (req, res) => {
 // 音声検索結果の総ページ数を計算
 soundInfoRouter.get("/total-search-result-pages", async (req, res) => {
   try {
-    const numSounds = await prisma.soundInfo.count();
-    const totalPages = Math.ceil(numSounds / numSoundsPerPage);
+    const totalSounds = await prisma.soundInfo.count();
+    const totalPages = Math.ceil(totalSounds / soundsPerPage);
     return res.json(totalPages);
   } catch (error) {
     console.log("エラー発生");
