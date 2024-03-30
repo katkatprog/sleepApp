@@ -1,3 +1,5 @@
+import { ArrowLongLeftIcon } from "@/components/icons/ArrowLongLeftIcon";
+import { ArrowLongRightIcon } from "@/components/icons/ArrowLongRightIcon";
 import { SoundInfo } from "@prisma/client";
 import { GetServerSideProps } from "next";
 import Image from "next/image";
@@ -33,16 +35,16 @@ const ExplorePage = (props: SoundsListProps) => {
         </Link>
       ))}
       <div className="h-28 pt-4 flex items-start justify-center">
-        <div>
+        <div className="flex items-center">
           <Link href={`/explore/${props.currentPage - 1}`}>
             <button className="rounded-md px-4 py-2 border border-neutral-700 hover:bg-neutral-700 transition mr-4">
-              Prev
+              <ArrowLongLeftIcon propClassName=""></ArrowLongLeftIcon>
             </button>
           </Link>
           {`${props.currentPage} / ${props.totalPages}`}
           <Link href={`/explore/${props.currentPage + 1}`}>
             <button className="rounded-md px-4 py-2 border border-neutral-700 hover:bg-neutral-700 transition ml-4">
-              Next
+              <ArrowLongRightIcon propClassName=""></ArrowLongRightIcon>
             </button>
           </Link>
         </div>
