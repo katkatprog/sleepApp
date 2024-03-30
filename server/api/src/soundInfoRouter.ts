@@ -32,6 +32,10 @@ soundInfoRouter.get("/list", async (req, res) => {
     return res.status(400).send("Request Param is not valid...");
   }
 
+  if (numCurrentPage <= 0) {
+    return res.status(404).send("Page is not found...");
+  }
+
   try {
     // 音声情報リストを取得
     const result = await prisma.soundInfo.findMany({
@@ -41,6 +45,11 @@ soundInfoRouter.get("/list", async (req, res) => {
       take: numSoundsPerPage,
       skip: numSoundsPerPage * (numCurrentPage - 1),
     });
+
+    if (result.length === 0) {
+      return res.status(404).send("Page is not found...");
+    }
+
     return res.send(result);
   } catch (error) {
     console.log("エラー発生");
