@@ -54,7 +54,7 @@ soundInfoRouter.get("/total-search-result-pages", async (req, res) => {
   try {
     const numSounds = await prisma.soundInfo.count();
     const totalPages = Math.ceil(numSounds / numSoundsPerPage);
-    return res.send({ totalPages });
+    return res.json(totalPages);
   } catch (error) {
     console.log("エラー発生");
     console.log(error);
