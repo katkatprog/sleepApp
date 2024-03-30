@@ -69,7 +69,6 @@ export const getServerSideProps: GetServerSideProps<SoundsListProps> = async (
   ]);
   const soundsList: SoundInfo[] = await response[0].json();
   const totalPages: { numPages: number } = await response[1].json();
-  console.log(totalPages);
 
   return {
     props: {
