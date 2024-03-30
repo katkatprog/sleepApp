@@ -23,11 +23,12 @@ const SearchPage = (props: SoundsListProps) => {
           );
         }}
       >
-        <div className="rounded-lg m-4 px-2 py-1 border border-neutral-700">
+        <div className="rounded-lg my-6 px-2 py-1 border border-neutral-700">
           <SearchIcon propClassName="w-5 h-5 stroke-2 inline-block"></SearchIcon>
           <input
             type="text"
-            className="h-8 bg-neutral-800 outline-none border-none ml-1 w-11/12"
+            className="h-8 bg-neutral-800 outline-none border-none ml-1 w-11/12 placeholder:text-gray-500"
+            placeholder="検索"
             onChange={(e) => {
               setSearchQuery(e.target.value);
             }}
