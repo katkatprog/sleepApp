@@ -31,24 +31,32 @@ soundInfoRouter.get("/search", async (req, res) => {
   if (isNaN(currentPage)) {
     return res.status(400).send("Request Param is not valid...");
   }
-
   if (currentPage <= 0) {
     return res.status(404).send("Page is not found...");
   }
 
+  // 検索キーワードを元に検索条件を作成
+  const searchWord = String(req.query.q || "");
+  let wordsConditions: { name: { contains: string } }[] = [];
+  const wordsArray: string[] = searchWord.split(" ");
+  wordsConditions = wordsArray.map((word) => ({
+    name: {
+      contains: word,
+    },
+  }));
+
   try {
     // 音声情報リストを取得
     const result = await prisma.soundInfo.findMany({
+      where: {
+        OR: [...wordsConditions],
+      },
       orderBy: {
         createdAt: "desc",
       },
       take: soundsPerPage,
       skip: soundsPerPage * (currentPage - 1),
     });
-
-    if (result.length === 0) {
-      return res.status(404).send("Page is not found...");
-    }
 
     return res.send(result);
   } catch (error) {
@@ -60,8 +68,22 @@ soundInfoRouter.get("/search", async (req, res) => {
 
 // 音声検索結果の総ページ数を計算
 soundInfoRouter.get("/total-search-result-pages", async (req, res) => {
+  // 検索キーワードを元に検索条件を作成
+  const searchWord = String(req.query.q || "");
+  let wordsConditions: { name: { contains: string } }[] = [];
+  const wordsArray: string[] = searchWord.split(" ");
+  wordsConditions = wordsArray.map((word) => ({
+    name: {
+      contains: word,
+    },
+  }));
+
   try {
-    const totalSounds = await prisma.soundInfo.count();
+    const totalSounds = await prisma.soundInfo.count({
+      where: {
+        OR: [...wordsConditions],
+      },
+    });
     const totalPages = Math.ceil(totalSounds / soundsPerPage);
     return res.json(totalPages);
   } catch (error) {
