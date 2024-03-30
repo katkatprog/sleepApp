@@ -31,24 +31,36 @@ soundInfoRouter.get("/search", async (req, res) => {
   if (isNaN(currentPage)) {
     return res.status(400).send("Request Param is not valid...");
   }
-
   if (currentPage <= 0) {
     return res.status(404).send("Page is not found...");
+  }
+
+  // 検索キーワードを元に検索条件を作成
+  let wordsConditions: { name: { contains: string } }[] = [];
+  if (typeof req.query.q === "string") {
+    const wordsArray: string[] = req.query.q.split(" ");
+    wordsConditions = wordsArray.map((word) => ({
+      name: {
+        contains: word,
+      },
+    }));
   }
 
   try {
     // 音声情報リストを取得
     const result = await prisma.soundInfo.findMany({
+      where:
+        wordsConditions.length > 0
+          ? {
+              OR: [...wordsConditions],
+            }
+          : {},
       orderBy: {
         createdAt: "desc",
       },
       take: soundsPerPage,
       skip: soundsPerPage * (currentPage - 1),
     });
-
-    if (result.length === 0) {
-      return res.status(404).send("Page is not found...");
-    }
 
     return res.send(result);
   } catch (error) {
