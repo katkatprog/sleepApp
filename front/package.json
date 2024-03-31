@@ -8,8 +8,8 @@
     "start": "next start",
     "lint": "next lint",
     "format": "prettier --write .",
-    "db-pull": "./node_modules/.bin/dotenv -e .env.local -- yarn prisma db pull",
-    "db-gen": "./node_modules/.bin/dotenv -e .env.local -- yarn prisma generate"
+    "ci": "yarn format && yarn lint",
+    "db-pull": "./node_modules/.bin/dotenv -e .env.local -- yarn prisma db pull"
   },
   "dependencies": {
     "heroicons": "^2.1.1",
