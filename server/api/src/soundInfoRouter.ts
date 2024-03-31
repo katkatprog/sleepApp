@@ -52,7 +52,7 @@ soundInfoRouter.get("/search", async (req, res) => {
     const result = await Promise.all([
       prisma.soundInfo.findMany({
         where: {
-          OR: [...wordsConditions],
+          AND: [...wordsConditions],
         },
         orderBy: {
           createdAt: "desc",
@@ -62,7 +62,7 @@ soundInfoRouter.get("/search", async (req, res) => {
       }),
       prisma.soundInfo.count({
         where: {
-          OR: [...wordsConditions],
+          AND: [...wordsConditions],
         },
       }),
     ]);
