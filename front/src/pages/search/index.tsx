@@ -18,6 +18,7 @@ const SearchPage = (props: SoundsListProps) => {
       <form
         onSubmit={(e) => {
           e.preventDefault();
+          inputRef.current?.blur();
           router.push(`/search?page=1&q=${inputRef.current?.value || ""}`);
         }}
         className="flex justify-center items-center mx-3 my-6"
