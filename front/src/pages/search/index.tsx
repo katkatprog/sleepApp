@@ -41,6 +41,9 @@ const SearchPage = (props: SoundsListProps) => {
           className="h-10 ml-2 rounded-lg px-2 py-1 border-2 border-neutral-700 bg-neutral-800"
           onChange={() => {
             selectRef.current?.blur();
+            router.push(
+              `/search?q=${inputRef.current?.value || ""}&sort=${selectRef.current?.value}`,
+            );
           }}
           defaultValue={router.query.sort || "created"}
         >
@@ -88,7 +91,7 @@ const SearchPage = (props: SoundsListProps) => {
                   inputRef.current.value = (router.query.q || "").toString();
                 }
                 router.push(
-                  `/search?page=${currentPage - 1}&q=${router.query.q || ""}`,
+                  `/search?page=${currentPage - 1}&q=${router.query.q || ""}&sort=${router.query.sort || "created"}`,
                 );
               }}
             >
@@ -104,7 +107,7 @@ const SearchPage = (props: SoundsListProps) => {
                   inputRef.current.value = (router.query.q || "").toString();
                 }
                 router.push(
-                  `/search?page=${currentPage + 1}&q=${router.query.q || ""}`,
+                  `/search?page=${currentPage + 1}&q=${router.query.q || ""}&sort=${router.query.sort || "created"}`,
                 );
               }}
             >
