@@ -7,7 +7,7 @@
         "name": "[Dev]Batch Debug",
         "preLaunchTask": "CompileBatch",
         "cwd": "${workspaceFolder}",
-        "program": "${file}"
+        "program": "${workspaceFolder}/src/index.ts"
       }
     ]
   }

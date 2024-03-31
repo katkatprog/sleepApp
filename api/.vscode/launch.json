@@ -7,7 +7,7 @@
         "name": "[Dev]API Debug",
         "preLaunchTask": "CompileAPI",
         "cwd": "${workspaceFolder}",
-        "program": "${file}"
+        "program": "${workspaceFolder}/src/index.ts"
       }
     ]
   }

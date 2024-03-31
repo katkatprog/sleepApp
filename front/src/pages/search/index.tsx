@@ -10,8 +10,9 @@ import { useRef } from "react";
 
 const SearchPage = (props: SoundsListProps) => {
   const router = useRouter();
-  const currentPage = Number(router.query.page);
+  const currentPage = Number(router.query.page || 1);
   const inputRef = useRef<HTMLInputElement>(null);
+  const selectRef = useRef<HTMLSelectElement>(null);
 
   return (
     <>
@@ -19,7 +20,7 @@ const SearchPage = (props: SoundsListProps) => {
         onSubmit={(e) => {
           e.preventDefault();
           inputRef.current?.blur();
-          router.push(`/search?page=1&q=${inputRef.current?.value || ""}`);
+          router.push(`/search?q=${inputRef.current?.value || ""}`);
         }}
         className="flex justify-center items-center mx-3 my-6"
       >
@@ -33,7 +34,24 @@ const SearchPage = (props: SoundsListProps) => {
         <button className="h-10 px-4 bg-neutral-700 hover:bg-neutral-500 rounded-r-lg rounded-l-none transition">
           <SearchIcon propClassName="w-5 h-5 stroke-2"></SearchIcon>
         </button>
+
+        <select
+          ref={selectRef}
+          name="sort"
+          className="h-10 ml-2 rounded-lg px-2 py-1 border-2 border-neutral-700 bg-neutral-800"
+          onChange={() => {
+            selectRef.current?.blur();
+            router.push(
+              `/search?q=${inputRef.current?.value || ""}&sort=${selectRef.current?.value}`,
+            );
+          }}
+          defaultValue={router.query.sort || "created"}
+        >
+          <option value="created">新着順</option>
+          <option value="count">再生数順</option>
+        </select>
       </form>
+
       {props.soundsList.map((sound) => (
         <Link href={`/play/${sound.id}`} key={sound.id}>
           <div className="h-20 px-4 pt-2 border-b flex justify-between items-start border-neutral-700 hover:bg-neutral-700 transition">
@@ -73,7 +91,7 @@ const SearchPage = (props: SoundsListProps) => {
                   inputRef.current.value = (router.query.q || "").toString();
                 }
                 router.push(
-                  `/search?page=${currentPage - 1}&q=${router.query.q || ""}`,
+                  `/search?page=${currentPage - 1}&q=${router.query.q || ""}&sort=${router.query.sort || "created"}`,
                 );
               }}
             >
@@ -89,7 +107,7 @@ const SearchPage = (props: SoundsListProps) => {
                   inputRef.current.value = (router.query.q || "").toString();
                 }
                 router.push(
-                  `/search?page=${currentPage + 1}&q=${router.query.q || ""}`,
+                  `/search?page=${currentPage + 1}&q=${router.query.q || ""}&sort=${router.query.sort || "created"}`,
                 );
               }}
             >
@@ -110,7 +128,7 @@ export const getServerSideProps: GetServerSideProps<SoundsListProps> = async (
   // APIから音声リストを取得
   const response: SoundsListProps = await (
     await fetch(
-      `${process.env.API_URL}/sound-info/search?page=${context.query?.page}&q=${context.query?.q || ""}`,
+      `${process.env.API_URL}/sound-info/search?page=${context.query?.page || 1}&q=${context.query?.q || ""}&sort=${context.query?.sort || "created"}`,
     )
   ).json();
 
