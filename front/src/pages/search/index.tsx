@@ -56,6 +56,7 @@ const SearchPage = (props: SoundsListProps) => {
                   ></Image>
                 ))}
               <p>{new Date(sound.createdAt).toLocaleDateString()}</p>
+              <p>{sound.playCount} 回再生</p>
             </div>
           </div>
         </Link>
