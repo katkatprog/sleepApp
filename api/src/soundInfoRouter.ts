@@ -46,6 +46,17 @@ soundInfoRouter.get("/search", async (req, res) => {
     return res.status(404).send("Page is not found...");
   }
 
+  // クエリパラメータsortの整理
+  const sortBy = String(req.query.sort || "created");
+  let sortCondition: { createdAt: "desc" } | { playCount: "desc" };
+  if (sortBy === "created") {
+    sortCondition = { createdAt: "desc" };
+  } else if (sortBy === "count") {
+    sortCondition = { playCount: "desc" };
+  } else {
+    return res.status(400).send("Request Param is not valid...");
+  }
+
   // 検索キーワードを元に検索条件を作成
   const searchWord = String(req.query.q || "");
   let wordsConditions: { name: { contains: string } }[] = [];
@@ -66,9 +77,7 @@ soundInfoRouter.get("/search", async (req, res) => {
         where: {
           AND: [...wordsConditions],
         },
-        orderBy: {
-          createdAt: "desc",
-        },
+        orderBy: sortCondition,
         take: soundsPerPage,
         skip: soundsPerPage * (currentPage - 1),
       }),
