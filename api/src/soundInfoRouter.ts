@@ -12,22 +12,22 @@ soundInfoRouter.get("/single/:id", async (req, res) => {
   }
   try {
     // 音声情報取得
-    const result = await prisma.soundInfo.findUnique({
+    const soundInfo = await prisma.soundInfo.findUnique({
       where: { id: soundId },
     });
-    if (!result) {
+    if (!soundInfo) {
       return res.status(404).send("Sound info was not found...");
     }
     // 再生数加算
     await prisma.soundInfo.update({
       data: {
-        playCount: result.playCount + 1,
+        playCount: soundInfo.playCount + 1,
       },
       where: {
         id: soundId,
       },
     });
-    return res.send(result);
+    return res.send(soundInfo);
   } catch (error) {
     console.log("エラー発生");
     console.log(error);
