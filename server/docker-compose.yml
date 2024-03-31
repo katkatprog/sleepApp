@@ -12,7 +12,7 @@ services:
       - api_store:/workspace/server/api/node_modules
     command: >
       sh -c 
-        "yarn && yarn dev"
+        "yarn && tail -f /dev/null"
     ports:
       - "8080:8080"
     depends_on:
