@@ -8,13 +8,13 @@ import { SoundInfo } from "@prisma/client";
 const PlayPage = ({ soundInfo }: SoundInfoProps) => {
   const audioRef = useRef<HTMLAudioElement>(null);
   const [isPlaying, setIsPlaying] = useState(false);
-  const [duration, setDuration] = useState("0:00");
+  const [totalTime, setTotalTime] = useState("0:00");
   const [currentTime, setCurrentTime] = useState("0:00");
 
   // 音声の全体時間が明らかになったとき、ステートにセットする
   useEffect(() => {
-    const strDuration = secondFormat(audioRef.current?.duration || 0);
-    setDuration(strDuration);
+    const strTotalTime = secondFormat(audioRef.current?.duration || 0);
+    setTotalTime(strTotalTime);
   }, [audioRef.current?.duration]);
 
   return (
@@ -72,7 +72,7 @@ const PlayPage = ({ soundInfo }: SoundInfoProps) => {
             isPlaying={isPlaying}
             setIsPlaying={setIsPlaying}
           ></PlayButton>
-          <p className="text-green-400 ml-6">{`${currentTime} / ${duration}`}</p>
+          <p className="text-green-400 ml-6">{`${currentTime} / ${totalTime}`}</p>
         </div>
       </div>
     </div>
