@@ -20,7 +20,25 @@ const PlayPage = ({ soundInfo }: SoundInfoProps) => {
   return (
     <div className="p-7">
       <div>
-        <h1 className=" text-2xl font-bold">{soundInfo.name}</h1>
+        <div className="flex items-center">
+          <h1 className=" text-2xl font-bold mr-2">{soundInfo.name}</h1>
+          {soundInfo.isMaleVoice !== null &&
+            (soundInfo.isMaleVoice ? (
+              <Image
+                alt="#"
+                src={"/male_icon.svg"}
+                width={32}
+                height={32}
+              ></Image>
+            ) : (
+              <Image
+                alt="#"
+                src={"/female_icon.svg"}
+                width={32}
+                height={32}
+              ></Image>
+            ))}
+        </div>
         <div className="flex justify-between mt-3">
           <p className="">
             {new Date(soundInfo.createdAt).toLocaleDateString()}
