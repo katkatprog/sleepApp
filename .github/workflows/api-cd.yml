@@ -4,12 +4,12 @@ on:
   push:
     branches: main
     paths:
-      - 'server/api/**'
-      - '.github/**'
+      - "api/**"
+      - ".github/**"
 
 defaults:
   run:
-    working-directory: server/api
+    working-directory: api
 
 permissions:
   id-token: write
@@ -33,7 +33,7 @@ jobs:
         uses: aws-actions/amazon-ecr-login@v1
         with:
           mask-password: true
-      
+
       - name: Build and push image to ECR
         id: build-image
         env:

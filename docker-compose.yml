@@ -8,11 +8,11 @@ services:
     tty: true
     stdin_open: true
     volumes:
-      - ..:/workspace
-      - api_store:/workspace/server/api/node_modules
+      - .:/workspace
+      - api_store:/workspace/api/node_modules
     command: >
       sh -c 
-        "yarn && yarn dev"
+        "yarn && tail -f /dev/null"
     ports:
       - "8080:8080"
     depends_on:
@@ -25,8 +25,8 @@ services:
     tty: true
     stdin_open: true
     volumes:
-      - ..:/workspace
-      - batch_store:/workspace/server/batch/node_modules
+      - .:/workspace
+      - batch_store:/workspace/batch/node_modules
     command: >
       sh -c 
         "yarn && tail -f /dev/null"
