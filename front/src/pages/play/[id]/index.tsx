@@ -39,8 +39,8 @@ const PlayPage = ({ soundInfo }: SoundInfoProps) => {
               ></Image>
             </div>
           )}
-          <p>{`${soundInfo.playCount} 回再生`}</p>
         </div>
+        <p>{`${soundInfo.playCount} 回再生`}</p>
       </div>
 
       <div className="flex justify-center mt-8">

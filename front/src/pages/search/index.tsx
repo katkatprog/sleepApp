@@ -36,9 +36,9 @@ const SearchPage = (props: SoundsListProps) => {
       </form>
       {props.soundsList.map((sound) => (
         <Link href={`/play/${sound.id}`} key={sound.id}>
-          <div className="h-20 px-4 border-b flex justify-between border-neutral-700 hover:bg-neutral-700 transition">
-            <h1 className="font-bold mt-4">{sound.name}</h1>
-            <div className="mt-2">
+          <div className="h-20 px-4 pt-2 border-b flex justify-between items-start border-neutral-700 hover:bg-neutral-700 transition">
+            <div className="flex pt-2">
+              <h1 className="font-bold mr-2">{sound.name}</h1>
               {sound.isMaleVoice !== null &&
                 (sound.isMaleVoice ? (
                   <Image
@@ -55,6 +55,8 @@ const SearchPage = (props: SoundsListProps) => {
                     height={32}
                   ></Image>
                 ))}
+            </div>
+            <div>
               <p>{new Date(sound.createdAt).toLocaleDateString()}</p>
               <p>{sound.playCount} 回再生</p>
             </div>
