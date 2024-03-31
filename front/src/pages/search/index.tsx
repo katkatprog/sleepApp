@@ -12,6 +12,7 @@ const SearchPage = (props: SoundsListProps) => {
   const router = useRouter();
   const currentPage = Number(router.query.page || 1);
   const inputRef = useRef<HTMLInputElement>(null);
+  const selectRef = useRef<HTMLSelectElement>(null);
 
   return (
     <>
@@ -33,7 +34,20 @@ const SearchPage = (props: SoundsListProps) => {
         <button className="h-10 px-4 bg-neutral-700 hover:bg-neutral-500 rounded-r-lg rounded-l-none transition">
           <SearchIcon propClassName="w-5 h-5 stroke-2"></SearchIcon>
         </button>
+
+        <select
+          ref={selectRef}
+          name="sort"
+          className="h-10 ml-2 rounded-lg px-2 py-1 border-2 border-neutral-700 bg-neutral-800"
+          onChange={() => {
+            selectRef.current?.blur();
+          }}
+        >
+          <option>新着順</option>
+          <option>再生数順</option>
+        </select>
       </form>
+
       {props.soundsList.map((sound) => (
         <Link href={`/play/${sound.id}`} key={sound.id}>
           <div className="h-20 px-4 pt-2 border-b flex justify-between items-start border-neutral-700 hover:bg-neutral-700 transition">
