@@ -27,7 +27,7 @@ soundInfoRouter.get("/single/:id", async (req, res) => {
         id: soundId,
       },
     });
-    return res.send(soundInfo);
+    return res.send({ ...soundInfo, playCount: soundInfo.playCount + 1 });
   } catch (error) {
     console.log("エラー発生");
     console.log(error);
