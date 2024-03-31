@@ -13,4 +13,5 @@ model SoundInfo {
   createdAt   DateTime @default(now())
   url         String
   isMaleVoice Boolean?
+  playCount   Int      @default(0)
 }

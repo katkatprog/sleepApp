@@ -11,13 +11,23 @@ soundInfoRouter.get("/single/:id", async (req, res) => {
     return res.status(400).send("Request Param is not valid...");
   }
   try {
-    const result = await prisma.soundInfo.findUnique({
+    // 音声情報取得
+    const soundInfo = await prisma.soundInfo.findUnique({
       where: { id: soundId },
     });
-    if (!result) {
+    if (!soundInfo) {
       return res.status(404).send("Sound info was not found...");
     }
-    return res.send(result);
+    // 再生数加算
+    await prisma.soundInfo.update({
+      data: {
+        playCount: soundInfo.playCount + 1,
+      },
+      where: {
+        id: soundId,
+      },
+    });
+    return res.send({ ...soundInfo, playCount: soundInfo.playCount + 1 });
   } catch (error) {
     console.log("エラー発生");
     console.log(error);
