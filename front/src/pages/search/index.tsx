@@ -18,6 +18,7 @@ const SearchPage = (props: SoundsListProps) => {
       <form
         onSubmit={(e) => {
           e.preventDefault();
+          inputRef.current?.blur();
           router.push(`/search?page=1&q=${inputRef.current?.value || ""}`);
         }}
         className="flex justify-center items-center mx-3 my-6"
@@ -25,11 +26,11 @@ const SearchPage = (props: SoundsListProps) => {
         <input
           ref={inputRef}
           type="text"
-          className="h-10 bg-neutral-800 border border-neutral-700 placeholder:text-gray-600 rounded-l-lg pl-2 outline-neutral-500 w-full"
+          className="h-10 bg-neutral-800 border-2 border-neutral-700 placeholder:text-gray-600 rounded-l-lg rounded-r-none pl-2 outline-neutral-500 w-full"
           placeholder="検索"
           defaultValue={router.query.q || ""}
         />
-        <button className="h-10 px-4 bg-neutral-700 hover:bg-neutral-500 rounded-r-lg">
+        <button className="h-10 px-4 bg-neutral-700 hover:bg-neutral-500 rounded-r-lg rounded-l-none transition">
           <SearchIcon propClassName="w-5 h-5 stroke-2"></SearchIcon>
         </button>
       </form>
