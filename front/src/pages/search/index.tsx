@@ -42,9 +42,10 @@ const SearchPage = (props: SoundsListProps) => {
           onChange={() => {
             selectRef.current?.blur();
           }}
+          defaultValue={router.query.sort || "created"}
         >
-          <option>新着順</option>
-          <option>再生数順</option>
+          <option value="created">新着順</option>
+          <option value="count">再生数順</option>
         </select>
       </form>
 
