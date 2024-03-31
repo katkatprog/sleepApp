@@ -38,7 +38,8 @@ soundInfoRouter.get("/search", async (req, res) => {
   // 検索キーワードを元に検索条件を作成
   const searchWord = String(req.query.q || "");
   let wordsConditions: { name: { contains: string } }[] = [];
-  const wordsArray: string[] = searchWord.split(" ");
+  // eslint-disable-next-line no-irregular-whitespace
+  const wordsArray: string[] = searchWord.split(/ |　/);
   wordsConditions = wordsArray.map((word) => ({
     name: {
       contains: word,
