@@ -10,7 +10,7 @@ import { useRef } from "react";
 
 const SearchPage = (props: SoundsListProps) => {
   const router = useRouter();
-  const currentPage = Number(router.query.page);
+  const currentPage = Number(router.query.page || 1);
   const inputRef = useRef<HTMLInputElement>(null);
 
   return (
@@ -19,7 +19,7 @@ const SearchPage = (props: SoundsListProps) => {
         onSubmit={(e) => {
           e.preventDefault();
           inputRef.current?.blur();
-          router.push(`/search?page=1&q=${inputRef.current?.value || ""}`);
+          router.push(`/search?q=${inputRef.current?.value || ""}`);
         }}
         className="flex justify-center items-center mx-3 my-6"
       >
@@ -110,7 +110,7 @@ export const getServerSideProps: GetServerSideProps<SoundsListProps> = async (
   // APIから音声リストを取得
   const response: SoundsListProps = await (
     await fetch(
-      `${process.env.API_URL}/sound-info/search?page=${context.query?.page}&q=${context.query?.q || ""}`,
+      `${process.env.API_URL}/sound-info/search?page=${context.query?.page || 1}&q=${context.query?.q || ""}`,
     )
   ).json();
 

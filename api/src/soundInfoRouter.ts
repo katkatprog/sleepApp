@@ -37,7 +37,8 @@ soundInfoRouter.get("/single/:id", async (req, res) => {
 
 // 音声情報取得(一覧)
 soundInfoRouter.get("/search", async (req, res) => {
-  const currentPage = Number(req.query.page);
+  // クエリパラメータpageが存在しない場合、1をセット
+  const currentPage = Number(req.query.page || 1);
   if (isNaN(currentPage)) {
     return res.status(400).send("Request Param is not valid...");
   }

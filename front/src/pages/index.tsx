@@ -16,7 +16,7 @@ const HomePage = () => {
               <br />
               今日も快適な睡眠を...
             </h3>
-            <Link href={"/search?page=1"}>
+            <Link href={"/search"}>
               <button className="mt-6 bg-green-600 hover:bg-green-500 font-bold px-12 py-4 rounded-md transition">
                 <SearchIcon propClassName="w-7 h-7 stroke-2 inline mr-2"></SearchIcon>
                 音声を探す
