@@ -1,4 +1,14 @@
-import { arrayShuffle } from "./func";
+import { arrayShuffle, wordsToSSML } from "./func";
+
+describe("SSML作成処理のテスト", () => {
+  it("文字列の配列から、期待したSSMLが作られるかテスト", () => {
+    const inputArray = ["a", "b", "c"];
+    const outputStr = wordsToSSML(inputArray);
+    expect(outputStr).toBe(
+      `<speak><prosody rate="95%">a<break time="6s"/>b<break time="6s"/>c<break time="6s"/></prosody></speak>`,
+    );
+  });
+});
 
 describe("配列シャッフル処理のテスト", () => {
   let inputArray: string[];
