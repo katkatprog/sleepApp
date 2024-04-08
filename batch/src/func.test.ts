@@ -1,4 +1,20 @@
-import { arrayShuffle, wordsToSSML } from "./func";
+import {
+  arrayShuffle,
+  extractWordsListFromGPTResponse,
+  wordsToSSML,
+} from "./func";
+
+describe("単語リスト生成処理のテスト", () => {
+  it("GPTのレスポンスから単語リストを生成できることのテスト", () => {
+    const gptRes =
+      '{\n  "noun": [\n    "テーブル",\n    "椅子",\n    "コンピュータ"\n  ]\n}';
+    expect(extractWordsListFromGPTResponse(gptRes)).toEqual([
+      "テーブル",
+      "椅子",
+      "コンピュータ",
+    ]);
+  });
+});
 
 describe("SSML作成処理のテスト", () => {
   it("文字列の配列から、期待したSSMLが作られるかテスト", () => {

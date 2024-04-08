@@ -8,7 +8,7 @@
     "format": "prettier --write ./src/**/*.ts",
     "lint": "eslint ./src/**/*.ts",
     "ci": "yarn lint && yarn format",
-    "test": "jest"
+    "test": "tsc && jest"
   },
   "devDependencies": {
     "@types/jest": "^29.5.12",
