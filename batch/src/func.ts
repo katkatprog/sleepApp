@@ -27,8 +27,19 @@ export const generateDailyWordsList = async () => {
     model: "gpt-3.5-turbo",
     max_tokens: 4096,
   });
+  const wordsList = extractWordsListFromGPTResponse(
+    chatCompletion.choices[0].message.content,
+  );
+
+  console.log(`生成された単語リスト：${wordsList}`);
+  console.log(`単語数: ${wordsList.length}`);
+
+  return wordsList;
+};
+
+export const extractWordsListFromGPTResponse = (gptResMsg: string | null) => {
   // 返答
-  let resContent = chatCompletion.choices[0].message.content;
+  let resContent = gptResMsg;
   if (!resContent) {
     throw new Error("GPTからの返答の文字列がありません");
   }
@@ -43,9 +54,6 @@ export const generateDailyWordsList = async () => {
   const wordsList: string[] = JSON.parse(
     resContent.substring(indexOfStartArr, indexOfEndArr + 1),
   );
-
-  console.log(`生成された単語リスト：${wordsList}`);
-  console.log(`単語数: ${wordsList.length}`);
 
   return wordsList;
 };
