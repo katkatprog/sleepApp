@@ -1,11 +1,13 @@
 name: batch-cd
 
 on:
-  push:
-    branches: main
-    paths:
-      - "batch/**"
-      - ".github/**"
+  workflow_run:
+    workflows:
+      - first-workflow
+    branches:
+      - main
+    types: 
+      - completed
 
 defaults:
   run:

@@ -1,0 +1,23 @@
+name: batch-ci
+
+on:
+  push:
+    branches:
+      - "*"
+    paths:
+      - "batch/**"
+      - ".github/**"
+
+defaults:
+  run:
+    working-directory: batch
+
+  # テスト実行
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: do test
+        run: yarn test
