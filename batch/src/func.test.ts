@@ -1,18 +1,34 @@
-import {
-  arrayShuffle,
-  extractWordsListFromGPTResponse,
-  wordsToSSML,
-} from "./func";
+import OpenAI from "openai";
+import { arrayShuffle, generateDailyWordsList, wordsToSSML } from "./func";
+
+jest.mock("openai", () => {
+  return jest.fn().mockImplementation(() => {
+    return {
+      chat: {
+        completions: {
+          create: jest.fn().mockImplementation(async () => {
+            return {
+              choices: [
+                {
+                  message: {
+                    content:
+                      '{\n  "noun": [\n    "テーブル",\n    "椅子",\n    "コンピュータ"\n  ]\n}',
+                  },
+                },
+              ],
+            };
+          }),
+        },
+      },
+    };
+  });
+});
+jest.mocked(OpenAI);
 
 describe("単語リスト生成処理のテスト", () => {
-  it("GPTのレスポンスから単語リストを生成できることのテスト", () => {
-    const gptRes =
-      '{\n  "noun": [\n    "テーブル",\n    "椅子",\n    "コンピュータ"\n  ]\n}';
-    expect(extractWordsListFromGPTResponse(gptRes)).toEqual([
-      "テーブル",
-      "椅子",
-      "コンピュータ",
-    ]);
+  it("正しくstring型配列を生成できることのテスト", async () => {
+    const result = await generateDailyWordsList();
+    expect(result).toEqual(["テーブル", "椅子", "コンピュータ"]);
   });
 });
 
