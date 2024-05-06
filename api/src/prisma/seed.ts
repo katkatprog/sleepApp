@@ -1,4 +1,4 @@
-import prisma from "../client";
+import prisma from "./client";
 
 const main = async () => {
   if (!process.env.TEST_SOUND_URL) {

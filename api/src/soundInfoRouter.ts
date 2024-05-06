@@ -1,5 +1,5 @@
 import express from "express";
-import prisma from "./client";
+import prisma from "./prisma/client";
 export const soundInfoRouter = express.Router();
 const soundsPerPage = 20;
 

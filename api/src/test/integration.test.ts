@@ -1,5 +1,5 @@
 import { SoundInfo } from "@prisma/client"
-import { prismaMock } from "../singleton"
+import { prismaMock } from "../prisma/singleton"
 import request from "supertest"
 import { app } from "../app"
 
