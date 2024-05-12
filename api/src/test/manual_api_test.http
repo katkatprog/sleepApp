@@ -1,0 +1,20 @@
+### 生存確認用のエンドポイント
+GET http://localhost:8080/health
+
+### 音声情報を個別取得
+GET http://localhost:8080/sound-info/single/1
+
+### 音声情報を検索（条件指定なし）
+GET http://localhost:8080/sound-info/search
+
+### 音声情報を検索（「a」という文字列で検索）
+GET http://localhost:8080/sound-info/search?q=a
+
+### 音声情報を検索（作成日順でソート）
+GET http://localhost:8080/sound-info/search?sort=created
+
+### 音声情報を検索（再生回数順でソート）
+GET http://localhost:8080/sound-info/search?sort=count
+
+### 音声情報を検索（ページ指定あり）
+GET http://localhost:8080/sound-info/search?page=1

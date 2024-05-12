@@ -1,6 +1,5 @@
-import { PrismaClient } from "@prisma/client";
 import express from "express";
-const prisma = new PrismaClient();
+import prisma from "./prisma/client";
 export const soundInfoRouter = express.Router();
 const soundsPerPage = 20;
 

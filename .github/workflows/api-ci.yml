@@ -1,0 +1,23 @@
+name: api-ci
+
+on:
+  push:
+    branches:
+      - "*"
+    paths:
+      - "api/**"
+      - ".github/**"
+
+defaults:
+  run:
+    working-directory: api
+
+  # テスト実行
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: do test
+        run: yarn && yarn test
