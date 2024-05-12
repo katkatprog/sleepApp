@@ -101,7 +101,9 @@ describe("Integration test", () => {
     prismaMock.soundInfo.count.mockResolvedValue(1);
 
     // 処理実行
-    const res = await request(app).get("/sound-info/search?q=test&sort=count&page=1");
+    const res = await request(app).get(
+      "/sound-info/search?q=test&sort=count&page=1",
+    );
     // 実行結果
     expect(res.status).toBe(200);
     expect(res.body).toEqual({ soundsList: [sInfo], totalPages: 1 });
@@ -109,7 +111,9 @@ describe("Integration test", () => {
 
   test("[異常系1]音声情報を検索(不正なページ指定)", async () => {
     // 処理実行
-    const res = await request(app).get("/sound-info/search?q=test&sort=count&page=test");
+    const res = await request(app).get(
+      "/sound-info/search?q=test&sort=count&page=test",
+    );
     // 実行結果
     expect(res.status).toBe(400);
     expect(res.text).toBe("Request Param is not valid...");
@@ -117,7 +121,9 @@ describe("Integration test", () => {
 
   test("[異常系2]音声情報を検索(不正なページ指定)", async () => {
     // 処理実行
-    const res = await request(app).get("/sound-info/search?q=test&sort=count&page=0");
+    const res = await request(app).get(
+      "/sound-info/search?q=test&sort=count&page=0",
+    );
     // 実行結果
     expect(res.status).toBe(404);
     expect(res.text).toBe("Page is not found...");
@@ -126,12 +132,8 @@ describe("Integration test", () => {
   test("[異常系3]音声情報を検索", async () => {
     // 異常系1,2以外で何らかのエラーが起きた場合を想定
     // データ設定
-    prismaMock.soundInfo.findMany.mockRejectedValue(
-      new Error("Error on Test")
-    );
-    prismaMock.soundInfo.count.mockRejectedValue(
-      new Error("Error on Test")
-    );
+    prismaMock.soundInfo.findMany.mockRejectedValue(new Error("Error on Test"));
+    prismaMock.soundInfo.count.mockRejectedValue(new Error("Error on Test"));
 
     // 処理実行
     const res = await request(app).get("/sound-info/search");
