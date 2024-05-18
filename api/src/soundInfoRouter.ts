@@ -89,7 +89,13 @@ soundInfoRouter.get("/search", async (req, res) => {
 
     const soundsList = result[0];
     const totalSounds = result[1];
-    const totalPages = soundsList.length === 0 ? 1: Math.ceil(totalSounds / soundsPerPage);
+    const totalPages =
+      soundsList.length === 0 ? 1 : Math.ceil(totalSounds / soundsPerPage);
+
+    // 検索結果に対して範囲を超えたページ番号が指定された場合、404エラーを出す
+    if (soundsList.length === 0 && currentPage > 0) {
+      return res.status(404).send("Page is not found...");
+    }
 
     return res.send({ soundsList, totalPages });
   } catch (error) {
