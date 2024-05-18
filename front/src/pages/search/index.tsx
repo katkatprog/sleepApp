@@ -54,35 +54,39 @@ const SearchPage = (props: SoundsListProps) => {
         </select>
       </form>
 
-      {props.soundsList.map((sound) => (
-        <Link href={`/play/${sound.id}`} key={sound.id}>
-          <div className="h-20 px-4 pt-2 border-b flex justify-between items-start border-neutral-700 hover:bg-neutral-700 transition">
-            <div className="flex pt-2">
-              <h1 className="font-bold mr-2">{sound.name}</h1>
-              {sound.isMaleVoice !== null &&
-                (sound.isMaleVoice ? (
-                  <Image
-                    alt="#"
-                    src={"/male_icon.svg"}
-                    width={32}
-                    height={32}
-                  ></Image>
-                ) : (
-                  <Image
-                    alt="#"
-                    src={"/female_icon.svg"}
-                    width={32}
-                    height={32}
-                  ></Image>
-                ))}
+      {props.soundsList.length === 0 ? (
+        <h1 className="text-center">該当する結果が見つかりませんでした。</h1>
+      ) : (
+        props.soundsList.map((sound) => (
+          <Link href={`/play/${sound.id}`} key={sound.id}>
+            <div className="h-20 px-4 pt-2 border-b flex justify-between items-start border-neutral-700 hover:bg-neutral-700 transition">
+              <div className="flex pt-2">
+                <h1 className="font-bold mr-2">{sound.name}</h1>
+                {sound.isMaleVoice !== null &&
+                  (sound.isMaleVoice ? (
+                    <Image
+                      alt="#"
+                      src={"/male_icon.svg"}
+                      width={32}
+                      height={32}
+                    ></Image>
+                  ) : (
+                    <Image
+                      alt="#"
+                      src={"/female_icon.svg"}
+                      width={32}
+                      height={32}
+                    ></Image>
+                  ))}
+              </div>
+              <div>
+                <p>{new Date(sound.createdAt).toLocaleDateString()}</p>
+                <p>{sound.playCount} 回再生</p>
+              </div>
             </div>
-            <div>
-              <p>{new Date(sound.createdAt).toLocaleDateString()}</p>
-              <p>{sound.playCount} 回再生</p>
-            </div>
-          </div>
-        </Link>
-      ))}
+          </Link>
+        ))
+      )}
       <div className="h-28 pt-4 flex items-start justify-center">
         <div className="flex items-center">
           {currentPage > 1 && (
