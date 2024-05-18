@@ -1,3 +1,4 @@
+import { Layout } from "@/components/Layout";
 import { ArrowLongLeftIcon } from "@/components/icons/ArrowLongLeftIcon";
 import { ArrowLongRightIcon } from "@/components/icons/ArrowLongRightIcon";
 import { SearchIcon } from "@/components/icons/SearchIcon";
@@ -15,7 +16,7 @@ const SearchPage = (props: SoundsListProps) => {
   const selectRef = useRef<HTMLSelectElement>(null);
 
   return (
-    <>
+    <Layout>
       <form
         onSubmit={(e) => {
           e.preventDefault();
@@ -122,7 +123,7 @@ const SearchPage = (props: SoundsListProps) => {
           )}
         </div>
       </div>
-    </>
+    </Layout>
   );
 };
 
