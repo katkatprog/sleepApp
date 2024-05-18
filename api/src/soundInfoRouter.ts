@@ -93,7 +93,7 @@ soundInfoRouter.get("/search", async (req, res) => {
       soundsList.length === 0 ? 1 : Math.ceil(totalSounds / soundsPerPage);
 
     // 検索結果に対して範囲を超えたページ番号が指定された場合、404エラーを出す
-    if (soundsList.length === 0 && currentPage > 0) {
+    if (soundsList.length === 0 && currentPage >= 2) {
       return res.status(404).send("Page is not found...");
     }
 
