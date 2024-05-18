@@ -103,10 +103,18 @@ export const getServerSideProps: GetServerSideProps<SoundInfoProps> = async (
   context,
 ) => {
   // APIから音声情報を取得
-  const response = await fetch(
+  const result = await fetch(
     `${process.env.API_URL}/sound-info/single/${context.params?.id}`,
   );
-  const soundInfo: SoundInfo = await response.json();
+
+  if (result.status === 404) {
+    return { notFound: true };
+  }
+  if (result.status !== 200) {
+    throw new Error("Something went wrong...");
+  }
+
+  const soundInfo: SoundInfo = await result.json();
 
   return {
     props: {

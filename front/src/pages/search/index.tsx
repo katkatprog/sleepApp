@@ -6,6 +6,7 @@ import { SoundInfo } from "@prisma/client";
 import { GetServerSideProps } from "next";
 import Image from "next/image";
 import Link from "next/link";
+import { notFound } from "next/navigation";
 import { useRouter } from "next/router";
 import { useRef } from "react";
 
@@ -133,11 +134,18 @@ export const getServerSideProps: GetServerSideProps<SoundsListProps> = async (
   context,
 ) => {
   // APIから音声リストを取得
-  const response: SoundsListProps = await (
-    await fetch(
-      `${process.env.API_URL}/sound-info/search?page=${context.query?.page || 1}&q=${context.query?.q || ""}&sort=${context.query?.sort || "created"}`,
-    )
-  ).json();
+  const result = await fetch(
+    `${process.env.API_URL}/sound-info/search?page=${context.query?.page || 1}&q=${context.query?.q || ""}&sort=${context.query?.sort || "created"}`,
+  );
+
+  if (result.status === 404) {
+    return { notFound: true };
+  }
+  if (result.status !== 200) {
+    throw new Error("Something went wrong...");
+  }
+
+  const response: SoundsListProps = await result.json();
 
   return {
     props: {
