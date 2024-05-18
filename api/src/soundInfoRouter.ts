@@ -89,7 +89,7 @@ soundInfoRouter.get("/search", async (req, res) => {
 
     const soundsList = result[0];
     const totalSounds = result[1];
-    const totalPages = Math.ceil(totalSounds / soundsPerPage);
+    const totalPages = soundsList.length === 0 ? 1: Math.ceil(totalSounds / soundsPerPage);
 
     return res.send({ soundsList, totalPages });
   } catch (error) {
