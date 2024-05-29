@@ -18,3 +18,6 @@ GET http://localhost:8080/sound-info/search?sort=count
 
 ### 音声情報を検索（ページ指定あり）
 GET http://localhost:8080/sound-info/search?page=1
+
+### 音声情報を検索（ページ指定あり）
+GET http://localhost:8080/sound-info/search?page=10000

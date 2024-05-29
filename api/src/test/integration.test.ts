@@ -119,7 +119,7 @@ describe("Integration test", () => {
     expect(res.text).toBe("Request Param is not valid...");
   });
 
-  test("[異常系2]音声情報を検索(不正なページ指定)", async () => {
+  test("[異常系2]音声情報を検索(検索結果に対しての範囲を超えたページ指定(ページ数を0以下に設定した場合))", async () => {
     // 処理実行
     const res = await request(app).get(
       "/sound-info/search?q=test&sort=count&page=0",
@@ -129,8 +129,22 @@ describe("Integration test", () => {
     expect(res.text).toBe("Page is not found...");
   });
 
-  test("[異常系3]音声情報を検索", async () => {
-    // 異常系1,2以外で何らかのエラーが起きた場合を想定
+  test("[異常系3]音声情報を検索(検索結果に対しての範囲を超えたページ指定(ページ数が大きすぎる場合))", async () => {
+    // データ設定
+    prismaMock.soundInfo.findMany.mockResolvedValue([]);
+    prismaMock.soundInfo.count.mockResolvedValue(1);
+
+    // 処理実行
+    const res = await request(app).get(
+      "/sound-info/search?q=test&sort=count&page=10000",
+    );
+    // 実行結果
+    expect(res.status).toBe(404);
+    expect(res.text).toBe("Page is not found...");
+  });
+
+  test("[異常系4]音声情報を検索", async () => {
+    // 異常系1,2,3以外で何らかのエラーが起きた場合を想定
     // データ設定
     prismaMock.soundInfo.findMany.mockRejectedValue(new Error("Error on Test"));
     prismaMock.soundInfo.count.mockRejectedValue(new Error("Error on Test"));

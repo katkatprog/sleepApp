@@ -1,3 +1,4 @@
+import { Layout } from "@/components/Layout";
 import { ArrowLongLeftIcon } from "@/components/icons/ArrowLongLeftIcon";
 import { ArrowLongRightIcon } from "@/components/icons/ArrowLongRightIcon";
 import { SearchIcon } from "@/components/icons/SearchIcon";
@@ -5,6 +6,7 @@ import { SoundInfo } from "@prisma/client";
 import { GetServerSideProps } from "next";
 import Image from "next/image";
 import Link from "next/link";
+import { notFound } from "next/navigation";
 import { useRouter } from "next/router";
 import { useRef } from "react";
 
@@ -15,7 +17,7 @@ const SearchPage = (props: SoundsListProps) => {
   const selectRef = useRef<HTMLSelectElement>(null);
 
   return (
-    <>
+    <Layout>
       <form
         onSubmit={(e) => {
           e.preventDefault();
@@ -54,35 +56,39 @@ const SearchPage = (props: SoundsListProps) => {
         </select>
       </form>
 
-      {props.soundsList.map((sound) => (
-        <Link href={`/play/${sound.id}`} key={sound.id}>
-          <div className="h-20 px-4 pt-2 border-b flex justify-between items-start border-neutral-700 hover:bg-neutral-700 transition">
-            <div className="flex pt-2">
-              <h1 className="font-bold mr-2">{sound.name}</h1>
-              {sound.isMaleVoice !== null &&
-                (sound.isMaleVoice ? (
-                  <Image
-                    alt="#"
-                    src={"/male_icon.svg"}
-                    width={32}
-                    height={32}
-                  ></Image>
-                ) : (
-                  <Image
-                    alt="#"
-                    src={"/female_icon.svg"}
-                    width={32}
-                    height={32}
-                  ></Image>
-                ))}
+      {props.soundsList.length === 0 ? (
+        <h1 className="text-center">該当する結果が見つかりませんでした。</h1>
+      ) : (
+        props.soundsList.map((sound) => (
+          <Link href={`/play/${sound.id}`} key={sound.id}>
+            <div className="h-20 px-4 pt-2 border-b flex justify-between items-start border-neutral-700 hover:bg-neutral-700 transition">
+              <div className="flex pt-2">
+                <h1 className="font-bold mr-2">{sound.name}</h1>
+                {sound.isMaleVoice !== null &&
+                  (sound.isMaleVoice ? (
+                    <Image
+                      alt="#"
+                      src={"/male_icon.svg"}
+                      width={32}
+                      height={32}
+                    ></Image>
+                  ) : (
+                    <Image
+                      alt="#"
+                      src={"/female_icon.svg"}
+                      width={32}
+                      height={32}
+                    ></Image>
+                  ))}
+              </div>
+              <div>
+                <p>{new Date(sound.createdAt).toLocaleDateString()}</p>
+                <p>{sound.playCount} 回再生</p>
+              </div>
             </div>
-            <div>
-              <p>{new Date(sound.createdAt).toLocaleDateString()}</p>
-              <p>{sound.playCount} 回再生</p>
-            </div>
-          </div>
-        </Link>
-      ))}
+          </Link>
+        ))
+      )}
       <div className="h-28 pt-4 flex items-start justify-center">
         <div className="flex items-center">
           {currentPage > 1 && (
@@ -118,7 +124,7 @@ const SearchPage = (props: SoundsListProps) => {
           )}
         </div>
       </div>
-    </>
+    </Layout>
   );
 };
 
@@ -128,11 +134,18 @@ export const getServerSideProps: GetServerSideProps<SoundsListProps> = async (
   context,
 ) => {
   // APIから音声リストを取得
-  const response: SoundsListProps = await (
-    await fetch(
-      `${process.env.API_URL}/sound-info/search?page=${context.query?.page || 1}&q=${context.query?.q || ""}&sort=${context.query?.sort || "created"}`,
-    )
-  ).json();
+  const result = await fetch(
+    `${process.env.API_URL}/sound-info/search?page=${context.query?.page || 1}&q=${context.query?.q || ""}&sort=${context.query?.sort || "created"}`,
+  );
+
+  if (result.status === 404) {
+    return { notFound: true };
+  }
+  if (result.status !== 200) {
+    throw new Error("Something went wrong...");
+  }
+
+  const response: SoundsListProps = await result.json();
 
   return {
     props: {
