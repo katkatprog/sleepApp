@@ -6,7 +6,7 @@ import {
   saveTodaysSoundInfo,
   wordsToSSML,
 } from "./func";
-
+　
 const main = async () => {
   const prisma = new PrismaClient();
   try {
