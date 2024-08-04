@@ -25,9 +25,9 @@
   },
   "dependencies": {
     "@aws-sdk/client-polly": "^3.515.0",
+    "@google/generative-ai": "^0.16.0",
     "@prisma/client": "^5.10.1",
     "dotenv": "^16.4.5",
-    "openai": "^4.0.0",
     "prisma": "^5.10.1"
   }
 }

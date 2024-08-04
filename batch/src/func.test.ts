@@ -1,29 +1,28 @@
-import OpenAI from "openai";
+import { GoogleGenerativeAI } from "@google/generative-ai";
 import { arrayShuffle, generateDailyWordsList, wordsToSSML } from "./func";
 
-jest.mock("openai", () => {
-  return jest.fn().mockImplementation(() => {
-    return {
-      chat: {
-        completions: {
-          create: jest.fn().mockImplementation(async () => {
-            return {
-              choices: [
-                {
-                  message: {
-                    content:
-                      '{\n  "noun": [\n    "テーブル",\n    "椅子",\n    "コンピュータ"\n  ]\n}',
-                  },
-                },
-              ],
-            };
-          }),
+jest.mock("@google/generative-ai"); //モジュール全体をモック
+const MockGoogleGenerativeAI = GoogleGenerativeAI as jest.Mock; // TypeScriptでは型変換する必要がある
+MockGoogleGenerativeAI.mockImplementation(() => {
+  // geminiに代入するオブジェクトのモック
+  return {
+    getGenerativeModel: () => {
+      // modelに代入するオブジェクトのモック
+      return {
+        generateContent: async () => {
+          // resultに代入するオブジェクトのモック
+          return {
+            response: {
+              text: () => {
+                return "dummy1, テーブル, 椅子, コンピュータ, dummy2";
+              },
+            },
+          };
         },
-      },
-    };
-  });
+      };
+    },
+  };
 });
-jest.mocked(OpenAI);
 
 describe("単語リスト生成処理のテスト", () => {
   it("正しくstring型配列を生成できることのテスト", async () => {
