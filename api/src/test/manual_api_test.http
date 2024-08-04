@@ -21,3 +21,13 @@ GET http://localhost:8080/sound-info/search?page=1
 
 ### 音声情報を検索（ページ指定あり）
 GET http://localhost:8080/sound-info/search?page=10000
+
+### Signup
+POST http://localhost:8080/auth/signup
+content-type: application/json
+
+{
+  "name": "kat",
+  "email": "katkatprog@example.com",
+  "password": "Passw0rd"
+}

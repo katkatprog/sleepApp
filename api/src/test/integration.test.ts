@@ -2,6 +2,7 @@ import { SoundInfo } from "@prisma/client";
 import { prismaMock } from "../prisma/singleton";
 import request from "supertest";
 import { app } from "../app";
+import { PrismaClientKnownRequestError } from "@prisma/client/runtime/library";
 
 describe("Integration test", () => {
   // prismaMockは各々のテスト前に初期化される(singleton.tsに設定あり)
@@ -155,5 +156,52 @@ describe("Integration test", () => {
     // 実行結果
     expect(res.status).toBe(500);
     expect(res.text).toBe("Something went wrong...");
+  });
+
+  // auth
+  test("[異常系1]Signup(リクエストパラメータ欠落)", async () => {
+    // 処理実行(パスワード欠落)
+    const res = await request(app).post("/auth/signup").send({
+      name: "kat",
+      email: "katkatprog@example.com",
+    });
+
+    // 実行結果
+    expect(res.status).toBe(400);
+    expect(res.text).toBe("name, email or password is undefined...");
+  });
+
+  test("[異常系2]Signup(email重複)", async () => {
+    // emailの重複が起きた場合を想定
+    prismaMock.user.create.mockRejectedValue({
+      code: "P2002",
+    } as PrismaClientKnownRequestError);
+
+    // 処理実行
+    const res = await request(app).post("/auth/signup").send({
+      name: "kat",
+      email: "katkatprog@example.com",
+      password: "Passw0rd",
+    });
+
+    // 実行結果
+    expect(res.status).toBe(400);
+    expect(res.text).toBe("This email already exists...");
+  });
+
+  test("[異常系3]Signup", async () => {
+    // 異常系1,2以外でエラーが起きた場合を想定
+    prismaMock.user.create.mockRejectedValue(new Error());
+
+    // 処理実行
+    const res = await request(app).post("/auth/signup").send({
+      name: "kat",
+      email: "katkatprog@example.com",
+      password: "Passw0rd",
+    });
+
+    // 実行結果
+    expect(res.status).toBe(500);
+    expect(res.text).toBe("Something went wrong in signup...");
   });
 });
