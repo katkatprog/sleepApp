@@ -6,43 +6,37 @@ import {
 
 import { Prisma, PrismaClient } from "@prisma/client";
 import { DefaultArgs } from "@prisma/client/runtime/library";
-import OpenAI from "openai";
+import { GoogleGenerativeAI } from "@google/generative-ai";
 import "dotenv/config";
 
 // [日次]単語リストを作成する
 export const generateDailyWordsList = async () => {
-  // ChatGPT連携準備
-  const openai = new OpenAI({
-    apiKey: process.env.OPENAI_API_KEY,
+  // Gemini連携準備
+  const gemini = new GoogleGenerativeAI(process.env.GEMINI_API_KEY || "");
+  const model = gemini.getGenerativeModel({
+    model: "gemini-1.5-pro",
+    generationConfig: { maxOutputTokens: 1000 }, //過剰生成防止
   });
-  // ChatGPTに単語リスト作成依頼
-  const chatCompletion = await openai.chat.completions.create({
-    messages: [
-      {
-        role: "user",
-        content:
-          "名詞を無作為に200個表示してください。\n※表示方法は、配列形式（JSON）で表示してください。\n※名詞は、できる限り形状のあるものを選んでください。\n※重複はできる限り避けてください。",
-      },
-    ],
-    model: "gpt-3.5-turbo",
-    max_tokens: 4096,
-  });
+  // Geminiに単語リスト作成依頼
+  const result = await model.generateContent(
+    "名詞を無作為に200個表示してください。※カンマ区切りで表示してください。※名詞は、できる限り形状のあるものを選んでください。※重複はできる限り避けてください。※ネガティブな単語はできる限り避けてください。",
+  );
+  let resContent = result.response.text();
   // 返答
-  let resContent = chatCompletion.choices[0].message.content;
   if (!resContent) {
-    throw new Error("GPTからの返答の文字列がありません");
+    throw new Error("Geminiからの返答の文字列がありません");
   }
-  console.log(`GPTからの返答：${resContent}`);
+  console.log(`Geminiからの返答：${resContent}`);
 
   // 文字列整形
   resContent = resContent.replaceAll(" ", "").replaceAll("\n", "");
 
-  // 返答(文字列)から配列部分を抜き出し、それをJavaScriptの配列に変換
-  const indexOfStartArr = resContent.indexOf("[");
-  const indexOfEndArr = resContent.indexOf("]");
-  const wordsList: string[] = JSON.parse(
-    resContent.substring(indexOfStartArr, indexOfEndArr + 1),
-  );
+  // 返答(文字列)からカンマ区切り部分を抜き出し、それをJavaScriptの配列に変換
+  const indexOfStartArr = resContent.indexOf(",");
+  const indexOfEndArr = resContent.lastIndexOf(",");
+  const wordsList: string[] = resContent
+    .substring(indexOfStartArr + 1, indexOfEndArr)
+    .split(",");
 
   console.log(`生成された単語リスト：${wordsList}`);
   console.log(`単語数: ${wordsList.length}`);
