@@ -1,16 +1,16 @@
-name: api-ci
+name: front-ci
 
 on:
   push:
     branches:
       - "*"
     paths:
-      - "api/**"
+      - "front/**"
       - ".github/**"
 
 defaults:
   run:
-    working-directory: api
+    working-directory: front
 
 jobs:
   # CI実行(違反があるならエラーにする)
@@ -21,12 +21,3 @@ jobs:
 
       - name: do integrate
         run: yarn && yarn checkformat && yarn lint
-        
-  # テスト実行
-  test:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: do test
-        run: yarn && yarn test

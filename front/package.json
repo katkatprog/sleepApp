@@ -8,6 +8,7 @@
     "start": "next start",
     "lint": "next lint",
     "format": "prettier --write .",
+    "checkformat": "prettier --check .",
     "ci": "yarn format && yarn lint",
     "db-pull": "./node_modules/.bin/dotenv -e .env.local -- yarn prisma db pull"
   },
