@@ -12,8 +12,17 @@ defaults:
   run:
     working-directory: batch
 
-  # テスト実行
 jobs:
+  # CI実行(違反があるならエラーにする)
+  integrate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: do integrate
+        run: yarn && yarn checkformat && yarn lint
+        
+  # テスト実行
   test:
     runs-on: ubuntu-latest
     steps:
