@@ -31,3 +31,12 @@ content-type: application/json
   "email": "katkatprog@example.com",
   "password": "Passw0rd"
 }
+
+### Signin
+POST http://localhost:8080/auth/signin
+content-type: application/json
+
+{
+  "email": "katkatprog@example.com",
+  "password": "Passw0rd"
+}
