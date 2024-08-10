@@ -21,13 +21,25 @@ authRouter.post("/signup", async (req, res) => {
     const hashedPassword = await bcrypt.hash(password, 10);
 
     // DBへの保存
-    await prisma.user.create({
+    const user = await prisma.user.create({
       data: {
         name,
         email,
         hashedPassword,
       },
     });
+
+    // DB保存後、jwt発行
+    const token = jwt.sign(
+      {
+        // ペイロードにはユーザーIDを含める
+        userId: user.id,
+      },
+      process.env.JWT_SECRET || "",
+      { expiresIn: process.env.JWT_EXPIRE || "24h" },
+    );
+
+    res.cookie("token", token);
 
     return res.send("OK");
   } catch (error) {
