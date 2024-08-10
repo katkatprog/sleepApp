@@ -1,4 +1,4 @@
-import { SoundInfo } from "@prisma/client";
+import { SoundInfo, User } from "@prisma/client";
 import { prismaMock } from "../prisma/singleton";
 import request from "supertest";
 import { app } from "../app";
@@ -203,5 +203,67 @@ describe("Integration test", () => {
     // 実行結果
     expect(res.status).toBe(500);
     expect(res.text).toBe("Something went wrong in signup...");
+  });
+
+  test("[異常系1]Signin(リクエストパラメータ欠落)", async () => {
+    // 処理実行(パスワード欠落)
+    const res = await request(app).post("/auth/signin").send({
+      email: "katkatprog@example.com",
+    });
+
+    // 実行結果
+    expect(res.status).toBe(400);
+    expect(res.text).toBe("email or password is undefined...");
+  });
+
+  test("[異常系2]Signin(emailが存在しない場合)", async () => {
+    // emailのユーザーが存在しない場合を想定
+    prismaMock.user.findUnique.mockResolvedValue(null);
+
+    // 処理実行
+    const res = await request(app).post("/auth/signin").send({
+      email: "katkatprog@example.com",
+      password: "Passw0rd",
+    });
+
+    // 実行結果
+    expect(res.status).toBe(400);
+    expect(res.text).toBe("email or password is incorrect...");
+  });
+
+  test("[異常系3]Signin(emailかpasswordが間違っている場合)", async () => {
+    // passwordが間違っている場合を想定
+    const user: User = {
+      id: 1,
+      email: "katkatprog@example.com",
+      name: "kat",
+      hashedPassword: "", // 入力の「Passw0rd」のハッシュ値と異なるハッシュ値（ここでは空白に設定）
+    };
+    prismaMock.user.findUnique.mockResolvedValue(user);
+
+    // 処理実行
+    const res = await request(app).post("/auth/signin").send({
+      email: "katkatprog@example.com",
+      password: "Passw0rd",
+    });
+
+    // 実行結果
+    expect(res.status).toBe(400);
+    expect(res.text).toBe("email or password is incorrect...");
+  });
+
+  test("[異常系4]Signin", async () => {
+    // 異常系1,2,3以外でエラーが起きた場合を想定
+    prismaMock.user.findUnique.mockRejectedValue(new Error());
+
+    // 処理実行
+    const res = await request(app).post("/auth/signin").send({
+      email: "katkatprog@example.com",
+      password: "Passw0rd",
+    });
+
+    // 実行結果
+    expect(res.status).toBe(500);
+    expect(res.text).toBe("Something went wrong in signin...");
   });
 });

@@ -94,6 +94,6 @@ authRouter.post("/signin", async (req, res) => {
   } catch (error) {
     console.log("エラー発生");
     console.log(error);
-    return res.status(500).send("Something went wrong in signup...");
+    return res.status(500).send("Something went wrong in signin...");
   }
 });
