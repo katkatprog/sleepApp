@@ -42,17 +42,19 @@ const SigninPage = () => {
                 }
               }}
             >
+              <p className="mt-4">メールアドレス</p>
               <input
                 ref={emailRef}
                 type="text"
-                className="h-10 bg-neutral-800 border-2 border-neutral-700 placeholder:text-gray-600 rounded-lg pl-2 mt-4 outline-neutral-500 w-full"
+                className="h-10 bg-neutral-800 border-2 border-neutral-700 placeholder:text-gray-600 rounded-lg pl-2 outline-neutral-500 w-full"
                 placeholder="Input your email..."
               />
 
+              <p className="mt-4">パスワード</p>
               <input
                 ref={passwordRef}
                 type="password"
-                className="h-10 bg-neutral-800 border-2 border-neutral-700 placeholder:text-gray-600 rounded-lg pl-2 mt-4 outline-neutral-500 w-full"
+                className="h-10 bg-neutral-800 border-2 border-neutral-700 placeholder:text-gray-600 rounded-lg pl-2 outline-neutral-500 w-full"
                 placeholder="Input your password..."
               />
 
