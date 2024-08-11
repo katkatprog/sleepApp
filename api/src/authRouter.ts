@@ -9,21 +9,28 @@ export const authRouter = express.Router();
 // サインアップ
 authRouter.post(
   "/signup",
-  body("name").not().isEmpty(),
-  body("email").not().isEmpty().isEmail(),
+  body("name").notEmpty().withMessage("お名前が入力されていません。"),
+  body("email")
+    .notEmpty()
+    .withMessage("メールアドレスが入力されていません。")
+    .isEmail()
+    .withMessage("メールアドレスの形式が正しくありません。"),
   body("password")
-    .not()
-    .isEmpty()
+    .notEmpty()
+    .withMessage("パスワードが入力されていません。")
     .isLength({ min: 8 })
+    .withMessage("パスワードの桁数が足りません。")
     .matches(
       // eslint-disable-next-line no-useless-escape
       /^(?=.*[A-Za-z])(?=.*\d)(?=.*[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>/?`~])[A-Za-z\d!@#$%^&*()_+\-=\[\]{};':"\\|,.<>/?`~]+$/,
-    ),
+    )
+    .withMessage("パスワードの形式が正しくありません。"),
   async (req, res) => {
     // バリデーションチェック
     const valiResult = validationResult(req);
     if (!valiResult.isEmpty()) {
-      return res.status(400).send("Validation error...");
+      const valiMsgArray = valiResult.array().map((vali) => vali.msg);
+      return res.status(400).send(valiMsgArray.join(""));
     }
 
     // 入力値代入

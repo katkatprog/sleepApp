@@ -169,19 +169,21 @@ describe("Integration test", () => {
 
       // 実行結果
       expect(res.status).toBe(400);
-      expect(res.text).toBe("Validation error...");
+      expect(res.text).toBe("お名前が入力されていません。");
     });
 
     test("[異常系1-2]emailが欠落", async () => {
       // 処理実行
       const res = await request(app).post("/auth/signup").send({
-        naem: "kat",
+        name: "kat",
         password: "P@ssw0rd",
       });
 
       // 実行結果
       expect(res.status).toBe(400);
-      expect(res.text).toBe("Validation error...");
+      expect(res.text).toBe(
+        "メールアドレスが入力されていません。メールアドレスの形式が正しくありません。",
+      );
     });
 
     test("[異常系1-3]passwordが欠落", async () => {
@@ -193,7 +195,9 @@ describe("Integration test", () => {
 
       // 実行結果
       expect(res.status).toBe(400);
-      expect(res.text).toBe("Validation error...");
+      expect(res.text).toBe(
+        "パスワードが入力されていません。パスワードの桁数が足りません。パスワードの形式が正しくありません。",
+      );
     });
 
     test("[異常系1-4]emailがメールアドレスの形式ではない", async () => {
@@ -206,33 +210,33 @@ describe("Integration test", () => {
 
       // 実行結果
       expect(res.status).toBe(400);
-      expect(res.text).toBe("Validation error...");
+      expect(res.text).toBe("メールアドレスの形式が正しくありません。");
     });
 
     test("[異常系1-5]passwordが8桁未満", async () => {
       // 処理実行
       const res = await request(app).post("/auth/signup").send({
         name: "kat",
-        email: "katkatprog",
+        email: "katkatprog@example.com",
         password: "P@ssw0r",
       });
 
       // 実行結果
       expect(res.status).toBe(400);
-      expect(res.text).toBe("Validation error...");
+      expect(res.text).toBe("パスワードの桁数が足りません。");
     });
 
     test("[異常系1-6]passwordが半角英数字記号になっていない", async () => {
       // 処理実行
       const res = await request(app).post("/auth/signup").send({
         name: "kat",
-        email: "katkatprog",
-        password: "P@sswrd",
+        email: "katkatprog@example.com",
+        password: "P@sswrdあ",
       });
 
       // 実行結果
       expect(res.status).toBe(400);
-      expect(res.text).toBe("Validation error...");
+      expect(res.text).toBe("パスワードの形式が正しくありません。");
     });
   });
 
