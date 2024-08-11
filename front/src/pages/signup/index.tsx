@@ -40,6 +40,8 @@ const SignupPage = () => {
                       autoClose: 5000,
                     });
                     router.push(`/search`);
+                  } else if (result.status === 400) {
+                    toast.error(await result.text());
                   } else {
                     toast.error("新規登録に失敗しました。再度お試しください。");
                   }

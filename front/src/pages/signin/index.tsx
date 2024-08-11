@@ -36,6 +36,8 @@ const SigninPage = () => {
                   if (result.status === 200) {
                     router.push(`/search`);
                     toast.success("ログインしました。", { autoClose: 5000 });
+                  } else if (result.status === 400) {
+                    toast.error(await result.text());
                   } else {
                     toast.error("ログインに失敗しました。再度お試しください。");
                   }
