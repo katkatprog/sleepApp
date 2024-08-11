@@ -17,7 +17,7 @@ authRouter.post(
     .isLength({ min: 8 })
     .matches(
       // eslint-disable-next-line no-useless-escape
-      /^(?=.*[A-Za-z])(?=.*\d)(?=.*[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>/?]).+$/,
+      /^(?=.*[A-Za-z])(?=.*\d)(?=.*[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>/?`~]).+$/,
     ),
   async (req, res) => {
     // バリデーションチェック
