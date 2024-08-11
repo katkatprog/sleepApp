@@ -36,7 +36,9 @@ const SignupPage = () => {
                     },
                   );
                   if (result.status === 200) {
-                    toast.success("新規登録しました。どうぞお楽しみ下さい。");
+                    toast.success("新規登録しました。どうぞお楽しみ下さい。", {
+                      autoClose: 5000,
+                    });
                     router.push(`/search`);
                   } else {
                     toast.error("新規登録に失敗しました。再度お試しください。");
