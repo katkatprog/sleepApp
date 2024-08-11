@@ -1,4 +1,5 @@
 import { Layout } from "@/components/Layout";
+import Link from "next/link";
 import { useRouter } from "next/router";
 import React, { useRef } from "react";
 
@@ -71,6 +72,12 @@ const SignupPage = () => {
               <button className="mt-6 bg-green-600 hover:bg-green-500 font-bold w-full py-2 rounded-md transition">
                 Signup
               </button>
+
+              <Link href={"/signin"}>
+                <p className="text-green-400 hover:text-green-300 mt-2">
+                  アカウントをお持ちの方
+                </p>
+              </Link>
             </form>
           </div>
         </div>
