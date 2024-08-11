@@ -159,16 +159,81 @@ describe("Integration test", () => {
   });
 
   // auth
-  test("[異常系1]Signup(リクエストパラメータ欠落)", async () => {
-    // 処理実行(パスワード欠落)
-    const res = await request(app).post("/auth/signup").send({
-      name: "kat",
-      email: "katkatprog@example.com",
+  describe("[異常系1]Signup(バリデーションチェック)", () => {
+    test("[異常系1-1]nameが欠落", async () => {
+      // 処理実行
+      const res = await request(app).post("/auth/signup").send({
+        email: "katkatprog@example.com",
+        password: "P@ssw0rd",
+      });
+
+      // 実行結果
+      expect(res.status).toBe(400);
+      expect(res.text).toBe("Validation error...");
     });
 
-    // 実行結果
-    expect(res.status).toBe(400);
-    expect(res.text).toBe("name, email or password is undefined...");
+    test("[異常系1-2]emailが欠落", async () => {
+      // 処理実行
+      const res = await request(app).post("/auth/signup").send({
+        naem: "kat",
+        password: "P@ssw0rd",
+      });
+
+      // 実行結果
+      expect(res.status).toBe(400);
+      expect(res.text).toBe("Validation error...");
+    });
+
+    test("[異常系1-3]passwordが欠落", async () => {
+      // 処理実行
+      const res = await request(app).post("/auth/signup").send({
+        name: "kat",
+        email: "katkatprog@example.com",
+      });
+
+      // 実行結果
+      expect(res.status).toBe(400);
+      expect(res.text).toBe("Validation error...");
+    });
+
+    test("[異常系1-4]emailがメールアドレスの形式ではない", async () => {
+      // 処理実行
+      const res = await request(app).post("/auth/signup").send({
+        name: "kat",
+        email: "katkatprog",
+        password: "P@ssw0rd",
+      });
+
+      // 実行結果
+      expect(res.status).toBe(400);
+      expect(res.text).toBe("Validation error...");
+    });
+
+    test("[異常系1-5]passwordが8桁未満", async () => {
+      // 処理実行
+      const res = await request(app).post("/auth/signup").send({
+        name: "kat",
+        email: "katkatprog",
+        password: "P@ssw0r",
+      });
+
+      // 実行結果
+      expect(res.status).toBe(400);
+      expect(res.text).toBe("Validation error...");
+    });
+
+    test("[異常系1-6]passwordが半角英数字記号になっていない", async () => {
+      // 処理実行
+      const res = await request(app).post("/auth/signup").send({
+        name: "kat",
+        email: "katkatprog",
+        password: "P@sswrd",
+      });
+
+      // 実行結果
+      expect(res.status).toBe(400);
+      expect(res.text).toBe("Validation error...");
+    });
   });
 
   test("[異常系2]Signup(email重複)", async () => {
@@ -181,7 +246,7 @@ describe("Integration test", () => {
     const res = await request(app).post("/auth/signup").send({
       name: "kat",
       email: "katkatprog@example.com",
-      password: "Passw0rd",
+      password: "P@ssw0rd",
     });
 
     // 実行結果
@@ -197,7 +262,7 @@ describe("Integration test", () => {
     const res = await request(app).post("/auth/signup").send({
       name: "kat",
       email: "katkatprog@example.com",
-      password: "Passw0rd",
+      password: "P@ssw0rd",
     });
 
     // 実行結果
@@ -213,7 +278,7 @@ describe("Integration test", () => {
 
     // 実行結果
     expect(res.status).toBe(400);
-    expect(res.text).toBe("email or password is undefined...");
+    expect(res.text).toBe("email or password is empty...");
   });
 
   test("[異常系2]Signin(emailが存在しない場合)", async () => {
@@ -223,7 +288,7 @@ describe("Integration test", () => {
     // 処理実行
     const res = await request(app).post("/auth/signin").send({
       email: "katkatprog@example.com",
-      password: "Passw0rd",
+      password: "P@ssw0rd",
     });
 
     // 実行結果
@@ -244,7 +309,7 @@ describe("Integration test", () => {
     // 処理実行
     const res = await request(app).post("/auth/signin").send({
       email: "katkatprog@example.com",
-      password: "Passw0rd",
+      password: "P@ssw0rd",
     });
 
     // 実行結果
@@ -259,7 +324,7 @@ describe("Integration test", () => {
     // 処理実行
     const res = await request(app).post("/auth/signin").send({
       email: "katkatprog@example.com",
-      password: "Passw0rd",
+      password: "P@ssw0rd",
     });
 
     // 実行結果
