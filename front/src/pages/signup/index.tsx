@@ -97,12 +97,12 @@ const SignupPage = () => {
               />
 
               <button className="mt-6 bg-green-600 hover:bg-green-500 font-bold w-full py-2 rounded-md transition">
-                Signup
+                新規登録
               </button>
 
               <Link href={"/signin"}>
                 <p className="text-green-400 hover:text-green-300 mt-2">
-                  アカウントをお持ちの方
+                  アカウントをお持ちの方はログイン
                 </p>
               </Link>
             </form>

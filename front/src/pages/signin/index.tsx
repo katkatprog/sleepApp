@@ -65,7 +65,7 @@ const SigninPage = () => {
               />
 
               <button className="mt-6 bg-green-600 hover:bg-green-500 font-bold w-full py-2 rounded-md transition">
-                Signin
+                ログイン
               </button>
 
               <Link href={"/signup"}>
