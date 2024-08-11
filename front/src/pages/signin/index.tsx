@@ -2,6 +2,7 @@ import { Layout } from "@/components/Layout";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import React, { useRef } from "react";
+import { toast } from "react-toastify";
 
 const SigninPage = () => {
   const router = useRouter();
@@ -34,12 +35,12 @@ const SigninPage = () => {
                   );
                   if (result.status === 200) {
                     router.push(`/search`);
+                    toast.success("ログインしました。");
                   } else {
-                    alert("ログインに失敗しました");
+                    toast.error("ログインに失敗しました。再度お試しください。");
                   }
                 } catch (error) {
-                  console.log(error);
-                  alert("ログインに失敗しました");
+                  toast.error("ログインに失敗しました。再度お試しください。");
                 }
               }}
             >

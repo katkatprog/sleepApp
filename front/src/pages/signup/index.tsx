@@ -2,6 +2,7 @@ import { Layout } from "@/components/Layout";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import React, { useRef } from "react";
+import { toast } from "react-toastify";
 
 const SignupPage = () => {
   const router = useRouter();
@@ -35,13 +36,14 @@ const SignupPage = () => {
                     },
                   );
                   if (result.status === 200) {
+                    toast.success("新規登録しました。どうぞお楽しみ下さい。");
                     router.push(`/search`);
                   } else {
-                    alert("サインアップに失敗しました");
+                    toast.error("新規登録に失敗しました。再度お試しください。");
                   }
                 } catch (error) {
                   console.log(error);
-                  alert("サインアップに失敗しました");
+                  toast.error("新規登録に失敗しました。再度お試しください。");
                 }
               }}
             >
