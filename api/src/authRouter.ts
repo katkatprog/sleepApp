@@ -70,7 +70,7 @@ authRouter.post(
       console.log(error);
       // email重複エラー
       if ((error as PrismaClientKnownRequestError).code === "P2002") {
-        return res.status(400).send("This email already exists...");
+        return res.status(400).send("メールアドレスが登録済です。");
       }
 
       return res.status(500).send("Something went wrong in signup...");
@@ -84,7 +84,9 @@ authRouter.post("/signin", async (req, res) => {
   const email: string = req.body.email || "";
   const password: string = req.body.password || "";
   if (!email || !password) {
-    return res.status(400).send("email or password is empty...");
+    return res
+      .status(400)
+      .send("メールアドレスもしくはパスワードが入力されていません。");
   }
 
   try {
@@ -93,7 +95,9 @@ authRouter.post("/signin", async (req, res) => {
 
     // リクエストのemailで登録されたユーザーが存在しない場合
     if (!user) {
-      return res.status(400).send("email or password is incorrect...");
+      return res
+        .status(400)
+        .send("メールアドレスもしくはパスワードが正しくありません。");
     }
 
     // パスワード照合
@@ -113,7 +117,9 @@ authRouter.post("/signin", async (req, res) => {
 
       return res.status(200).send("OK");
     } else {
-      return res.status(400).send("email or password is incorrect...");
+      return res
+        .status(400)
+        .send("メールアドレスもしくはパスワードが正しくありません。");
     }
   } catch (error) {
     console.log("エラー発生");
