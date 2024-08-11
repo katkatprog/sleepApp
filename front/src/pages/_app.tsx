@@ -12,7 +12,7 @@ export default function App({ Component, pageProps }: AppProps) {
         theme={"colored"}
         style={{ width: "500px" }}
       />
-      <Component {...pageProps} />;
+      <Component {...pageProps} />
     </>
   );
 }
