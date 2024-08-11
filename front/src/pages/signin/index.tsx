@@ -47,9 +47,10 @@ const SigninPage = () => {
               <p className="mt-4">メールアドレス</p>
               <input
                 ref={emailRef}
-                type="text"
+                type="email"
                 className="h-10 bg-neutral-800 border-2 border-neutral-700 placeholder:text-gray-600 rounded-lg pl-2 outline-neutral-500 w-full"
                 placeholder="Input your email..."
+                required={true}
               />
 
               <p className="mt-4">パスワード</p>
@@ -58,6 +59,7 @@ const SigninPage = () => {
                 type="password"
                 className="h-10 bg-neutral-800 border-2 border-neutral-700 placeholder:text-gray-600 rounded-lg pl-2 outline-neutral-500 w-full"
                 placeholder="Input your password..."
+                required={true}
               />
 
               <button className="mt-6 bg-green-600 hover:bg-green-500 font-bold w-full py-2 rounded-md transition">

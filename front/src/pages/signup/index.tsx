@@ -55,14 +55,16 @@ const SignupPage = () => {
                 type="text"
                 className="h-10 bg-neutral-800 border-2 border-neutral-700 placeholder:text-gray-600 rounded-lg pl-2 outline-neutral-500 w-full"
                 placeholder="Input your name..."
+                required={true}
               />
 
               <p className="mt-4">メールアドレス</p>
               <input
                 ref={emailRef}
-                type="text"
+                type="email"
                 className="h-10 bg-neutral-800 border-2 border-neutral-700 placeholder:text-gray-600 rounded-lg pl-2 outline-neutral-500 w-full"
                 placeholder="Input your email..."
+                required={true}
               />
 
               <p className="mt-4">パスワード</p>
@@ -71,6 +73,25 @@ const SignupPage = () => {
                 type="password"
                 className="h-10 bg-neutral-800 border-2 border-neutral-700 placeholder:text-gray-600 rounded-lg pl-2 outline-neutral-500 w-full"
                 placeholder="Input your password..."
+                onChange={() => {
+                  // 正規表現をRegExpの形で扱いたかったため(inputのpatternでは使えない)、onChangeでバリデーションを実装
+                  const password = passwordRef.current?.value;
+                  const exp =
+                    /^(?=.*[A-Za-z])(?=.*\d)(?=.*[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>/?`~])[A-Za-z\d!@#$%^&*()_+\-=\[\]{};':"\\|,.<>/?`~]+$/;
+                  const result = exp.test(password || "");
+
+                  if (result) {
+                    // パスワードの形式が正しい場合、バリデーションのエラーを解除
+                    passwordRef.current?.setCustomValidity("");
+                  } else {
+                    // パスワードの形式が正しくない場合、バリデーションのエラーメッセージを設定
+                    passwordRef.current?.setCustomValidity(
+                      "パスワードは半角英字、半角数字、記号を1つ以上含む必要があります。また半角英数字、記号以外は使用できません。※使用可能な記号は!@#$%^&*()_+-=[]{};':\"\\|,.<>/?`~のどれかです。",
+                    );
+                  }
+                }}
+                minLength={8}
+                required
               />
 
               <button className="mt-6 bg-green-600 hover:bg-green-500 font-bold w-full py-2 rounded-md transition">
