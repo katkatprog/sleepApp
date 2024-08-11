@@ -1,13 +1,16 @@
 import { Layout } from "@/components/Layout";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import React, { useRef } from "react";
+import { EyeSlashIcon } from "@/components/icons/EyeSlashIcon";
+import { EyeIcon } from "@/components/icons/EyeIcon";
+import React, { useRef, useState } from "react";
 import { toast } from "react-toastify";
 
 const SigninPage = () => {
   const router = useRouter();
   const emailRef = useRef<HTMLInputElement>(null);
   const passwordRef = useRef<HTMLInputElement>(null);
+  const [showPassword, setShowPassword] = useState(false);
 
   return (
     <Layout>
@@ -50,21 +53,46 @@ const SigninPage = () => {
               <input
                 ref={emailRef}
                 type="email"
-                className="h-10 bg-neutral-800 border-2 border-neutral-700 placeholder:text-gray-600 rounded-lg pl-2 outline-neutral-500 w-full"
+                className="h-10 bg-neutral-800 border-2 border-neutral-700 placeholder:text-gray-600 rounded-lg pl-2 outline-none w-full"
                 placeholder="Input your email..."
                 required={true}
               />
 
               <p className="mt-4">パスワード</p>
-              <input
-                ref={passwordRef}
-                type="password"
-                className="h-10 bg-neutral-800 border-2 border-neutral-700 placeholder:text-gray-600 rounded-lg pl-2 outline-neutral-500 w-full"
-                placeholder="Input your password..."
-                required={true}
-              />
+              <div className="flex">
+                <input
+                  ref={passwordRef}
+                  type="password"
+                  className="h-10 bg-neutral-800 border-2 border-neutral-700 border-r-0 placeholder:text-gray-600 rounded-l-lg rounded-r-none pl-2 outline-none w-full"
+                  placeholder="Input your password..."
+                  required={true}
+                />
+                <button
+                  type="button"
+                  className="h-10 bg-neutral-800 border-2 border-neutral-700 border-l-0 placeholder:text-gray-600 rounded-r-lg rounded-l-none pr-2 outline-none"
+                  onClick={() => {
+                    setShowPassword(!showPassword);
+                    if (passwordRef.current?.type) {
+                      if (passwordRef.current.type === "password") {
+                        passwordRef.current.type = "text";
+                      } else {
+                        passwordRef.current.type = "password";
+                      }
+                    }
+                  }}
+                >
+                  {showPassword ? (
+                    <EyeSlashIcon propClassName=""></EyeSlashIcon>
+                  ) : (
+                    <EyeIcon propClassName=""></EyeIcon>
+                  )}
+                </button>
+              </div>
 
-              <button className="mt-6 bg-green-600 hover:bg-green-500 font-bold w-full py-2 rounded-md transition">
+              <button
+                type="submit"
+                className="mt-6 bg-green-600 hover:bg-green-500 font-bold w-full py-2 rounded-md transition"
+              >
                 ログイン
               </button>
 
