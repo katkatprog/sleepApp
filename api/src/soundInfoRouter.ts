@@ -30,7 +30,7 @@ soundInfoRouter.get("/single/:id", async (req, res) => {
   } catch (error) {
     console.log("エラー発生");
     console.log(error);
-    return res.status(500).send("Something went wrong...");
+    return res.status(500).send("想定外のエラーが発生しました。");
   }
 });
 
@@ -101,6 +101,6 @@ soundInfoRouter.get("/search", async (req, res) => {
   } catch (error) {
     console.log("エラー発生");
     console.log(error);
-    return res.status(500).send("Something went wrong...");
+    return res.status(500).send("想定外のエラーが発生しました。");
   }
 });

@@ -63,7 +63,7 @@ describe("Integration test", () => {
 
     // 実行結果
     expect(res.status).toBe(500);
-    expect(res.text).toBe("Something went wrong...");
+    expect(res.text).toBe("想定外のエラーが発生しました。");
   });
 
   test("[正常系1]音声情報を検索(クエリパラメータなし)", async () => {
@@ -165,7 +165,7 @@ describe("Integration test", () => {
 
     // 実行結果
     expect(res.status).toBe(500);
-    expect(res.text).toBe("Something went wrong...");
+    expect(res.text).toBe("想定外のエラーが発生しました。");
   });
 
   // auth
@@ -281,7 +281,7 @@ describe("Integration test", () => {
 
     // 実行結果
     expect(res.status).toBe(500);
-    expect(res.text).toBe("Something went wrong in signup...");
+    expect(res.text).toBe("想定外のエラーが発生しました。");
   });
 
   test("[異常系1]Signin(リクエストパラメータ欠落)", async () => {
@@ -349,6 +349,6 @@ describe("Integration test", () => {
 
     // 実行結果
     expect(res.status).toBe(500);
-    expect(res.text).toBe("Something went wrong in signin...");
+    expect(res.text).toBe("想定外のエラーが発生しました。");
   });
 });

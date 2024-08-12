@@ -73,7 +73,7 @@ authRouter.post(
         return res.status(400).send("メールアドレスが登録済です。");
       }
 
-      return res.status(500).send("Something went wrong in signup...");
+      return res.status(500).send("想定外のエラーが発生しました。");
     }
   },
 );
@@ -124,6 +124,6 @@ authRouter.post("/signin", async (req, res) => {
   } catch (error) {
     console.log("エラー発生");
     console.log(error);
-    return res.status(500).send("Something went wrong in signin...");
+    return res.status(500).send("想定外のエラーが発生しました。");
   }
 });
