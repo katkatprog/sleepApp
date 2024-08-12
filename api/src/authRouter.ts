@@ -3,7 +3,8 @@ import prisma from "./prisma/client";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import { PrismaClientKnownRequestError } from "@prisma/client/runtime/library";
-import { body, validationResult } from "express-validator";
+import { body } from "express-validator";
+import { checkReq } from "./middleware/checkReq";
 export const authRouter = express.Router();
 
 // サインアップ
@@ -25,14 +26,8 @@ authRouter.post(
       /^(?=.*[A-Za-z])(?=.*\d)(?=.*[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>/?`~])[A-Za-z\d!@#$%^&*()_+\-=\[\]{};':"\\|,.<>/?`~]+$/,
     )
     .withMessage("パスワードの形式が正しくありません。"),
+  checkReq,
   async (req, res) => {
-    // バリデーションチェック
-    const valiResult = validationResult(req);
-    if (!valiResult.isEmpty()) {
-      const valiMsgArray = valiResult.array().map((vali) => vali.msg);
-      return res.status(400).send(valiMsgArray.join(""));
-    }
-
     // 入力値代入
     const name: string = req.body.name;
     const email: string = req.body.email;
