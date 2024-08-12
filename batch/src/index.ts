@@ -32,7 +32,7 @@ const main = async () => {
 
     console.log("全処理が完了しました。");
   } catch (error) {
-    console.log("エラー発生");
+    console.log("想定外のエラーが発生しました。");
     console.error(error);
   } finally {
     await prisma.$disconnect();

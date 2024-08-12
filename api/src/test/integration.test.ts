@@ -35,7 +35,7 @@ describe("Integration test", () => {
 
     // 実行結果
     expect(res.status).toBe(400);
-    expect(res.text).toBe("Request Param is not valid...");
+    expect(res.text).toBe("音声のIDが数字ではありません。");
   });
 
   test("[異常系2]音声情報を個別取得", async () => {
@@ -48,7 +48,7 @@ describe("Integration test", () => {
 
     // 実行結果
     expect(res.status).toBe(404);
-    expect(res.text).toBe("Sound info was not found...");
+    expect(res.text).toBe("音声情報が見つかりません。");
   });
 
   test("[異常系3]音声情報を個別取得", async () => {
@@ -63,7 +63,7 @@ describe("Integration test", () => {
 
     // 実行結果
     expect(res.status).toBe(500);
-    expect(res.text).toBe("Something went wrong...");
+    expect(res.text).toBe("想定外のエラーが発生しました。");
   });
 
   test("[正常系1]音声情報を検索(クエリパラメータなし)", async () => {
@@ -117,7 +117,7 @@ describe("Integration test", () => {
     );
     // 実行結果
     expect(res.status).toBe(400);
-    expect(res.text).toBe("Request Param is not valid...");
+    expect(res.text).toBe("クエリパラメータpageが数字ではありません。");
   });
 
   test("[異常系2]音声情報を検索(検索結果に対しての範囲を超えたページ指定(ページ数を0以下に設定した場合))", async () => {
@@ -127,7 +127,7 @@ describe("Integration test", () => {
     );
     // 実行結果
     expect(res.status).toBe(404);
-    expect(res.text).toBe("Page is not found...");
+    expect(res.text).toBe("指定の検索ページが見つかりません。");
   });
 
   test("[異常系3]音声情報を検索(検索結果に対しての範囲を超えたページ指定(ページ数が大きすぎる場合))", async () => {
@@ -141,11 +141,21 @@ describe("Integration test", () => {
     );
     // 実行結果
     expect(res.status).toBe(404);
-    expect(res.text).toBe("Page is not found...");
+    expect(res.text).toBe("指定の検索ページが見つかりません。");
   });
 
-  test("[異常系4]音声情報を検索", async () => {
-    // 異常系1,2,3以外で何らかのエラーが起きた場合を想定
+  test("[異常系4]音声情報を検索(sortByの指定が正しくない)", async () => {
+    // 処理実行
+    const res = await request(app).get(
+      "/sound-info/search?q=test&sort=dummy&page=1",
+    );
+    // 実行結果
+    expect(res.status).toBe(400);
+    expect(res.text).toBe("クエリパラメータsortの指定が正しくありません。");
+  });
+
+  test("[異常系5]音声情報を検索", async () => {
+    // 異常系1,2,3,4以外で何らかのエラーが起きた場合を想定
     // データ設定
     prismaMock.soundInfo.findMany.mockRejectedValue(new Error("Error on Test"));
     prismaMock.soundInfo.count.mockRejectedValue(new Error("Error on Test"));
@@ -155,7 +165,7 @@ describe("Integration test", () => {
 
     // 実行結果
     expect(res.status).toBe(500);
-    expect(res.text).toBe("Something went wrong...");
+    expect(res.text).toBe("想定外のエラーが発生しました。");
   });
 
   // auth
@@ -271,7 +281,7 @@ describe("Integration test", () => {
 
     // 実行結果
     expect(res.status).toBe(500);
-    expect(res.text).toBe("Something went wrong in signup...");
+    expect(res.text).toBe("想定外のエラーが発生しました。");
   });
 
   test("[異常系1]Signin(リクエストパラメータ欠落)", async () => {
@@ -282,9 +292,7 @@ describe("Integration test", () => {
 
     // 実行結果
     expect(res.status).toBe(400);
-    expect(res.text).toBe(
-      "メールアドレスもしくはパスワードが入力されていません。",
-    );
+    expect(res.text).toBe("パスワードが入力されていません。");
   });
 
   test("[異常系2]Signin(emailが存在しない場合)", async () => {
@@ -339,6 +347,6 @@ describe("Integration test", () => {
 
     // 実行結果
     expect(res.status).toBe(500);
-    expect(res.text).toBe("Something went wrong in signin...");
+    expect(res.text).toBe("想定外のエラーが発生しました。");
   });
 });
