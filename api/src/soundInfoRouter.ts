@@ -7,7 +7,7 @@ const soundsPerPage = 20;
 soundInfoRouter.get("/single/:id", async (req, res) => {
   const soundId = Number(req.params.id);
   if (isNaN(soundId)) {
-    return res.status(400).send("Request Param is not valid...");
+    return res.status(400).send("音声のIDが数字ではありません。");
   }
   try {
     // 音声情報取得
@@ -15,7 +15,7 @@ soundInfoRouter.get("/single/:id", async (req, res) => {
       where: { id: soundId },
     });
     if (!soundInfo) {
-      return res.status(404).send("Sound info was not found...");
+      return res.status(404).send("音声情報が見つかりません。");
     }
     // 再生数加算
     await prisma.soundInfo.update({
@@ -39,10 +39,10 @@ soundInfoRouter.get("/search", async (req, res) => {
   // クエリパラメータpageが存在しない場合、1をセット
   const currentPage = Number(req.query.page || 1);
   if (isNaN(currentPage)) {
-    return res.status(400).send("Request Param is not valid...");
+    return res.status(400).send("クエリパラメータpageが数字ではありません。");
   }
   if (currentPage <= 0) {
-    return res.status(404).send("Page is not found...");
+    return res.status(404).send("指定の検索ページが見つかりません。");
   }
 
   // クエリパラメータsortの整理
@@ -53,7 +53,7 @@ soundInfoRouter.get("/search", async (req, res) => {
   } else if (sortBy === "count") {
     sortCondition = { playCount: "desc" };
   } else {
-    return res.status(400).send("Request Param is not valid...");
+    return res.status(400).send("クエリパラメータsortByの指定が正しくありません。");
   }
 
   // 検索キーワードを元に検索条件を作成
@@ -94,7 +94,7 @@ soundInfoRouter.get("/search", async (req, res) => {
 
     // 検索結果に対して範囲を超えたページ番号が指定された場合、404エラーを出す
     if (soundsList.length === 0 && currentPage >= 2) {
-      return res.status(404).send("Page is not found...");
+      return res.status(404).send("指定の検索ページが見つかりません。");
     }
 
     return res.send({ soundsList, totalPages });
