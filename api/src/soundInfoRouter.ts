@@ -53,7 +53,7 @@ soundInfoRouter.get("/search", async (req, res) => {
   } else if (sortBy === "count") {
     sortCondition = { playCount: "desc" };
   } else {
-    return res.status(400).send("クエリパラメータsortByの指定が正しくありません。");
+    return res.status(400).send("クエリパラメータsortの指定が正しくありません。");
   }
 
   // 検索キーワードを元に検索条件を作成

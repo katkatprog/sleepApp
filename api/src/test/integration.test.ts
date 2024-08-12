@@ -144,8 +144,18 @@ describe("Integration test", () => {
     expect(res.text).toBe("指定の検索ページが見つかりません。");
   });
 
-  test("[異常系4]音声情報を検索", async () => {
-    // 異常系1,2,3以外で何らかのエラーが起きた場合を想定
+  test("[異常系4]音声情報を検索(sortByの指定が正しくない)", async () => {
+    // 処理実行
+    const res = await request(app).get(
+      "/sound-info/search?q=test&sort=dummy&page=1",
+    );
+    // 実行結果
+    expect(res.status).toBe(400);
+    expect(res.text).toBe("クエリパラメータsortの指定が正しくありません。");
+  });
+
+  test("[異常系5]音声情報を検索", async () => {
+    // 異常系1,2,3,4以外で何らかのエラーが起きた場合を想定
     // データ設定
     prismaMock.soundInfo.findMany.mockRejectedValue(new Error("Error on Test"));
     prismaMock.soundInfo.count.mockRejectedValue(new Error("Error on Test"));
