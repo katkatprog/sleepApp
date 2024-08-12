@@ -292,9 +292,7 @@ describe("Integration test", () => {
 
     // 実行結果
     expect(res.status).toBe(400);
-    expect(res.text).toBe(
-      "メールアドレスもしくはパスワードが入力されていません。",
-    );
+    expect(res.text).toBe("パスワードが入力されていません。");
   });
 
   test("[異常系2]Signin(emailが存在しない場合)", async () => {

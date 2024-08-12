@@ -1,38 +1,42 @@
 import express from "express";
 import prisma from "./prisma/client";
+import { param } from "express-validator";
+import { checkReq } from "./middleware/checkReq";
 export const soundInfoRouter = express.Router();
 const soundsPerPage = 20;
 
 // 音声情報取得(個別)
-soundInfoRouter.get("/single/:id", async (req, res) => {
-  const soundId = Number(req.params.id);
-  if (isNaN(soundId)) {
-    return res.status(400).send("音声のIDが数字ではありません。");
-  }
-  try {
-    // 音声情報取得
-    const soundInfo = await prisma.soundInfo.findUnique({
-      where: { id: soundId },
-    });
-    if (!soundInfo) {
-      return res.status(404).send("音声情報が見つかりません。");
+soundInfoRouter.get(
+  "/single/:id",
+  param("id").isNumeric().withMessage("音声のIDが数字ではありません。"),
+  checkReq,
+  async (req, res) => {
+    const soundId = Number(req.params.id);
+    try {
+      // 音声情報取得
+      const soundInfo = await prisma.soundInfo.findUnique({
+        where: { id: soundId },
+      });
+      if (!soundInfo) {
+        return res.status(404).send("音声情報が見つかりません。");
+      }
+      // 再生数加算
+      await prisma.soundInfo.update({
+        data: {
+          playCount: soundInfo.playCount + 1,
+        },
+        where: {
+          id: soundId,
+        },
+      });
+      return res.send({ ...soundInfo, playCount: soundInfo.playCount + 1 });
+    } catch (error) {
+      console.log("エラー発生");
+      console.log(error);
+      return res.status(500).send("想定外のエラーが発生しました。");
     }
-    // 再生数加算
-    await prisma.soundInfo.update({
-      data: {
-        playCount: soundInfo.playCount + 1,
-      },
-      where: {
-        id: soundId,
-      },
-    });
-    return res.send({ ...soundInfo, playCount: soundInfo.playCount + 1 });
-  } catch (error) {
-    console.log("エラー発生");
-    console.log(error);
-    return res.status(500).send("想定外のエラーが発生しました。");
-  }
-});
+  },
+);
 
 // 音声情報取得(一覧)
 soundInfoRouter.get("/search", async (req, res) => {

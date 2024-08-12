@@ -10,6 +10,7 @@ export const authRouter = express.Router();
 // サインアップ
 authRouter.post(
   "/signup",
+  // リクエストバリデーション準備
   body("name").notEmpty().withMessage("お名前が入力されていません。"),
   body("email")
     .notEmpty()
@@ -26,7 +27,7 @@ authRouter.post(
       /^(?=.*[A-Za-z])(?=.*\d)(?=.*[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>/?`~])[A-Za-z\d!@#$%^&*()_+\-=\[\]{};':"\\|,.<>/?`~]+$/,
     )
     .withMessage("パスワードの形式が正しくありません。"),
-  checkReq,
+  checkReq, // リクエストのバリデーションチェック
   async (req, res) => {
     // 入力値代入
     const name: string = req.body.name;
@@ -74,51 +75,53 @@ authRouter.post(
 );
 
 // サインイン
-authRouter.post("/signin", async (req, res) => {
-  // 入力値代入、および存在チェック
-  const email: string = req.body.email || "";
-  const password: string = req.body.password || "";
-  if (!email || !password) {
-    return res
-      .status(400)
-      .send("メールアドレスもしくはパスワードが入力されていません。");
-  }
+authRouter.post(
+  "/signin",
+  // リクエストバリデーション準備
+  body("email").notEmpty().withMessage("メールアドレスが入力されていません。"),
+  body("password").notEmpty().withMessage("パスワードが入力されていません。"),
+  checkReq, // リクエストのバリデーションチェック
+  async (req, res) => {
+    // 入力値代入
+    const email: string = req.body.email;
+    const password: string = req.body.password;
 
-  try {
-    // emailをキーにデータ取得
-    const user = await prisma.user.findUnique({ where: { email } });
+    try {
+      // emailをキーにデータ取得
+      const user = await prisma.user.findUnique({ where: { email } });
 
-    // リクエストのemailで登録されたユーザーが存在しない場合
-    if (!user) {
-      return res
-        .status(400)
-        .send("メールアドレスもしくはパスワードが正しくありません。");
+      // リクエストのemailで登録されたユーザーが存在しない場合
+      if (!user) {
+        return res
+          .status(400)
+          .send("メールアドレスもしくはパスワードが正しくありません。");
+      }
+
+      // パスワード照合
+      const isMatch = await bcrypt.compare(password, user.hashedPassword);
+      if (isMatch) {
+        // パスワードが正しいならば、jwt発行
+        const token = jwt.sign(
+          {
+            // ペイロードにはユーザーIDを含める
+            userId: user.id,
+          },
+          process.env.JWT_SECRET || "",
+          { expiresIn: process.env.JWT_EXPIRE || "24h" },
+        );
+
+        res.cookie("token", token);
+
+        return res.status(200).send("OK");
+      } else {
+        return res
+          .status(400)
+          .send("メールアドレスもしくはパスワードが正しくありません。");
+      }
+    } catch (error) {
+      console.log("エラー発生");
+      console.log(error);
+      return res.status(500).send("想定外のエラーが発生しました。");
     }
-
-    // パスワード照合
-    const isMatch = await bcrypt.compare(password, user.hashedPassword);
-    if (isMatch) {
-      // パスワードが正しいならば、jwt発行
-      const token = jwt.sign(
-        {
-          // ペイロードにはユーザーIDを含める
-          userId: user.id,
-        },
-        process.env.JWT_SECRET || "",
-        { expiresIn: process.env.JWT_EXPIRE || "24h" },
-      );
-
-      res.cookie("token", token);
-
-      return res.status(200).send("OK");
-    } else {
-      return res
-        .status(400)
-        .send("メールアドレスもしくはパスワードが正しくありません。");
-    }
-  } catch (error) {
-    console.log("エラー発生");
-    console.log(error);
-    return res.status(500).send("想定外のエラーが発生しました。");
-  }
-});
+  },
+);
