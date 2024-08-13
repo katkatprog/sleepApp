@@ -127,7 +127,7 @@ authRouter.post(
 );
 
 // サインアウト
-authRouter.post("/signout", (req, res) => {
+authRouter.post("/logout", (req, res) => {
   res.clearCookie("token");
   return res.status(200).send("OK");
 });

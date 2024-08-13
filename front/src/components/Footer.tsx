@@ -25,7 +25,7 @@ export const Footer = () => {
             onClick={async () => {
               try {
                 const result = await fetch(
-                  `${process.env.NEXT_PUBLIC_API_URL}/auth/signout/`,
+                  `${process.env.NEXT_PUBLIC_API_URL}/auth/logout/`,
                   {
                     method: "POST",
                     headers: {

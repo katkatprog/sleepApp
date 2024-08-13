@@ -350,11 +350,11 @@ describe("Integration test", () => {
     expect(res.text).toBe("想定外のエラーが発生しました。");
   });
 
-  // signout
-  test("[正常系]Signout", async () => {
+  // logout
+  test("[正常系]Logout", async () => {
     // 処理実行
     const res = await request(app)
-      .post("/auth/signout")
+      .post("/auth/logout")
       .set("Cookie", "samplejwt");
 
     // 実行結果
