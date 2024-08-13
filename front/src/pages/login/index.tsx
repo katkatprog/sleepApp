@@ -3,14 +3,16 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import { EyeSlashIcon } from "@/components/icons/EyeSlashIcon";
 import { EyeIcon } from "@/components/icons/EyeIcon";
-import React, { useRef, useState } from "react";
+import React, { useContext, useRef, useState } from "react";
 import { toast } from "react-toastify";
+import { LoginUserContext } from "../_app";
 
-const SigninPage = () => {
+const LoginPage = () => {
   const router = useRouter();
   const emailRef = useRef<HTMLInputElement>(null);
   const passwordRef = useRef<HTMLInputElement>(null);
   const [showPassword, setShowPassword] = useState(false);
+  const context = useContext(LoginUserContext);
 
   return (
     <Layout>
@@ -23,7 +25,7 @@ const SigninPage = () => {
                 e.preventDefault();
                 try {
                   const result = await fetch(
-                    `${process.env.NEXT_PUBLIC_API_URL}/auth/signin`,
+                    `${process.env.NEXT_PUBLIC_API_URL}/auth/login`,
                     {
                       method: "POST",
                       body: JSON.stringify({
@@ -47,6 +49,19 @@ const SigninPage = () => {
                 } catch (error) {
                   toast.error("ログインに失敗しました。再度お試しください。");
                 }
+
+                // ログインユーザーの情報を取得する
+                try {
+                  const result = await fetch(
+                    `${process.env.NEXT_PUBLIC_API_URL}/login-user/`,
+                    {
+                      credentials: "include",
+                    },
+                  );
+                  if (context.setLoginUser) {
+                    context.setLoginUser(await result.json());
+                  }
+                } catch (error) {}
               }}
             >
               <p className="mt-4">メールアドレス</p>
@@ -109,4 +124,4 @@ const SigninPage = () => {
   );
 };
 
-export default SigninPage;
+export default LoginPage;

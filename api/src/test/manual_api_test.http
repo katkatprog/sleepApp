@@ -32,11 +32,20 @@ content-type: application/json
   "password": "P@ssw0rd"
 }
 
-### Signin
-POST http://localhost:8080/auth/signin
+### Login
+POST http://localhost:8080/auth/login
 content-type: application/json
 
 {
   "email": "katkatprog@example.com",
   "password": "P@ssw0rd"
 }
+
+### Logout
+POST http://localhost:8080/auth/logout
+content-type: application/json
+cookie: token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEyLCJpYXQiOjE3MjM0NjY1NDksImV4cCI6MTcyMzU1Mjk0OX0.Q7VcD695c2xWTc0ec_ONyB17bxx7iPfEkf4K_oNn7yU
+
+### login-user
+GET http://localhost:8080/login-user
+cookie: token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEyLCJpYXQiOjE3MjM0NjY1NDksImV4cCI6MTcyMzU1Mjk0OX0.Q7VcD695c2xWTc0ec_ONyB17bxx7iPfEkf4K_oNn7yU

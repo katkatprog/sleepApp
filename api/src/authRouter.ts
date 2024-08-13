@@ -74,9 +74,9 @@ authRouter.post(
   },
 );
 
-// サインイン
+// ログイン
 authRouter.post(
-  "/signin",
+  "/login",
   // リクエストバリデーション準備
   body("email").notEmpty().withMessage("メールアドレスが入力されていません。"),
   body("password").notEmpty().withMessage("パスワードが入力されていません。"),
@@ -125,3 +125,9 @@ authRouter.post(
     }
   },
 );
+
+// サインアウト
+authRouter.post("/logout", (req, res) => {
+  res.clearCookie("token");
+  return res.status(200).send("OK");
+});
