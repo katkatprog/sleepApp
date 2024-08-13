@@ -1,10 +1,10 @@
 import express from "express";
-import prisma from "./prisma/client";
+import prisma from "../prisma/client";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import { PrismaClientKnownRequestError } from "@prisma/client/runtime/library";
 import { body } from "express-validator";
-import { checkReq } from "./middleware/checkReq";
+import { checkReq } from "../middleware/checkReq";
 export const authRouter = express.Router();
 
 // サインアップ

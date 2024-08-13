@@ -1,8 +1,8 @@
 import "dotenv/config";
 import express from "express";
-import { soundInfoRouter } from "./soundInfoRouter";
-import { authRouter } from "./authRouter";
-import { loginUserRouter } from "./loginUserRouter";
+import { soundInfoRouter } from "./router/soundInfoRouter";
+import { authRouter } from "./router/authRouter";
+import { loginUserRouter } from "./router/loginUserRouter";
 import cors from "cors";
 import cookieParser from "cookie-parser";
 

@@ -1,7 +1,7 @@
 import express from "express";
 import jwt from "jsonwebtoken";
-import { DecodedToken } from "./types/decodedToken";
-import prisma from "./prisma/client";
+import { DecodedToken } from "../types/decodedToken";
+import prisma from "../prisma/client";
 
 export const loginUserRouter = express.Router();
 
