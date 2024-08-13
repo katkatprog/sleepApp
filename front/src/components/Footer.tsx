@@ -10,7 +10,7 @@ import { useRouter } from "next/router";
 
 export const Footer = () => {
   const router = useRouter();
-  const loginUser = useContext(LoginUserContext);
+  const context = useContext(LoginUserContext);
 
   return (
     <footer className="h-20 bg-neutral-800 border-gray-300 border-t fixed w-full left-0 bottom-0 flex justify-center">
@@ -19,7 +19,7 @@ export const Footer = () => {
           <SearchIcon propClassName="w-9 h-9 p-1 rounded-full stroke-2 hover:bg-neutral-700 transition"></SearchIcon>
         </Link>
         <SettingIcon propClassName="w-9 h-9 p-1 rounded-full stroke-2 hover:bg-neutral-700 transition"></SettingIcon>
-        {loginUser ? (
+        {context.loginUser ? (
           // ログイン状態
           <button
             onClick={async () => {
@@ -37,6 +37,10 @@ export const Footer = () => {
                 if (result.status === 200) {
                   router.push("/");
                   toast.success("ログアウトしました。", { autoClose: 5000 });
+                  // contextのloginUserをnullに設定
+                  if (context.setLoginUser) {
+                    context.setLoginUser(null);
+                  }
                 } else {
                   toast.error("ログアウトに失敗しました。再度お試しください。");
                 }

@@ -3,9 +3,18 @@ import "@/styles/globals.css";
 import type { AppProps } from "next/app";
 import { ToastContainer } from "react-toastify";
 import { User } from "@prisma/client";
-import { createContext, useEffect, useState } from "react";
+import {
+  Dispatch,
+  SetStateAction,
+  createContext,
+  useEffect,
+  useState,
+} from "react";
 
-export const LoginUserContext = createContext<LoginUser | null>(null);
+export const LoginUserContext = createContext<{
+  loginUser: LoginUser | null;
+  setLoginUser: Dispatch<SetStateAction<LoginUser | null>> | null;
+}>({ loginUser: null, setLoginUser: null });
 
 export default function App({ Component, pageProps }: AppProps) {
   // 画面ロード時にログインユーザーを取得し、設定する
@@ -32,7 +41,7 @@ export default function App({ Component, pageProps }: AppProps) {
         style={{ width: "500px" }}
       />
       {/* Layoutで囲われている全ページでLoginUserをグローバル的に使えるように設定 */}
-      <LoginUserContext.Provider value={loginUser}>
+      <LoginUserContext.Provider value={{ loginUser, setLoginUser }}>
         <Component {...pageProps} />
       </LoginUserContext.Provider>
     </>
