@@ -349,4 +349,24 @@ describe("Integration test", () => {
     expect(res.status).toBe(500);
     expect(res.text).toBe("想定外のエラーが発生しました。");
   });
+
+  // ログインユーザー取得
+  test("[正常系]ログインユーザー取得(token無し)", async () => {
+    // 処理実行
+    const res = await request(app).get("/login-user");
+
+    // 実行結果
+    expect(res.status).toBe(200);
+    expect(res.text).toBe("null");
+  });
+
+  test("[正常系]ログインユーザー取得(token不正)", async () => {
+    // 処理実行
+    // cookieには"dummy"というtokenを含める
+    const res = await request(app).get("/login-user").set("Cookie", "dummy");
+
+    // 実行結果
+    expect(res.status).toBe(200);
+    expect(res.text).toBe("null");
+  });
 });
