@@ -7,7 +7,7 @@ import React, { useContext, useRef, useState } from "react";
 import { toast } from "react-toastify";
 import { LoginUserContext } from "../_app";
 
-const SigninPage = () => {
+const LoginPage = () => {
   const router = useRouter();
   const emailRef = useRef<HTMLInputElement>(null);
   const passwordRef = useRef<HTMLInputElement>(null);
@@ -25,7 +25,7 @@ const SigninPage = () => {
                 e.preventDefault();
                 try {
                   const result = await fetch(
-                    `${process.env.NEXT_PUBLIC_API_URL}/auth/signin`,
+                    `${process.env.NEXT_PUBLIC_API_URL}/auth/login`,
                     {
                       method: "POST",
                       body: JSON.stringify({
@@ -124,4 +124,4 @@ const SigninPage = () => {
   );
 };
 
-export default SigninPage;
+export default LoginPage;

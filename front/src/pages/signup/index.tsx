@@ -143,7 +143,7 @@ const SignupPage = () => {
                 新規登録
               </button>
 
-              <Link href={"/signin"}>
+              <Link href={"/login"}>
                 <p className="text-green-400 hover:text-green-300 mt-2">
                   アカウントをお持ちの方はログイン
                 </p>

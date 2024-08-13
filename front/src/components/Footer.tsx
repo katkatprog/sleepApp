@@ -53,7 +53,7 @@ export const Footer = () => {
           </button>
         ) : (
           // 未ログイン状態
-          <Link href={"/signin"}>
+          <Link href={"/login"}>
             <LoginIcon propClassName="w-9 h-9 p-1 rounded-full stroke-2 hover:bg-neutral-700 transition"></LoginIcon>
           </Link>
         )}

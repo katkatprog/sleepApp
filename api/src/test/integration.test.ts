@@ -284,9 +284,9 @@ describe("Integration test", () => {
     expect(res.text).toBe("想定外のエラーが発生しました。");
   });
 
-  test("[異常系1]Signin(リクエストパラメータ欠落)", async () => {
+  test("[異常系1]Login(リクエストパラメータ欠落)", async () => {
     // 処理実行(パスワード欠落)
-    const res = await request(app).post("/auth/signin").send({
+    const res = await request(app).post("/auth/login").send({
       email: "katkatprog@example.com",
     });
 
@@ -295,12 +295,12 @@ describe("Integration test", () => {
     expect(res.text).toBe("パスワードが入力されていません。");
   });
 
-  test("[異常系2]Signin(emailが存在しない場合)", async () => {
+  test("[異常系2]Login(emailが存在しない場合)", async () => {
     // emailのユーザーが存在しない場合を想定
     prismaMock.user.findUnique.mockResolvedValue(null);
 
     // 処理実行
-    const res = await request(app).post("/auth/signin").send({
+    const res = await request(app).post("/auth/login").send({
       email: "katkatprog@example.com",
       password: "P@ssw0rd",
     });
@@ -312,7 +312,7 @@ describe("Integration test", () => {
     );
   });
 
-  test("[異常系3]Signin(emailかpasswordが間違っている場合)", async () => {
+  test("[異常系3]Login(emailかpasswordが間違っている場合)", async () => {
     // passwordが間違っている場合を想定
     const user: User = {
       id: 1,
@@ -323,7 +323,7 @@ describe("Integration test", () => {
     prismaMock.user.findUnique.mockResolvedValue(user);
 
     // 処理実行
-    const res = await request(app).post("/auth/signin").send({
+    const res = await request(app).post("/auth/login").send({
       email: "katkatprog@example.com",
       password: "P@ssw0rd",
     });
@@ -335,12 +335,12 @@ describe("Integration test", () => {
     );
   });
 
-  test("[異常系4]Signin", async () => {
+  test("[異常系4]Login", async () => {
     // 異常系1,2,3以外でエラーが起きた場合を想定
     prismaMock.user.findUnique.mockRejectedValue(new Error());
 
     // 処理実行
-    const res = await request(app).post("/auth/signin").send({
+    const res = await request(app).post("/auth/login").send({
       email: "katkatprog@example.com",
       password: "P@ssw0rd",
     });

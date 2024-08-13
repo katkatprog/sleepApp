@@ -32,8 +32,8 @@ content-type: application/json
   "password": "P@ssw0rd"
 }
 
-### Signin
-POST http://localhost:8080/auth/signin
+### Login
+POST http://localhost:8080/auth/login
 content-type: application/json
 
 {

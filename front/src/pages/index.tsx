@@ -63,7 +63,7 @@ const HomePage = () => {
         </h3>
 
         <div className="flex items-center justify-center">
-          <Link href={"/signin"}>
+          <Link href={"/login"}>
             <button className="mt-6 bg-green-600 hover:bg-green-500 font-bold px-12 py-4 rounded-md transition">
               <LoginIcon propClassName="w-7 h-7 stroke-2 inline-block mr-2"></LoginIcon>
               ログイン / 新規登録
