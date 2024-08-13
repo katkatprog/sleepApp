@@ -357,7 +357,7 @@ describe("Integration test", () => {
 
     // 実行結果
     expect(res.status).toBe(200);
-    expect(res.text).toBe("null");
+    expect(res.body).toBe(null);
   });
 
   test("[正常系]ログインユーザー取得(token不正)", async () => {
@@ -367,6 +367,6 @@ describe("Integration test", () => {
 
     // 実行結果
     expect(res.status).toBe(200);
-    expect(res.text).toBe("null");
+    expect(res.body).toBe(null);
   });
 });
