@@ -12,7 +12,9 @@ export const Header = () => {
       <div className="h-14 flex items-center justify-around max-w-2xl w-full">
         {context.loginUser ? (
           // ログイン状態
-          <UserIcon propClassName="w-7 h-7 text-neutral-800 bg-gray-300 rounded-full"></UserIcon>
+          <Link href={"/mypage"}>
+            <UserIcon propClassName="w-7 h-7 text-neutral-800 bg-gray-300 rounded-full"></UserIcon>
+          </Link>
         ) : (
           // 未ログイン時はダミー要素
           <div></div>
