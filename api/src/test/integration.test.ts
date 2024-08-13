@@ -350,6 +350,20 @@ describe("Integration test", () => {
     expect(res.text).toBe("想定外のエラーが発生しました。");
   });
 
+  // signout
+  test("[正常系]Signout", async () => {
+    // 処理実行
+    const res = await request(app)
+      .post("/auth/signout")
+      .set("Cookie", "samplejwt");
+
+    // 実行結果
+    expect(res.status).toBe(200);
+    // トークンがクリアされることのチェック
+    // headerのset-cookieは["token=; Path=/; ..."]という形で入っているため、下記のようなチェックをしている
+    expect(res.header["set-cookie"][0].includes("token=;")).toBe(true);
+  });
+
   // ログインユーザー取得
   test("[正常系]ログインユーザー取得(token無し)", async () => {
     // 処理実行
