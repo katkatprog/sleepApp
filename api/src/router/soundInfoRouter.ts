@@ -1,7 +1,7 @@
 import express from "express";
-import prisma from "./prisma/client";
+import prisma from "../prisma/client";
 import { param, query } from "express-validator";
-import { checkReq } from "./middleware/checkReq";
+import { checkReq } from "../middleware/checkReq";
 export const soundInfoRouter = express.Router();
 const soundsPerPage = 20;
 
