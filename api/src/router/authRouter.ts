@@ -58,7 +58,12 @@ authRouter.post(
         { expiresIn: process.env.JWT_EXPIRE || "24h" },
       );
 
-      res.cookie("token", token);
+      res.cookie("token", token, {
+        httpOnly: true,
+        sameSite: "none",
+        secure: true,
+        path: "/",
+      });
 
       return res.send("OK");
     } catch (error) {
@@ -110,7 +115,12 @@ authRouter.post(
           { expiresIn: process.env.JWT_EXPIRE || "24h" },
         );
 
-        res.cookie("token", token);
+        res.cookie("token", token, {
+          httpOnly: true,
+          sameSite: "none",
+          secure: true,
+          path: "/",
+        });
 
         return res.status(200).send("OK");
       } else {
