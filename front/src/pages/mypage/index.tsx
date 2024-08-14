@@ -49,6 +49,43 @@ const MyPage = () => {
                       プロフィールを編集する
                     </button>
                     <button
+                      className="mt-6 border-green-400 border-2 text-green-400 hover:bg-neutral-700 font-bold px-12 py-2 rounded-md transition w-full"
+                      onClick={async () => {
+                        try {
+                          const result = await fetch(
+                            `${process.env.NEXT_PUBLIC_API_URL}/auth/logout/`,
+                            {
+                              method: "POST",
+                              headers: {
+                                "content-type": "application/json",
+                              },
+                              credentials: "include",
+                            },
+                          );
+                          if (result.status === 200) {
+                            router.push("/");
+                            toast.success("ログアウトしました。", {
+                              autoClose: 5000,
+                            });
+                            // contextのloginUserをnullに設定
+                            if (context.setLoginUser) {
+                              context.setLoginUser(null);
+                            }
+                          } else {
+                            toast.error(
+                              "ログアウトに失敗しました。再度お試しください。",
+                            );
+                          }
+                        } catch (error) {
+                          toast.error(
+                            "ログアウトに失敗しました。再度お試しください。",
+                          );
+                        }
+                      }}
+                    >
+                      ログアウト
+                    </button>
+                    <button
                       className="mt-6 border-red-400 border-2 text-red-400 hover:bg-neutral-700 font-bold px-12 py-2 rounded-md transition w-full"
                       onClick={() => {
                         setMode("delete");
