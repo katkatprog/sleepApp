@@ -53,7 +53,7 @@ loginUserRouter.put(
   async (req, res) => {
     // トークン内のユーザーIDとbodyのユーザーIDが一致しなければエラー
     if (res.locals.userId !== req.body.id) {
-      res.status(401).send("認証情報が正しくありません。");
+      return res.status(401).send("認証情報が正しくありません。");
     }
 
     // ユーザー情報を更新し、結果を返却する
@@ -66,9 +66,9 @@ loginUserRouter.put(
           email: req.body.email as string,
         },
       });
-      res.status(200).json(result);
+      return res.status(200).json(result);
     } catch (error) {
-      res.status(500).json("想定外のエラーが発生しました。");
+      return res.status(500).send("想定外のエラーが発生しました。");
     }
   },
 );
@@ -115,7 +115,7 @@ loginUserRouter.delete(
         return res.status(400).send("パスワードが正しくありません。");
       }
     } catch (error) {
-      res.status(500).send("想定外のエラーが発生しました。");
+      return res.status(500).send("想定外のエラーが発生しました。");
     }
   },
 );
