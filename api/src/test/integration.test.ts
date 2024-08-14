@@ -16,6 +16,7 @@ describe("Integration test", () => {
       url: "sampleurl",
       isMaleVoice: true,
       playCount: 0,
+      reqUserId: null,
     };
     // データ設定
     prismaMock.soundInfo.findUnique.mockResolvedValue(sInfo);
@@ -75,6 +76,7 @@ describe("Integration test", () => {
       url: "sampleurl",
       isMaleVoice: true,
       playCount: 0,
+      reqUserId: null,
     };
     // データ設定
     prismaMock.soundInfo.findMany.mockResolvedValue([sInfo]);
@@ -96,6 +98,7 @@ describe("Integration test", () => {
       url: "sampleurl",
       isMaleVoice: true,
       playCount: 0,
+      reqUserId: null,
     };
     // データ設定
     prismaMock.soundInfo.findMany.mockResolvedValue([sInfo]);
@@ -477,6 +480,15 @@ describe("Integration test", () => {
         password: "P@ssw0rd",
       })
       .set("Cookie", "dummy");
+
+    // 実行結果
+    expect(res.status).toBe(401);
+    expect(res.text).toBe("認証情報が正しくありません。");
+  });
+
+  test("[異常系]音声リクエスト情報取得(tokenが不正)", async () => {
+    // 処理実行
+    const res = await request(app).get("/sound-request").set("Cookie", "dummy");
 
     // 実行結果
     expect(res.status).toBe(401);

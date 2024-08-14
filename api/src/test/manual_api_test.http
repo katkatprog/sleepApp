@@ -49,3 +49,7 @@ cookie: token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEyLCJpYXQiOjE3M
 ### login-user
 GET http://localhost:8080/login-user
 cookie: token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEyLCJpYXQiOjE3MjM0NjY1NDksImV4cCI6MTcyMzU1Mjk0OX0.Q7VcD695c2xWTc0ec_ONyB17bxx7iPfEkf4K_oNn7yU
+
+### 音声リクエスト情報取得
+GET http://localhost:8080/sound-request
+Cookie: token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjI2LCJpYXQiOjE3MjM2NTU2NDAsImV4cCI6MTcyMzc0MjA0MH0.W09WGvqplJ19bf3pwfuoE3LuGRDqYDeYeB12twGGous
