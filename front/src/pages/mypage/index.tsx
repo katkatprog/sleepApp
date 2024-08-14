@@ -7,12 +7,18 @@ import { LoginIcon } from "@/components/icons/LoginIcon";
 import { UserIcon } from "@/components/icons/UserIcon";
 import { toast } from "react-toastify";
 import { User } from "@prisma/client";
+import { EyeSlashIcon } from "@/components/icons/EyeSlashIcon";
+import { EyeIcon } from "@/components/icons/EyeIcon";
+import { useRouter } from "next/router";
 
 const MyPage = () => {
   const context = useContext(LoginUserContext);
   const nameRef = useRef<HTMLInputElement>(null);
   const emailRef = useRef<HTMLInputElement>(null);
+  const passwordRef = useRef<HTMLInputElement>(null);
+  const router = useRouter();
   const [mode, setMode] = useState<"normal" | "edit" | "delete">("normal");
+  const [showPassword, setShowPassword] = useState(false);
 
   return (
     <Layout>
@@ -41,6 +47,14 @@ const MyPage = () => {
                       }}
                     >
                       プロフィールを編集する
+                    </button>
+                    <button
+                      className="mt-6 border-red-400 border-2 text-red-400 hover:bg-neutral-700 font-bold px-12 py-2 rounded-md transition w-full"
+                      onClick={() => {
+                        setMode("delete");
+                      }}
+                    >
+                      退会する
                     </button>
                   </>
                 )}
@@ -122,6 +136,112 @@ const MyPage = () => {
                         type="submit"
                       >
                         保存
+                      </button>
+                    </form>
+                    <button
+                      className="mt-6 border-green-400 border-2 text-green-400 hover:bg-neutral-700 font-bold px-12 py-2 rounded-md transition w-full"
+                      onClick={() => {
+                        setMode("normal");
+                      }}
+                    >
+                      戻る
+                    </button>
+                  </>
+                )}
+                {mode === "delete" && (
+                  <>
+                    <h1 className="text-2xl font-black">退会しますか？</h1>
+                    <p>退会すると、アカウントを復元することはできません。</p>
+                    <p>
+                      また、音声リクエスト中の場合、そのリクエストは無効になります。
+                    </p>
+
+                    <p className="mt-6 font-bold">
+                      よろしければ、パスワード入力の上、退会ボタンをクリックしてください。
+                    </p>
+                    <form
+                      onSubmit={async (e) => {
+                        e.preventDefault();
+
+                        if (!context.loginUser || !context.setLoginUser) {
+                          // contextの読み込みが完了していない場合は途中終了（特にエラーメッセージ等は出さない）
+                          return;
+                        }
+
+                        try {
+                          const result = await fetch(
+                            `${process.env.NEXT_PUBLIC_API_URL}/login-user`,
+                            {
+                              method: "DELETE",
+                              credentials: "include",
+                              headers: {
+                                "content-type": "application/json",
+                              },
+                              body: JSON.stringify({
+                                id: context.loginUser.id,
+                                password: passwordRef.current?.value,
+                              }),
+                            },
+                          );
+                          if (result.status === 200) {
+                            // contextをクリア、トップページに移動
+                            toast.success(
+                              "退会しました。またのご利用をお待ちしております。",
+                              {
+                                autoClose: 5000,
+                              },
+                            );
+                            context.setLoginUser(null);
+                            router.push("/");
+                          } else if (Math.floor(result.status / 100) === 4) {
+                            // 400番台エラーなら、返ってきたメッセージをそのまま表示
+                            toast.error(await result.text());
+                          } else {
+                            toast.error(
+                              "退会できませんでした。もう一度お試しください。",
+                            );
+                          }
+                        } catch (error) {
+                          toast.error(
+                            "退会できませんでした。もう一度お試しください。",
+                          );
+                        }
+                      }}
+                    >
+                      <div className="flex">
+                        <input
+                          ref={passwordRef}
+                          type="password"
+                          className="h-10 bg-neutral-800 border-2 border-neutral-700 border-r-0 placeholder:text-gray-600 rounded-l-lg rounded-r-none pl-2 outline-none w-full"
+                          placeholder="Input your password..."
+                          required
+                        />
+                        <button
+                          type="button"
+                          className="h-10 bg-neutral-800 border-2 border-neutral-700 border-l-0 placeholder:text-gray-600 rounded-r-lg rounded-l-none pr-2 outline-none text-center"
+                          onClick={() => {
+                            setShowPassword(!showPassword);
+                            if (passwordRef.current?.type) {
+                              if (passwordRef.current.type === "password") {
+                                passwordRef.current.type = "text";
+                              } else {
+                                passwordRef.current.type = "password";
+                              }
+                            }
+                          }}
+                        >
+                          {showPassword ? (
+                            <EyeSlashIcon propClassName=""></EyeSlashIcon>
+                          ) : (
+                            <EyeIcon propClassName=""></EyeIcon>
+                          )}
+                        </button>
+                      </div>
+                      <button
+                        className="mt-6 bg-red-600 hover:bg-red-500 font-bold w-full py-2 rounded-md transition"
+                        type="submit"
+                      >
+                        退会する
                       </button>
                     </form>
                     <button
