@@ -12,7 +12,7 @@ const MyPage = () => {
   const context = useContext(LoginUserContext);
   const nameRef = useRef<HTMLInputElement>(null);
   const emailRef = useRef<HTMLInputElement>(null);
-  const [isEditing, setIsEditing] = useState(false);
+  const [mode, setMode] = useState<"normal" | "edit" | "delete">("normal");
 
   return (
     <Layout>
@@ -22,7 +22,29 @@ const MyPage = () => {
             {context.loginUser ? (
               // ログイン状態
               <>
-                {isEditing ? (
+                {mode === "normal" && (
+                  <>
+                    <h1 className="text-2xl font-black">
+                      {context.loginUser?.name}
+                    </h1>
+                    <div className="flex justify-center mt-4">
+                      <UserIcon propClassName="w-32 h-32 text-neutral-800 bg-gray-300 rounded-full"></UserIcon>
+                    </div>
+                    <div className="flex mt-4">
+                      <EmailIcon propClassName="w-6 h-6"></EmailIcon>
+                      <p className="ml-2">{context.loginUser?.email}</p>
+                    </div>
+                    <button
+                      className="mt-6 border-green-400 border-2 text-green-400 hover:bg-neutral-700 font-bold px-12 py-2 rounded-md transition w-full"
+                      onClick={() => {
+                        setMode("edit");
+                      }}
+                    >
+                      プロフィールを編集する
+                    </button>
+                  </>
+                )}
+                {mode === "edit" && (
                   <>
                     <form action="">
                       <h1 className="text-2xl font-black">
@@ -78,7 +100,7 @@ const MyPage = () => {
                               toast.success("プロフィールを編集しました。", {
                                 autoClose: 5000,
                               });
-                              setIsEditing(false);
+                              setMode("normal");
                               context.setLoginUser(
                                 (await result.json()) as LoginUser | null,
                               );
@@ -103,31 +125,10 @@ const MyPage = () => {
                     <button
                       className="mt-6 border-green-400 border-2 text-green-400 hover:bg-neutral-700 font-bold px-12 py-2 rounded-md transition w-full"
                       onClick={() => {
-                        setIsEditing(false);
+                        setMode("normal");
                       }}
                     >
                       戻る
-                    </button>
-                  </>
-                ) : (
-                  <>
-                    <h1 className="text-2xl font-black">
-                      {context.loginUser?.name}
-                    </h1>
-                    <div className="flex justify-center mt-4">
-                      <UserIcon propClassName="w-32 h-32 text-neutral-800 bg-gray-300 rounded-full"></UserIcon>
-                    </div>
-                    <div className="flex mt-4">
-                      <EmailIcon propClassName="w-6 h-6"></EmailIcon>
-                      <p className="ml-2">{context.loginUser?.email}</p>
-                    </div>
-                    <button
-                      className="mt-6 border-green-400 border-2 text-green-400 hover:bg-neutral-700 font-bold px-12 py-2 rounded-md transition w-full"
-                      onClick={() => {
-                        setIsEditing(true);
-                      }}
-                    >
-                      プロフィールを編集する
                     </button>
                   </>
                 )}
