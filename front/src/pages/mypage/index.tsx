@@ -46,7 +46,55 @@ const MyPage = () => {
                 )}
                 {mode === "edit" && (
                   <>
-                    <form action="">
+                    <form
+                      onSubmit={async (e) => {
+                        e.preventDefault();
+
+                        if (!context.loginUser || !context.setLoginUser) {
+                          // contextの読み込みが完了していない場合は途中終了（特にエラーメッセージ等は出さない）
+                          return;
+                        }
+
+                        try {
+                          const result = await fetch(
+                            `${process.env.NEXT_PUBLIC_API_URL}/login-user`,
+                            {
+                              method: "PUT",
+                              credentials: "include",
+                              headers: {
+                                "content-type": "application/json",
+                              },
+                              body: JSON.stringify({
+                                id: context.loginUser.id,
+                                name: nameRef.current?.value,
+                                email: emailRef.current?.value,
+                              }),
+                            },
+                          );
+                          if (result.status === 200) {
+                            // 編集モードの終了、contextを最新のログインユーザー情報で書き換える
+                            toast.success("プロフィールを編集しました。", {
+                              autoClose: 5000,
+                            });
+                            setMode("normal");
+                            context.setLoginUser(
+                              (await result.json()) as LoginUser | null,
+                            );
+                          } else if (Math.floor(result.status / 100) === 4) {
+                            // 400番台エラーなら、返ってきたメッセージをそのまま表示
+                            toast.error(await result.text());
+                          } else {
+                            toast.error(
+                              "プロフィール編集できませんでした。もう一度お試しください。",
+                            );
+                          }
+                        } catch (error) {
+                          toast.error(
+                            "プロフィール編集できませんでした。もう一度お試しください。",
+                          );
+                        }
+                      }}
+                    >
                       <h1 className="text-2xl font-black">
                         プロフィールを編集
                       </h1>
@@ -71,53 +119,7 @@ const MyPage = () => {
                       />
                       <button
                         className="mt-6 bg-green-600 hover:bg-green-500 font-bold w-full py-2 rounded-md transition"
-                        onClick={async (e) => {
-                          e.preventDefault();
-
-                          if (!context.loginUser || !context.setLoginUser) {
-                            // contextの読み込みが完了していない場合は途中終了（特にエラーメッセージ等は出さない）
-                            return;
-                          }
-
-                          try {
-                            const result = await fetch(
-                              `${process.env.NEXT_PUBLIC_API_URL}/login-user`,
-                              {
-                                method: "PUT",
-                                credentials: "include",
-                                headers: {
-                                  "content-type": "application/json",
-                                },
-                                body: JSON.stringify({
-                                  id: context.loginUser.id,
-                                  name: nameRef.current?.value,
-                                  email: emailRef.current?.value,
-                                }),
-                              },
-                            );
-                            if (result.status === 200) {
-                              // 編集モードの終了、contextを最新のログインユーザー情報で書き換える
-                              toast.success("プロフィールを編集しました。", {
-                                autoClose: 5000,
-                              });
-                              setMode("normal");
-                              context.setLoginUser(
-                                (await result.json()) as LoginUser | null,
-                              );
-                            } else if (Math.floor(result.status / 100) === 4) {
-                              // 400番台エラーなら、返ってきたメッセージをそのまま表示
-                              toast.error(await result.text());
-                            } else {
-                              toast.error(
-                                "プロフィール編集できませんでした。もう一度お試しください。",
-                              );
-                            }
-                          } catch (error) {
-                            toast.error(
-                              "プロフィール編集できませんでした。もう一度お試しください。",
-                            );
-                          }
-                        }}
+                        type="submit"
                       >
                         保存
                       </button>
