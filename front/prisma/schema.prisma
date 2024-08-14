@@ -14,6 +14,7 @@ model SoundInfo {
   url         String
   isMaleVoice Boolean?
   playCount   Int      @default(0)
+  reqUserId   Int?
 }
 
 model User {
