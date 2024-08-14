@@ -383,4 +383,74 @@ describe("Integration test", () => {
     expect(res.status).toBe(200);
     expect(res.body).toBe(null);
   });
+
+  test("[異常系]ログインユーザー編集(idが空)", async () => {
+    // 処理実行
+    const res = await request(app).put("/login-user").send({
+      name: "testuser",
+      email: "test@example.com",
+    });
+
+    // 実行結果
+    expect(res.status).toBe(400);
+    expect(res.text).toBe("idが入力されていません。");
+  });
+
+  test("[異常系]ログインユーザー編集(nameが空)", async () => {
+    // 処理実行
+    const res = await request(app).put("/login-user").send({
+      id: 1,
+      name: "",
+      email: "test@example.com",
+    });
+
+    // 実行結果
+    expect(res.status).toBe(400);
+    expect(res.text).toBe("お名前が入力されていません。");
+  });
+
+  test("[異常系]ログインユーザー編集(emailが空)", async () => {
+    // 処理実行
+    const res = await request(app).put("/login-user").send({
+      id: 1,
+      name: "testuser",
+      email: "",
+    });
+
+    // 実行結果
+    expect(res.status).toBe(400);
+    expect(res.text).toBe(
+      "メールアドレスが入力されていません。メールアドレスの形式が正しくありません。",
+    );
+  });
+
+  test("[異常系]ログインユーザー編集(emailが空)", async () => {
+    // 処理実行
+    const res = await request(app).put("/login-user").send({
+      id: 1,
+      name: "testuser",
+      email: "test@",
+    });
+
+    // 実行結果
+    expect(res.status).toBe(400);
+    expect(res.text).toBe("メールアドレスの形式が正しくありません。");
+  });
+
+  test("[異常系]ログインユーザー編集(token不正)", async () => {
+    // 処理実行
+    // cookieには"dummy"というtokenを含める
+    const res = await request(app)
+      .put("/login-user")
+      .set("Cookie", "dummy")
+      .send({
+        id: 1,
+        name: "testuser",
+        email: "test@example.com",
+      });
+
+    // 実行結果
+    expect(res.status).toBe(401);
+    expect(res.text).toBe("認証情報が正しくありません。");
+  });
 });
