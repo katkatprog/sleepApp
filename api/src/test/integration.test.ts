@@ -453,4 +453,33 @@ describe("Integration test", () => {
     expect(res.status).toBe(401);
     expect(res.text).toBe("認証情報が正しくありません。");
   });
+
+  test("[異常系]ログインユーザー削除(id, パスワードが空)", async () => {
+    // 処理実行
+    const res = await request(app).delete("/login-user").send({
+      id: "",
+      password: "",
+    });
+
+    // 実行結果
+    expect(res.status).toBe(400);
+    expect(res.text).toBe(
+      "idが入力されていません。パスワードが入力されていません。",
+    );
+  });
+
+  test("[異常系]ログインユーザー削除(tokenが不正)", async () => {
+    // 処理実行
+    const res = await request(app)
+      .delete("/login-user")
+      .send({
+        id: 1,
+        password: "P@ssw0rd",
+      })
+      .set("Cookie", "dummy");
+
+    // 実行結果
+    expect(res.status).toBe(401);
+    expect(res.text).toBe("認証情報が正しくありません。");
+  });
 });
