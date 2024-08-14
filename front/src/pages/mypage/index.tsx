@@ -86,7 +86,7 @@ const MyPage = () => {
                       ログアウト
                     </button>
                     <button
-                      className="mt-6 border-red-400 border-2 text-red-400 hover:bg-neutral-700 font-bold px-12 py-2 rounded-md transition w-full"
+                      className="mt-12 border-red-400 border-2 text-red-400 hover:bg-neutral-700 font-bold px-12 py-2 rounded-md transition w-full"
                       onClick={() => {
                         setMode("delete");
                       }}
@@ -193,8 +193,9 @@ const MyPage = () => {
                       また、音声リクエスト中の場合、そのリクエストは無効になります。
                     </p>
 
-                    <p className="mt-6 font-bold">
-                      よろしければ、パスワード入力の上、退会ボタンをクリックしてください。
+                    <p className="mt-10 mb-2 font-bold">
+                      よろしければ、パスワードを入力の上、
+                      <br /> 「退会する」をクリックしてください。
                     </p>
                     <form
                       onSubmit={async (e) => {
@@ -275,7 +276,7 @@ const MyPage = () => {
                         </button>
                       </div>
                       <button
-                        className="mt-6 bg-red-600 hover:bg-red-500 font-bold w-full py-2 rounded-md transition"
+                        className="mt-6 bg-red-500 hover:bg-red-400 font-bold w-full py-2 rounded-md transition"
                         type="submit"
                       >
                         退会する
