@@ -28,5 +28,5 @@ model SoundReqQueue {
   userId      Int      @id
   theme       String
   isMaleVoice Boolean  @default(false)
-  createdAt   DateTime @default(now())
+  requestedAt DateTime @default(now())
 }
