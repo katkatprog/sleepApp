@@ -138,6 +138,11 @@ authRouter.post(
 
 // サインアウト
 authRouter.post("/logout", (req, res) => {
-  res.clearCookie("token");
+  res.clearCookie("token", {
+    httpOnly: true,
+    sameSite: "none",
+    secure: true,
+    path: "/",
+  });
   return res.status(200).send("OK");
 });

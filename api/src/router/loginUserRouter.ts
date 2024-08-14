@@ -109,7 +109,12 @@ loginUserRouter.delete(
 
         // Queue情報削除（今後実装する）
 
-        res.clearCookie("token");
+        res.clearCookie("token", {
+          httpOnly: true,
+          sameSite: "none",
+          secure: true,
+          path: "/",
+        });
         return res.status(200).send("OK");
       } else {
         return res.status(400).send("パスワードが正しくありません。");
