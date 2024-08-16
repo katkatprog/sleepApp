@@ -8,22 +8,24 @@ datasource db {
 }
 
 model SoundInfo {
-  id          Int      @id @default(autoincrement())
-  name        String
-  createdAt   DateTime @default(now())
-  url         String
-  isMaleVoice Boolean?
-  playCount   Int      @default(0)
-  reqUserId   Int?
-  User        User?    @relation(fields: [reqUserId], references: [id])
+  id            Int             @id @default(autoincrement())
+  name          String
+  createdAt     DateTime        @default(now())
+  url           String
+  isMaleVoice   Boolean?
+  playCount     Int             @default(0)
+  reqUserId     Int?
+  SoundFavorite SoundFavorite[]
+  User          User?           @relation(fields: [reqUserId], references: [id])
 }
 
 model User {
-  id             Int         @id @default(autoincrement())
+  id             Int             @id @default(autoincrement())
   name           String
-  email          String      @unique
+  email          String          @unique
   hashedPassword String
   image          String?
+  SoundFavorite  SoundFavorite[]
   SoundInfo      SoundInfo[]
 }
 
@@ -32,4 +34,13 @@ model SoundReqQueue {
   theme       String
   isMaleVoice Boolean  @default(false)
   requestedAt DateTime @default(now())
+}
+
+model SoundFavorite {
+  userId    Int
+  soundId   Int
+  SoundInfo SoundInfo @relation(fields: [soundId], references: [id], onDelete: Cascade)
+  User      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, soundId])
 }
