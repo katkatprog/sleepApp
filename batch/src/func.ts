@@ -32,11 +32,9 @@ export const generateWordsList = async (theme?: string) => {
   resContent = resContent.replaceAll(" ", "").replaceAll("\n", "");
 
   // 返答(文字列)からカンマ区切り部分を抜き出し、それをJavaScriptの配列に変換
-  const indexOfStartArr = resContent.indexOf(",");
-  const indexOfEndArr = resContent.lastIndexOf(",");
-  const wordsList: string[] = resContent
-    .substring(indexOfStartArr + 1, indexOfEndArr)
-    .split(",");
+  const wordsList: string[] = resContent.split(/[,、]/);
+  wordsList.shift(); //一番最初のカンマより前の要素は削除
+  wordsList.pop(); //一番最後のカンマより後の要素は削除
 
   console.log(`生成された単語リスト：${wordsList}`);
   console.log(`単語数: ${wordsList.length}`);
