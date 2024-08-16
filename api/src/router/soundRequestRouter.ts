@@ -1,6 +1,9 @@
 import express from "express";
 import prisma from "../prisma/client";
 import { checkJwt } from "../middleware/checkJwt";
+import { body } from "express-validator";
+import { checkReq } from "../middleware/checkReq";
+import { PrismaClientKnownRequestError } from "@prisma/client/runtime/library";
 
 export const soundRequestRouter = express.Router();
 
@@ -33,3 +36,39 @@ soundRequestRouter.get("/", checkJwt, async (req, res) => {
     return res.status(500).send("想定外のエラーが発生しました。");
   }
 });
+
+// 音声リクエストデータを作成する
+soundRequestRouter.post(
+  "/",
+  body("theme").notEmpty().withMessage("テーマが入力されていません。"),
+  body("isMaleVoice")
+    .isBoolean()
+    .withMessage("女性ボイス/男性ボイスの形式が正しくありません。"),
+  checkReq,
+  checkJwt,
+  async (req, res) => {
+    if (!res.locals.userId) {
+      return res.status(401).send("認証情報が正しくありません。");
+    }
+
+    try {
+      const queueInfo = await prisma.soundReqQueue.create({
+        data: {
+          userId: res.locals.userId,
+          theme: req.body.theme,
+          isMaleVoice: req.body.isMaleVoice,
+        },
+      });
+
+      return res.status(200).json(queueInfo);
+    } catch (error) {
+      if ((error as PrismaClientKnownRequestError).code === "P2002") {
+        return res
+          .status(400)
+          .send("すでにリクエスト済みのため、新たなリクエストはできません。");
+      }
+
+      return res.status(500).send("想定外のエラーが発生しました。");
+    }
+  },
+);
