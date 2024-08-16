@@ -16,6 +16,14 @@ soundInfoRouter.get(
       // 音声情報取得
       const soundInfo = await prisma.soundInfo.findUnique({
         where: { id: soundId },
+        include: {
+          user: {
+            select: {
+              id: true,
+              name: true,
+            },
+          },
+        },
       });
       if (!soundInfo) {
         return res.status(404).send("音声情報が見つかりません。");
