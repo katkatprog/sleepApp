@@ -38,7 +38,7 @@ export default function App({ Component, pageProps }: AppProps) {
       <ToastContainer
         autoClose={false}
         theme={"colored"}
-        style={{ width: "500px" }}
+        style={{ width: "100%", maxWidth: "500px" }}
       />
       {/* Layoutで囲われている全ページでLoginUserをグローバル的に使えるように設定 */}
       <LoginUserContext.Provider value={{ loginUser, setLoginUser }}>
