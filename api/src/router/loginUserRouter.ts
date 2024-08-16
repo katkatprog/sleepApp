@@ -107,7 +107,10 @@ loginUserRouter.delete(
           where: { id: req.body.id as number },
         });
 
-        // Queue情報削除（今後実装する）
+        // Queue情報削除（行う理由：https://github.com/katkatprog/sleepApp/issues/79）
+        await prisma.soundReqQueue.delete({
+          where: { userId: req.body.id as number },
+        });
 
         res.clearCookie("token", {
           httpOnly: true,
