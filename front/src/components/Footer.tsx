@@ -24,7 +24,6 @@ export const Footer = () => {
             <PlusIcon prosClassName="w-9 h-9 p-1 rounded-full stroke-2 hover:bg-neutral-700 transition"></PlusIcon>
           </Link>
         )}
-        <SettingIcon propClassName="w-9 h-9 p-1 rounded-full stroke-2 hover:bg-neutral-700 transition"></SettingIcon>
         {context.loginUser ? (
           // ログイン状態
           <button
