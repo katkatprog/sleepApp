@@ -114,17 +114,28 @@ export const getServerSideProps: GetServerSideProps<SoundInfoProps> = async (
     throw new Error("Something went wrong...");
   }
 
-  const soundInfo: SoundInfo = await result.json();
+  const soundInfo: SoundInfo & {
+    user: {
+      id: number;
+      name: string;
+    } | null;
+  } = await result.json();
 
   return {
     props: {
       soundInfo: {
-        ...soundInfo,
-        requestedBy: {
-          userId: 1,
-          userName: "Taro",
-          image: "/image/1.jpg",
-        },
+        name: soundInfo.name,
+        createdAt: soundInfo.createdAt,
+        url: soundInfo.url,
+        isMaleVoice: soundInfo.isMaleVoice,
+        playCount: soundInfo.playCount,
+        requestedBy: soundInfo.user
+          ? {
+              userId: soundInfo.user.id,
+              userName: soundInfo.user.name,
+              image: "/image/1.jpg",
+            }
+          : null,
       },
     },
   };
@@ -134,13 +145,11 @@ interface SoundInfoProps {
   soundInfo: {
     name: string;
     createdAt: Date;
-    requestedBy:
-      | {
-          userId: number;
-          userName: string;
-          image: string;
-        }
-      | undefined;
+    requestedBy: {
+      userId: number;
+      userName: string;
+      image: string;
+    } | null;
     url: string | undefined;
     isMaleVoice: boolean | null;
     playCount: number;
