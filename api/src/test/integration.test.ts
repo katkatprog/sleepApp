@@ -322,6 +322,7 @@ describe("Integration test", () => {
       email: "katkatprog@example.com",
       name: "kat",
       hashedPassword: "", // 入力の「Passw0rd」のハッシュ値と異なるハッシュ値（ここでは空白に設定）
+      image: null,
     };
     prismaMock.user.findUnique.mockResolvedValue(user);
 

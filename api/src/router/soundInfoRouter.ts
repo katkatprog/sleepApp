@@ -21,6 +21,7 @@ soundInfoRouter.get(
             select: {
               id: true,
               name: true,
+              image: true,
             },
           },
         },

@@ -5,6 +5,7 @@ import Image from "next/image";
 import React, { useEffect, useRef, useState } from "react";
 import { SoundInfo } from "@prisma/client";
 import { Layout } from "@/components/Layout";
+import { UserIcon } from "@/components/icons/UserIcon";
 
 const PlayPage = ({ soundInfo }: SoundInfoProps) => {
   const audioRef = useRef<HTMLAudioElement>(null);
@@ -50,13 +51,17 @@ const PlayPage = ({ soundInfo }: SoundInfoProps) => {
                 <p className=" mr-1">
                   Requested by {soundInfo.requestedBy.userName}
                 </p>
-                <Image
-                  src={soundInfo.requestedBy.image}
-                  width={30}
-                  height={30}
-                  alt=""
-                  className="rounded-full"
-                ></Image>
+                {soundInfo.requestedBy.image ? (
+                  <Image
+                    src={soundInfo.requestedBy.image}
+                    width={30}
+                    height={30}
+                    alt=""
+                    className="rounded-full"
+                  ></Image>
+                ) : (
+                  <UserIcon propClassName="w-6 h-6 text-neutral-800 bg-gray-300 rounded-full"></UserIcon>
+                )}
               </div>
             )}
           </div>
@@ -118,6 +123,7 @@ export const getServerSideProps: GetServerSideProps<SoundInfoProps> = async (
     user: {
       id: number;
       name: string;
+      image: string | null;
     } | null;
   } = await result.json();
 
@@ -133,7 +139,7 @@ export const getServerSideProps: GetServerSideProps<SoundInfoProps> = async (
           ? {
               userId: soundInfo.user.id,
               userName: soundInfo.user.name,
-              image: "/image/1.jpg",
+              image: soundInfo.user.image,
             }
           : null,
       },
@@ -148,7 +154,7 @@ interface SoundInfoProps {
     requestedBy: {
       userId: number;
       userName: string;
-      image: string;
+      image: string | null;
     } | null;
     url: string | undefined;
     isMaleVoice: boolean | null;
