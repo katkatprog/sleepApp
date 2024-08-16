@@ -5,6 +5,7 @@ import Image from "next/image";
 import React, { useEffect, useRef, useState } from "react";
 import { SoundInfo } from "@prisma/client";
 import { Layout } from "@/components/Layout";
+import { UserIcon } from "@/components/icons/UserIcon";
 
 const PlayPage = ({ soundInfo }: SoundInfoProps) => {
   const audioRef = useRef<HTMLAudioElement>(null);
@@ -50,13 +51,17 @@ const PlayPage = ({ soundInfo }: SoundInfoProps) => {
                 <p className=" mr-1">
                   Requested by {soundInfo.requestedBy.userName}
                 </p>
-                <Image
-                  src={soundInfo.requestedBy.image}
-                  width={30}
-                  height={30}
-                  alt=""
-                  className="rounded-full"
-                ></Image>
+                {soundInfo.requestedBy.image ? (
+                  <Image
+                    src={soundInfo.requestedBy.image}
+                    width={30}
+                    height={30}
+                    alt=""
+                    className="rounded-full"
+                  ></Image>
+                ) : (
+                  <UserIcon propClassName="w-6 h-6 text-neutral-800 bg-gray-300 rounded-full"></UserIcon>
+                )}
               </div>
             )}
           </div>
@@ -114,17 +119,29 @@ export const getServerSideProps: GetServerSideProps<SoundInfoProps> = async (
     throw new Error("Something went wrong...");
   }
 
-  const soundInfo: SoundInfo = await result.json();
+  const soundInfo: SoundInfo & {
+    user: {
+      id: number;
+      name: string;
+      image: string | null;
+    } | null;
+  } = await result.json();
 
   return {
     props: {
       soundInfo: {
-        ...soundInfo,
-        requestedBy: {
-          userId: 1,
-          userName: "Taro",
-          image: "/image/1.jpg",
-        },
+        name: soundInfo.name,
+        createdAt: soundInfo.createdAt,
+        url: soundInfo.url,
+        isMaleVoice: soundInfo.isMaleVoice,
+        playCount: soundInfo.playCount,
+        requestedBy: soundInfo.user
+          ? {
+              userId: soundInfo.user.id,
+              userName: soundInfo.user.name,
+              image: soundInfo.user.image,
+            }
+          : null,
       },
     },
   };
@@ -134,13 +151,11 @@ interface SoundInfoProps {
   soundInfo: {
     name: string;
     createdAt: Date;
-    requestedBy:
-      | {
-          userId: number;
-          userName: string;
-          image: string;
-        }
-      | undefined;
+    requestedBy: {
+      userId: number;
+      userName: string;
+      image: string | null;
+    } | null;
     url: string | undefined;
     isMaleVoice: boolean | null;
     playCount: number;
