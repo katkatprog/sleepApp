@@ -9,8 +9,9 @@ import { DefaultArgs } from "@prisma/client/runtime/library";
 import { GoogleGenerativeAI } from "@google/generative-ai";
 import "dotenv/config";
 
-// [日次]単語リストを作成する
-export const generateDailyWordsList = async (theme?: string) => {
+// 単語リストを作成する
+// 引数themeあり：テーマ指定ありの音声作成、なし：テーマ指定無しの音声生成（本日の音声）
+export const generateWordsList = async (theme?: string) => {
   // Gemini連携準備
   const gemini = new GoogleGenerativeAI(process.env.GEMINI_API_KEY || "");
   const model = gemini.getGenerativeModel({
@@ -94,7 +95,8 @@ export const generateAudio = async (ssml: string, speaker: VoiceId) => {
 };
 
 // 本日の音声情報をDBに保存する
-export const saveTodaysSoundInfo = async (
+// 引数queueInfoあり：テーマ指定ありの音声作成、なし：テーマ指定無しの音声生成（本日の音声）
+export const saveSoundInfo = async (
   url: string,
   isMaleVoice: boolean,
   prisma: PrismaClient<Prisma.PrismaClientOptions, never, DefaultArgs>,

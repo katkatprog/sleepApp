@@ -2,8 +2,8 @@ import { PrismaClient } from ".prisma/client";
 import {
   arrayShuffle,
   generateAudio,
-  generateDailyWordsList,
-  saveTodaysSoundInfo,
+  generateWordsList,
+  saveSoundInfo,
   wordsToSSML,
 } from "./func";
 
@@ -22,7 +22,7 @@ const main = async () => {
     });
 
     for (const queueInfo of queueList) {
-      const wordsList = await generateDailyWordsList(queueInfo.theme);
+      const wordsList = await generateWordsList(queueInfo.theme);
 
       const shuffledWordsList = arrayShuffle([...wordsList, ...wordsList]);
       // ssml(AmazonPollyに登録できる形式)に変換
@@ -36,12 +36,7 @@ const main = async () => {
           ? "Kazuha"
           : "Tomoko"; // 話し手決定
       const s3Url = await generateAudio(ssml, speaker); // 音声作成＆URL発行
-      await saveTodaysSoundInfo(
-        s3Url,
-        queueInfo.isMaleVoice,
-        prisma,
-        queueInfo,
-      );
+      await saveSoundInfo(s3Url, queueInfo.isMaleVoice, prisma, queueInfo);
     }
 
     // 処理したキューのレコードを削除
@@ -59,7 +54,7 @@ const main = async () => {
     // ---------------------[start]日時の音声作成----------------------------
     console.log("日次の音声作成を開始します。");
     // 生成AIで単語リストを作成
-    const wordsList = await generateDailyWordsList();
+    const wordsList = await generateWordsList();
     const shuffledWordsList = arrayShuffle([...wordsList, ...wordsList]);
     // ssml(AmazonPollyに登録できる形式)に変換
     const ssml = wordsToSSML(shuffledWordsList);
@@ -67,14 +62,14 @@ const main = async () => {
 
     // 男性ボイス作成
     const s3UrlMale = await generateAudio(ssml, "Takumi");
-    await saveTodaysSoundInfo(s3UrlMale, true, prisma);
+    await saveSoundInfo(s3UrlMale, true, prisma);
 
     // 女性ボイス作成
     const s3UrlFemale = await generateAudio(
       ssml,
       Math.random() > 0.5 ? "Kazuha" : "Tomoko",
     );
-    await saveTodaysSoundInfo(s3UrlFemale, false, prisma);
+    await saveSoundInfo(s3UrlFemale, false, prisma);
     console.log("日次の音声作成を終了します。");
     // ---------------------[End]日時の音声作成---------------------------
 
