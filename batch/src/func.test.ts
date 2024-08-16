@@ -1,5 +1,5 @@
 import { GoogleGenerativeAI } from "@google/generative-ai";
-import { arrayShuffle, generateDailyWordsList, wordsToSSML } from "./func";
+import { arrayShuffle, generateWordsList, wordsToSSML } from "./func";
 
 jest.mock("@google/generative-ai"); //モジュール全体をモック
 const MockGoogleGenerativeAI = GoogleGenerativeAI as jest.Mock; // TypeScriptでは型変換する必要がある
@@ -26,7 +26,7 @@ MockGoogleGenerativeAI.mockImplementation(() => {
 
 describe("単語リスト生成処理のテスト", () => {
   it("正しくstring型配列を生成できることのテスト", async () => {
-    const result = await generateDailyWordsList();
+    const result = await generateWordsList();
     expect(result).toEqual(["テーブル", "椅子", "コンピュータ"]);
   });
 });

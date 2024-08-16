@@ -7,6 +7,7 @@ import { LoginUserContext } from "@/pages/_app";
 import { LogoutIcon } from "./icons/LogoutIcon";
 import { toast } from "react-toastify";
 import { useRouter } from "next/router";
+import { PlusIcon } from "./icons/PlusIcon";
 
 export const Footer = () => {
   const router = useRouter();
@@ -18,6 +19,11 @@ export const Footer = () => {
         <Link href={"/search"}>
           <SearchIcon propClassName="w-9 h-9 p-1 rounded-full stroke-2 hover:bg-neutral-700 transition"></SearchIcon>
         </Link>
+        {context.loginUser && (
+          <Link href={"/request"}>
+            <PlusIcon prosClassName="w-9 h-9 p-1 rounded-full stroke-2 hover:bg-neutral-700 transition"></PlusIcon>
+          </Link>
+        )}
         <SettingIcon propClassName="w-9 h-9 p-1 rounded-full stroke-2 hover:bg-neutral-700 transition"></SettingIcon>
         {context.loginUser ? (
           // ログイン状態

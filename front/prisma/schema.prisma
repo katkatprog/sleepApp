@@ -14,6 +14,7 @@ model SoundInfo {
   url         String
   isMaleVoice Boolean?
   playCount   Int      @default(0)
+  reqUserId   Int?
 }
 
 model User {
@@ -21,4 +22,11 @@ model User {
   name           String
   email          String @unique
   hashedPassword String
+}
+
+model SoundReqQueue {
+  userId      Int      @id
+  theme       String
+  isMaleVoice Boolean  @default(false)
+  requestedAt DateTime @default(now())
 }
