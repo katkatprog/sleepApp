@@ -4,13 +4,13 @@ import {
   VoiceId,
 } from "@aws-sdk/client-polly";
 
-import { Prisma, PrismaClient } from "@prisma/client";
+import { Prisma, PrismaClient, SoundReqQueue } from "@prisma/client";
 import { DefaultArgs } from "@prisma/client/runtime/library";
 import { GoogleGenerativeAI } from "@google/generative-ai";
 import "dotenv/config";
 
 // [日次]単語リストを作成する
-export const generateDailyWordsList = async () => {
+export const generateDailyWordsList = async (theme?: string) => {
   // Gemini連携準備
   const gemini = new GoogleGenerativeAI(process.env.GEMINI_API_KEY || "");
   const model = gemini.getGenerativeModel({
@@ -18,9 +18,8 @@ export const generateDailyWordsList = async () => {
     generationConfig: { maxOutputTokens: 1000 }, //過剰生成防止
   });
   // Geminiに単語リスト作成依頼
-  const result = await model.generateContent(
-    "名詞を無作為に200個表示してください。※カンマ区切りで表示してください。※名詞は、できる限り形状のあるものを選んでください。※重複はできる限り避けてください。※ネガティブな単語はできる限り避けてください。",
-  );
+  const prompt = `${theme ? `「${theme}に関する」` : ``}名詞を無作為に200個表示してください。※カンマ区切りで表示してください。※名詞は、できる限り形状のあるものを選んでください。※重複はできる限り避けてください。※ネガティブな単語はできる限り避けてください。`;
+  const result = await model.generateContent(prompt);
   let resContent = result.response.text();
   // 返答
   if (!resContent) {
@@ -99,12 +98,14 @@ export const saveTodaysSoundInfo = async (
   url: string,
   isMaleVoice: boolean,
   prisma: PrismaClient<Prisma.PrismaClientOptions, never, DefaultArgs>,
+  queueInfo?: SoundReqQueue,
 ) => {
   await prisma.soundInfo.create({
     data: {
-      name: "本日の音声",
+      name: queueInfo ? `「${queueInfo.theme}」に関する音声` : "本日の音声",
       url,
       isMaleVoice,
+      reqUserId: queueInfo ? queueInfo.userId : null,
     },
   });
   console.log("音声URLのDB保存が成功しました。");
