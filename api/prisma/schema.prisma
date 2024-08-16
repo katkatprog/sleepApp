@@ -22,6 +22,7 @@ model User {
   id              Int      @id @default(autoincrement())
   name            String
   email           String   @unique
+  image           String?
   hashedPassword  String
   SoundInfo       SoundInfo[]
 }
