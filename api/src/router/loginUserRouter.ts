@@ -113,16 +113,14 @@ loginUserRouter.delete(
         user.hashedPassword,
       );
       if (isMatch) {
-        // パスワードが正しいならば、退会続行（ユーザー情報削除、Queue情報削除）
+        // パスワードが正しいならば、退会続行
+        // ユーザー情報削除
+        await prisma.user.delete({
+          where: { id: req.body.id as number },
+        });
+
+        // DBのrelationの設定により、Userの削除に併せてSoundReqQueueの情報も削除される
         // ※Queue情報削除を行う理由：https://github.com/katkatprog/sleepApp/issues/79
-        await Promise.all([
-          prisma.user.delete({
-            where: { id: req.body.id as number },
-          }),
-          prisma.soundReqQueue.delete({
-            where: { userId: req.body.id as number },
-          }),
-        ]);
 
         // cookie削除
         res.clearCookie("token", {
