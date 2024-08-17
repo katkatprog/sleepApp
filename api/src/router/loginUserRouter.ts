@@ -6,6 +6,7 @@ import { checkJwt } from "../middleware/checkJwt";
 import { body } from "express-validator";
 import { checkReq } from "../middleware/checkReq";
 import bcrypt from "bcrypt";
+import { PrismaClientKnownRequestError } from "@prisma/client/runtime/library";
 
 export const loginUserRouter = express.Router();
 
@@ -73,6 +74,11 @@ loginUserRouter.put(
       });
       return res.status(200).json(result);
     } catch (error) {
+      // email重複エラー
+      if ((error as PrismaClientKnownRequestError).code === "P2002") {
+        return res.status(400).send("メールアドレスが登録済です。");
+      }
+
       return res.status(500).send("想定外のエラーが発生しました。");
     }
   },
