@@ -534,6 +534,28 @@ describe("Integration test", () => {
     expect(res.text).toBe("認証情報が正しくありません。");
   });
 
+  test("[異常系]音声いいね状態取得(音声IDが不正)", async () => {
+    // 処理実行
+    const res = await request(app)
+      .get("/sound-favorite/dummy")
+      .set("Cookie", "dummy");
+
+    // 実行結果
+    expect(res.status).toBe(400);
+    expect(res.text).toBe("音声IDの形式が正しくありません。");
+  });
+
+  test("[異常系]音声いいね状態取得(tokenが不正)", async () => {
+    // 処理実行
+    const res = await request(app)
+      .get("/sound-favorite/1")
+      .set("Cookie", "dummy");
+
+    // 実行結果
+    expect(res.status).toBe(401);
+    expect(res.text).toBe("認証情報が正しくありません。");
+  });
+
   test("[異常系]音声いいね(音声IDが無い)", async () => {
     // 処理実行
     const res = await request(app)

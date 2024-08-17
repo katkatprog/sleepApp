@@ -1,10 +1,39 @@
 import express from "express";
 import prisma from "../prisma/client";
-import { body } from "express-validator";
+import { body, param } from "express-validator";
 import { checkReq } from "../middleware/checkReq";
 import { checkJwt } from "../middleware/checkJwt";
 
 export const soundFavoriteRouter = express.Router();
+
+// 音声をいいねしているか否かの状態を取得する
+soundFavoriteRouter.get(
+  "/:soundId",
+  param("soundId").isNumeric().withMessage("音声IDの形式が正しくありません。"),
+  checkReq,
+  checkJwt,
+  async (req, res) => {
+    try {
+      const result = await prisma.soundFavorite.count({
+        where: {
+          soundId: parseInt(req.params.soundId as string),
+          userId: res.locals.userId as number,
+        },
+      });
+
+      if (result === 1) {
+        // いいねしている
+        return res.status(200).json({ status: true });
+      } else {
+        // return === 0
+        // いいねをしていない
+        return res.status(200).json({ status: false });
+      }
+    } catch (error) {
+      return res.status(500).send("想定外のエラーが発生しました。");
+    }
+  },
+);
 
 // 音声をいいねする/いいねを外す
 soundFavoriteRouter.post(
