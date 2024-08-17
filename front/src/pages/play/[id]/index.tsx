@@ -106,7 +106,7 @@ const PlayPage = ({ soundInfo }: SoundInfoProps) => {
               <span className="ml-1">{favoriteCount}</span>
             </button>
           </div>
-          <div className="flex justify-between mt-3">
+          <div className="flex justify-between mt-2">
             <p className="">
               {new Date(soundInfo.createdAt).toLocaleDateString()}
             </p>
@@ -118,12 +118,12 @@ const PlayPage = ({ soundInfo }: SoundInfoProps) => {
           </div>
           <p>{`${soundInfo.playCount} 回再生`}</p>
         </div>
-        <div className="flex justify-center mt-8">
+        <div className="flex justify-center mt-2">
           <Image
             src={soundInfo.imageUrl}
             alt="#"
-            width={"320"}
-            height={"320"}
+            width={"240"}
+            height={"240"}
             className="rounded-2xl"
           ></Image>
         </div>
@@ -161,7 +161,7 @@ const PlayPage = ({ soundInfo }: SoundInfoProps) => {
           max={3000}
           defaultValue={1}
           ref={rangeRef}
-          className="appearance-none w-full h-1 mt-10 border-none outline-none rounded-sm cursor-pointer bg-green-400 slider"
+          className="appearance-none w-full h-1 mt-6 border-none outline-none rounded-sm cursor-pointer bg-green-400 slider"
           onInput={() => {
             // プログレスバーを直接操作されたときの動作
             if (
