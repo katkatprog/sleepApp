@@ -68,14 +68,14 @@ const SearchPage = (props: SoundsListProps) => {
                   (sound.isMaleVoice ? (
                     <Image
                       alt="#"
-                      src={"/male_icon.svg"}
+                      src={"/etc/male_icon.svg"}
                       width={32}
                       height={32}
                     ></Image>
                   ) : (
                     <Image
                       alt="#"
-                      src={"/female_icon.svg"}
+                      src={"/etc/female_icon.svg"}
                       width={32}
                       height={32}
                     ></Image>
