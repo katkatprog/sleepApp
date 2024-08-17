@@ -19,7 +19,21 @@ const PlayPage = ({ soundInfo }: SoundInfoProps) => {
   const [currentTime, setCurrentTime] = useState("0:00");
   const [isFavorite, setIsFavorite] = useState(false);
   const [favoriteCount, setFavoriteCount] = useState(soundInfo.favoriteCount); //いいね数はSSRで取得するが、いいねボタンを押した際変更されるので、stateでも保持する
+  const [imageUrl, setImageUrl] = useState("");
   const router = useRouter();
+
+  // 中央に表示する画像を決定
+  useEffect(() => {
+    if (soundInfo.requestedBy?.image) {
+      // リクエストされた音声で、なおかつ顔写真が設定されていたら、それを中央に表示する
+      setImageUrl(soundInfo.requestedBy.image);
+    } else {
+      // 上記以外の場合、予め用意した画像をランダムに表示する
+      setImageUrl(`/playing/${Math.floor(Math.random() * 3)}.webp`);
+    }
+    // 別ページに移った際、表示画像の決め直しを行う
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [router.query.id]);
 
   // 音声の全体時間が明らかになったとき、ステートにセットする
   useEffect(() => {
@@ -132,10 +146,11 @@ const PlayPage = ({ soundInfo }: SoundInfoProps) => {
         </div>
         <div className="flex justify-center mt-8">
           <Image
-            src={"/prehnite_icon.svg"}
+            src={imageUrl}
             alt="#"
-            width={"180"}
-            height={"180"}
+            width={"320"}
+            height={"320"}
+            className="rounded-2xl"
           ></Image>
         </div>
         <audio
