@@ -62,3 +62,7 @@ Cookie: token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsImlhdCI6MTcyM
 POST http://localhost:8080/sound-favorite/1
 content-type: application/json
 Cookie: token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsImlhdCI6MTcyMzgzMjI5NSwiZXhwIjoxNzIzOTE4Njk1fQ.Li5czV2wl2SSxMwm7yi3KieHznGqeiEank7XEi7LIQY
+
+### いいねした音声一覧の取得
+GET http://localhost:8080/sound-favorite?page=1
+Cookie: token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsImlhdCI6MTcyMzgzMjI5NSwiZXhwIjoxNzIzOTE4Njk1fQ.Li5czV2wl2SSxMwm7yi3KieHznGqeiEank7XEi7LIQY

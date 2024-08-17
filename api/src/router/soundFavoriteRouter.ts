@@ -1,11 +1,71 @@
 import express from "express";
 import prisma from "../prisma/client";
-import { param } from "express-validator";
+import { param, query } from "express-validator";
 import { checkReq } from "../middleware/checkReq";
 import { checkJwt } from "../middleware/checkJwt";
 import { PrismaClientKnownRequestError } from "@prisma/client/runtime/library";
+const soundsPerPage = 20;
 
 export const soundFavoriteRouter = express.Router();
+
+// いいねした音声一覧を取得する
+soundFavoriteRouter.get(
+  "/",
+  query("page")
+    .custom((page) => {
+      // pageが存在するなら数字文字列であることが正しい
+      if (page && isNaN(page)) {
+        throw new Error();
+      }
+      return true;
+    })
+    .withMessage("クエリパラメータpageが数字ではありません。"),
+  checkReq,
+  checkJwt,
+  async (req, res) => {
+    // クエリパラメータpageが存在しない場合、1をセット
+    const currentPage = Number(req.query.page || 1);
+    if (currentPage <= 0) {
+      return res.status(404).send("指定の検索ページが見つかりません。");
+    }
+
+    try {
+      const soundsList = await prisma.soundFavorite.findMany({
+        where: {
+          userId: res.locals.userId as number,
+        },
+        include: {
+          SoundInfo: true,
+        },
+        orderBy: {
+          createdAt: "desc",
+        },
+        take: soundsPerPage,
+        skip: soundsPerPage * (currentPage - 1),
+      });
+
+      const totalSounds = await prisma.soundFavorite.count({
+        where: {
+          userId: res.locals.userId as number,
+        },
+      });
+      const totalPages =
+        soundsList.length === 0 ? 1 : Math.ceil(totalSounds / soundsPerPage);
+
+      // 検索結果に対して範囲を超えたページ番号が指定された場合、404エラーを出す
+      if (soundsList.length === 0 && currentPage >= 2) {
+        return res.status(404).send("指定の検索ページが見つかりません。");
+      }
+
+      return res.status(200).json({
+        soundsList: soundsList.map((soundFav) => soundFav.SoundInfo),
+        totalPages,
+      });
+    } catch (error) {
+      return res.status(500).send("想定外のエラーが発生しました。");
+    }
+  },
+);
 
 // 音声をいいねしているか否かの状態を取得する
 soundFavoriteRouter.get(
