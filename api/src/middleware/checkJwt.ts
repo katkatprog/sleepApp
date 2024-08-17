@@ -19,6 +19,10 @@ export const checkJwt = async (
       process.env.JWT_SECRET || "",
     ) as DecodedToken;
 
+    if (!decoded.userId || typeof decoded.userId !== "number") {
+      return res.status(401).json("認証情報が正しくありません。");
+    }
+
     // 復号したトークンから取り出したuserIdを、後続の関数で使えるようにする
     res.locals.userId = decoded.userId;
 

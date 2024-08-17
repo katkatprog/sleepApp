@@ -9,10 +9,6 @@ export const soundRequestRouter = express.Router();
 
 // トークンをもとに音声リクエストの状況を取得する
 soundRequestRouter.get("/", checkJwt, async (req, res) => {
-  if (!res.locals.userId) {
-    return res.status(401).send("認証情報が正しくありません。");
-  }
-
   try {
     const queueInfo = await prisma.soundReqQueue.findUnique({
       where: { userId: res.locals.userId as number },
@@ -47,10 +43,6 @@ soundRequestRouter.post(
   checkReq,
   checkJwt,
   async (req, res) => {
-    if (!res.locals.userId) {
-      return res.status(401).send("認証情報が正しくありません。");
-    }
-
     try {
       const queueInfo = await prisma.soundReqQueue.create({
         data: {

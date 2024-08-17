@@ -1,5 +1,5 @@
 export interface DecodedToken {
-  userId: number;
+  userId?: unknown;
   iat: number;
   exp: number;
 }
