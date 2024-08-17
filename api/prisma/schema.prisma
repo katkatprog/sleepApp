@@ -39,6 +39,7 @@ model SoundReqQueue {
 model SoundFavorite {
   userId    Int
   soundId   Int
+  createdAt DateTime  @default(now())
   SoundInfo SoundInfo @relation(fields: [soundId], references: [id], onDelete: Cascade)
   User      User  @relation(fields: [userId], references: [id], onDelete: Cascade)
   @@unique([userId, soundId])
