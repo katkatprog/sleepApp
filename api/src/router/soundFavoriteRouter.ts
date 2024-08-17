@@ -30,25 +30,29 @@ soundFavoriteRouter.get(
     }
 
     try {
-      const soundsList = await prisma.soundFavorite.findMany({
-        where: {
-          userId: res.locals.userId as number,
-        },
-        include: {
-          SoundInfo: true,
-        },
-        orderBy: {
-          createdAt: "desc",
-        },
-        take: soundsPerPage,
-        skip: soundsPerPage * (currentPage - 1),
-      });
+      const result = await Promise.all([
+        prisma.soundFavorite.findMany({
+          where: {
+            userId: res.locals.userId as number,
+          },
+          include: {
+            SoundInfo: true,
+          },
+          orderBy: {
+            createdAt: "desc",
+          },
+          take: soundsPerPage,
+          skip: soundsPerPage * (currentPage - 1),
+        }),
+        prisma.soundFavorite.count({
+          where: {
+            userId: res.locals.userId as number,
+          },
+        }),
+      ]);
+      const soundsList = result[0];
+      const totalSounds = result[1];
 
-      const totalSounds = await prisma.soundFavorite.count({
-        where: {
-          userId: res.locals.userId as number,
-        },
-      });
       const totalPages =
         soundsList.length === 0 ? 1 : Math.ceil(totalSounds / soundsPerPage);
 
