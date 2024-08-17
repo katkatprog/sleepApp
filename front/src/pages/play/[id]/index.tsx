@@ -52,71 +52,69 @@ const PlayPage = ({ soundInfo }: SoundInfoProps) => {
   return (
     <Layout>
       <div className="p-7">
-        <div>
-          <div className="flex items-center justify-between">
-            <div className="flex items-center">
-              <h1 className=" text-2xl font-bold mr-2">{soundInfo.name}</h1>
-              {soundInfo.isMaleVoice !== null &&
-                (soundInfo.isMaleVoice ? (
-                  <Image
-                    alt="#"
-                    src={"/etc/male_icon.svg"}
-                    width={32}
-                    height={32}
-                  ></Image>
-                ) : (
-                  <Image
-                    alt="#"
-                    src={"/etc/female_icon.svg"}
-                    width={32}
-                    height={32}
-                  ></Image>
-                ))}
-            </div>
-            <button
-              className="flex"
-              onClick={async () => {
-                try {
-                  if (context.loginUser) {
-                    await fetch(
-                      `${process.env.NEXT_PUBLIC_API_URL}/sound-favorite/${router.query.id}/`,
-                      {
-                        method: "POST",
-                        credentials: "include",
-                        headers: {
-                          "content-type": "application/json",
-                        },
-                      },
-                    );
-                    setFavoriteCount(
-                      () => favoriteCount + (isFavorite ? -1 : 1),
-                    );
-                    setIsFavorite(() => !isFavorite);
-                  } else {
-                    toast.info("いいねするにはログインしてください。");
-                  }
-                } catch (error) {
-                  toast.info("いいねできませんでした。再度お試しください。");
-                }
-              }}
-            >
-              <HeartIcon
-                propClassName={`size-6 ${isFavorite && `text-pink-400`}`}
-              ></HeartIcon>
-              <span className="ml-1">{favoriteCount}</span>
-            </button>
+        <div className="flex items-center justify-between">
+          <div className="flex items-center">
+            <h1 className=" text-2xl font-bold mr-2">{soundInfo.name}</h1>
+            {soundInfo.isMaleVoice !== null &&
+              (soundInfo.isMaleVoice ? (
+                <Image
+                  alt="#"
+                  src={"/etc/male_icon.svg"}
+                  width={32}
+                  height={32}
+                ></Image>
+              ) : (
+                <Image
+                  alt="#"
+                  src={"/etc/female_icon.svg"}
+                  width={32}
+                  height={32}
+                ></Image>
+              ))}
           </div>
-          <div className="flex justify-between mt-2">
-            <p className="">
-              {new Date(soundInfo.createdAt).toLocaleDateString()}
+        </div>
+        <div className="flex justify-between mt-2">
+          <p className="">
+            {new Date(soundInfo.createdAt).toLocaleDateString()}
+          </p>
+          {soundInfo.requestedBy && (
+            <p className=" mr-1">
+              Requested by {soundInfo.requestedBy.userName}
             </p>
-            {soundInfo.requestedBy && (
-              <p className=" mr-1">
-                Requested by {soundInfo.requestedBy.userName}
-              </p>
-            )}
-          </div>
+          )}
+        </div>
+        <div className="flex justify-between">
           <p>{`${soundInfo.playCount} 回再生`}</p>
+          <button
+            className="flex"
+            onClick={async () => {
+              try {
+                if (context.loginUser) {
+                  await fetch(
+                    `${process.env.NEXT_PUBLIC_API_URL}/sound-favorite/${router.query.id}/`,
+                    {
+                      method: "POST",
+                      credentials: "include",
+                      headers: {
+                        "content-type": "application/json",
+                      },
+                    },
+                  );
+                  setFavoriteCount(() => favoriteCount + (isFavorite ? -1 : 1));
+                  setIsFavorite(() => !isFavorite);
+                } else {
+                  toast.info("いいねするにはログインしてください。");
+                }
+              } catch (error) {
+                toast.info("いいねできませんでした。再度お試しください。");
+              }
+            }}
+          >
+            <HeartIcon
+              propClassName={`size-6 ${isFavorite && `text-pink-400`}`}
+            ></HeartIcon>
+            <span className="ml-1">{favoriteCount}</span>
+          </button>
         </div>
         <div className="flex justify-center mt-2">
           <Image
