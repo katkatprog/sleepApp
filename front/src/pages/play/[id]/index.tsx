@@ -13,6 +13,7 @@ import { toast } from "react-toastify";
 
 const PlayPage = ({ soundInfo }: SoundInfoProps) => {
   const audioRef = useRef<HTMLAudioElement>(null);
+  const rangeRef = useRef<HTMLInputElement>(null);
   const context = useContext(LoginUserContext);
   const [isPlaying, setIsPlaying] = useState(false);
   const [totalTime, setTotalTime] = useState("0:00");
@@ -144,24 +145,62 @@ const PlayPage = ({ soundInfo }: SoundInfoProps) => {
           ref={audioRef}
           src={soundInfo.url}
           onTimeUpdate={() => {
+            if (
+              !audioRef.current?.currentTime ||
+              !audioRef.current?.duration ||
+              !rangeRef.current
+            ) {
+              return;
+            }
+
             const strCurrentTime = secondFormat(
               audioRef.current?.currentTime || 0,
             );
             setCurrentTime(strCurrentTime);
+
+            // プログレスバーのサムの位置を更新
+            rangeRef.current.value = Math.ceil(
+              (audioRef.current?.currentTime / audioRef.current.duration) *
+                3000,
+            ).toString();
           }}
           onEnded={() => {
             setIsPlaying(false);
           }}
         ></audio>
+
+        <input
+          type="range"
+          min={1}
+          max={3000}
+          defaultValue={1}
+          ref={rangeRef}
+          className="appearance-none w-full h-1 mt-10 border-none outline-none rounded-sm cursor-pointer bg-green-400 slider"
+          onInput={() => {
+            // プログレスバーを直接操作されたときの動作
+            if (
+              !audioRef.current?.currentTime ||
+              !audioRef.current?.duration ||
+              !rangeRef.current?.value
+            ) {
+              return;
+            }
+
+            audioRef.current.currentTime =
+              (audioRef.current.duration * parseInt(rangeRef.current.value)) /
+              3000;
+          }}
+        />
+        <div className="flex justify-between mt-2">
+          <span className="text-green-400">{currentTime}</span>
+          <span className="text-green-400">{totalTime}</span>
+        </div>
         <div className="flex justify-center">
-          <div className="h-20 mt-10 flex justify-between items-center w-60">
-            <PlayButton
-              audioRef={audioRef}
-              isPlaying={isPlaying}
-              setIsPlaying={setIsPlaying}
-            ></PlayButton>
-            <p className="text-green-400 ml-6">{`${currentTime} / ${totalTime}`}</p>
-          </div>
+          <PlayButton
+            audioRef={audioRef}
+            isPlaying={isPlaying}
+            setIsPlaying={setIsPlaying}
+          ></PlayButton>
         </div>
       </div>
     </Layout>
