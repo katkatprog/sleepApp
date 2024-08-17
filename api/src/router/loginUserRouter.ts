@@ -24,6 +24,11 @@ loginUserRouter.get("/", async (req, res) => {
       process.env.JWT_SECRET || "",
     ) as DecodedToken;
 
+    // 復号結果にuserIdが存在しない、数値型ではないなら不正なトークンのため、nullを返す
+    if (!decoded.userId || typeof decoded.userId !== "number") {
+      return res.status(200).json(null);
+    }
+
     loginUserId = decoded.userId;
   } catch (error) {
     return res.status(200).json(null);
