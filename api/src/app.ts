@@ -6,6 +6,7 @@ import { loginUserRouter } from "./router/loginUserRouter";
 import cors from "cors";
 import cookieParser from "cookie-parser";
 import { soundRequestRouter } from "./router/soundRequestRouter";
+import { soundFavoriteRouter } from "./router/soundFavoriteRouter";
 
 export const app = express();
 app.use(express.json());
@@ -19,6 +20,7 @@ app.use(
 
 app.use("/sound-info", soundInfoRouter);
 app.use("/sound-request", soundRequestRouter);
+app.use("/sound-favorite", soundFavoriteRouter);
 app.use("/auth", authRouter);
 app.use("/login-user", loginUserRouter);
 app.get("/health", async (req, res) => {

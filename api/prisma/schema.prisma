@@ -16,6 +16,7 @@ model SoundInfo {
   playCount   Int      @default(0)
   reqUserId   Int?
   user        User?    @relation(fields: [reqUserId], references: [id], onDelete: SetNull)
+  SoundFavorite SoundFavorite[]
 }
 
 model User {
@@ -25,6 +26,7 @@ model User {
   image           String?
   hashedPassword  String
   SoundInfo       SoundInfo[]
+  SoundFavorite   SoundFavorite[]
 }
 
 model SoundReqQueue {
@@ -32,4 +34,13 @@ model SoundReqQueue {
   theme       String
   isMaleVoice Boolean   @default(false)
   requestedAt DateTime  @default(now())
+}
+
+model SoundFavorite {
+  userId    Int
+  soundId   Int
+  createdAt DateTime  @default(now())
+  SoundInfo SoundInfo @relation(fields: [soundId], references: [id], onDelete: Cascade)
+  User      User  @relation(fields: [userId], references: [id], onDelete: Cascade)
+  @@unique([userId, soundId])
 }

@@ -53,3 +53,16 @@ cookie: token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEyLCJpYXQiOjE3M
 ### 音声リクエスト情報取得
 GET http://localhost:8080/sound-request
 Cookie: token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjI2LCJpYXQiOjE3MjM2NTU2NDAsImV4cCI6MTcyMzc0MjA0MH0.W09WGvqplJ19bf3pwfuoE3LuGRDqYDeYeB12twGGous
+
+### いいねの状態（している/していない）取得
+GET http://localhost:8080/sound-favorite/1
+Cookie: token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsImlhdCI6MTcyMzgzMjI5NSwiZXhwIjoxNzIzOTE4Njk1fQ.Li5czV2wl2SSxMwm7yi3KieHznGqeiEank7XEi7LIQY
+
+### いいねの付け外し
+POST http://localhost:8080/sound-favorite/1
+content-type: application/json
+Cookie: token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsImlhdCI6MTcyMzgzMjI5NSwiZXhwIjoxNzIzOTE4Njk1fQ.Li5czV2wl2SSxMwm7yi3KieHznGqeiEank7XEi7LIQY
+
+### いいねした音声一覧の取得
+GET http://localhost:8080/sound-favorite?page=1
+Cookie: token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsImlhdCI6MTcyMzgzMjI5NSwiZXhwIjoxNzIzOTE4Njk1fQ.Li5czV2wl2SSxMwm7yi3KieHznGqeiEank7XEi7LIQY

@@ -24,6 +24,11 @@ soundInfoRouter.get(
               image: true,
             },
           },
+          SoundFavorite: {
+            select: {
+              userId: true,
+            },
+          },
         },
       });
       if (!soundInfo) {
