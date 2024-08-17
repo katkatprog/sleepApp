@@ -124,22 +124,9 @@ const PlayPage = ({ soundInfo }: SoundInfoProps) => {
               {new Date(soundInfo.createdAt).toLocaleDateString()}
             </p>
             {soundInfo.requestedBy && (
-              <div className="flex">
-                <p className=" mr-1">
-                  Requested by {soundInfo.requestedBy.userName}
-                </p>
-                {soundInfo.requestedBy.image ? (
-                  <Image
-                    src={soundInfo.requestedBy.image}
-                    width={30}
-                    height={30}
-                    alt=""
-                    className="rounded-full"
-                  ></Image>
-                ) : (
-                  <UserIcon propClassName="w-6 h-6 text-neutral-800 bg-gray-300 rounded-full"></UserIcon>
-                )}
-              </div>
+              <p className=" mr-1">
+                Requested by {soundInfo.requestedBy.userName}
+              </p>
             )}
           </div>
           <p>{`${soundInfo.playCount} 回再生`}</p>
