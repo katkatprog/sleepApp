@@ -14,7 +14,7 @@ const FavoritePage = () => {
   const context = useContext(LoginUserContext);
   const currentPage = Number(router.query.page || 1);
   const [soundsList, setSoundsList] = useState<SoundInfo[]>([]);
-  const [totalPages, setTotalPages] = useState(0);
+  const [totalPages, setTotalPages] = useState(1);
 
   useEffect(() => {
     // async, awaitを使うため、即時実行関数の形にする
