@@ -59,10 +59,6 @@ GET http://localhost:8080/sound-favorite/1
 Cookie: token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsImlhdCI6MTcyMzgzMjI5NSwiZXhwIjoxNzIzOTE4Njk1fQ.Li5czV2wl2SSxMwm7yi3KieHznGqeiEank7XEi7LIQY
 
 ### いいねの付け外し
-POST http://localhost:8080/sound-favorite
+POST http://localhost:8080/sound-favorite/1
 content-type: application/json
 Cookie: token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsImlhdCI6MTcyMzgzMjI5NSwiZXhwIjoxNzIzOTE4Njk1fQ.Li5czV2wl2SSxMwm7yi3KieHznGqeiEank7XEi7LIQY
-
-{
-  "soundId": 1
-}
