@@ -62,7 +62,7 @@ const HomePage = () => {
           <li>音声のいいね</li>
         </h3>
 
-        <div className="flex items-center justify-center">
+        <div className="flex items-center justify-center mb-16">
           <Link href={"/login"}>
             <button className="mt-6 bg-green-600 hover:bg-green-500 font-bold px-12 py-4 rounded-md transition">
               <LoginIcon propClassName="w-7 h-7 stroke-2 inline-block mr-2"></LoginIcon>
