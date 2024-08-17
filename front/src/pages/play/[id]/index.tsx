@@ -18,6 +18,7 @@ const PlayPage = ({ soundInfo }: SoundInfoProps) => {
   const [totalTime, setTotalTime] = useState("0:00");
   const [currentTime, setCurrentTime] = useState("0:00");
   const [isFavorite, setIsFavorite] = useState(false);
+  const [favoriteCount, setFavoriteCount] = useState(soundInfo.favoriteCount); //いいね数はSSRで取得するが、いいねボタンを押した際変更されるので、stateでも保持する
   const router = useRouter();
 
   // 音声の全体時間が明らかになったとき、ステートにセットする
@@ -72,6 +73,7 @@ const PlayPage = ({ soundInfo }: SoundInfoProps) => {
                 ))}
             </div>
             <button
+              className="flex"
               onClick={async () => {
                 try {
                   if (context.loginUser) {
@@ -85,6 +87,9 @@ const PlayPage = ({ soundInfo }: SoundInfoProps) => {
                         },
                       },
                     );
+                    setFavoriteCount(
+                      () => favoriteCount + (isFavorite ? -1 : 1),
+                    );
                     setIsFavorite(() => !isFavorite);
                   } else {
                     toast.info("いいねするにはログインしてください。");
@@ -97,6 +102,7 @@ const PlayPage = ({ soundInfo }: SoundInfoProps) => {
               <HeartIcon
                 propClassName={`size-6 ${isFavorite && `text-pink-400`}`}
               ></HeartIcon>
+              <span className="ml-1">{favoriteCount}</span>
             </button>
           </div>
           <div className="flex justify-between mt-3">
@@ -182,6 +188,7 @@ export const getServerSideProps: GetServerSideProps<SoundInfoProps> = async (
       name: string;
       image: string | null;
     } | null;
+    SoundFavorite: { userId: number }[];
   } = await result.json();
 
   return {
@@ -199,6 +206,7 @@ export const getServerSideProps: GetServerSideProps<SoundInfoProps> = async (
               image: soundInfo.user.image,
             }
           : null,
+        favoriteCount: soundInfo.SoundFavorite.length,
       },
     },
   };
@@ -216,5 +224,6 @@ interface SoundInfoProps {
     url: string | undefined;
     isMaleVoice: boolean | null;
     playCount: number;
+    favoriteCount: number;
   };
 }
