@@ -21,7 +21,7 @@ export const Header = () => {
         )}
         <Link href={"/"}>
           <Image
-            src={"/prehnite_icon.svg"}
+            src={"/top/prehnite_icon.svg"}
             alt="#"
             width={"48"}
             height={"48"}

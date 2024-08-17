@@ -13,6 +13,7 @@ import { toast } from "react-toastify";
 
 const PlayPage = ({ soundInfo }: SoundInfoProps) => {
   const audioRef = useRef<HTMLAudioElement>(null);
+  const rangeRef = useRef<HTMLInputElement>(null);
   const context = useContext(LoginUserContext);
   const [isPlaying, setIsPlaying] = useState(false);
   const [totalTime, setTotalTime] = useState("0:00");
@@ -59,14 +60,14 @@ const PlayPage = ({ soundInfo }: SoundInfoProps) => {
                 (soundInfo.isMaleVoice ? (
                   <Image
                     alt="#"
-                    src={"/male_icon.svg"}
+                    src={"/etc/male_icon.svg"}
                     width={32}
                     height={32}
                   ></Image>
                 ) : (
                   <Image
                     alt="#"
-                    src={"/female_icon.svg"}
+                    src={"/etc/female_icon.svg"}
                     width={32}
                     height={32}
                   ></Image>
@@ -110,56 +111,82 @@ const PlayPage = ({ soundInfo }: SoundInfoProps) => {
               {new Date(soundInfo.createdAt).toLocaleDateString()}
             </p>
             {soundInfo.requestedBy && (
-              <div className="flex">
-                <p className=" mr-1">
-                  Requested by {soundInfo.requestedBy.userName}
-                </p>
-                {soundInfo.requestedBy.image ? (
-                  <Image
-                    src={soundInfo.requestedBy.image}
-                    width={30}
-                    height={30}
-                    alt=""
-                    className="rounded-full"
-                  ></Image>
-                ) : (
-                  <UserIcon propClassName="w-6 h-6 text-neutral-800 bg-gray-300 rounded-full"></UserIcon>
-                )}
-              </div>
+              <p className=" mr-1">
+                Requested by {soundInfo.requestedBy.userName}
+              </p>
             )}
           </div>
           <p>{`${soundInfo.playCount} 回再生`}</p>
         </div>
         <div className="flex justify-center mt-8">
           <Image
-            src={"/prehnite_icon.svg"}
+            src={soundInfo.imageUrl}
             alt="#"
-            width={"180"}
-            height={"180"}
+            width={"320"}
+            height={"320"}
+            className="rounded-2xl"
           ></Image>
         </div>
         <audio
           ref={audioRef}
           src={soundInfo.url}
           onTimeUpdate={() => {
+            if (
+              !audioRef.current?.currentTime ||
+              !audioRef.current?.duration ||
+              !rangeRef.current
+            ) {
+              return;
+            }
+
             const strCurrentTime = secondFormat(
               audioRef.current?.currentTime || 0,
             );
             setCurrentTime(strCurrentTime);
+
+            // プログレスバーのサムの位置を更新
+            rangeRef.current.value = Math.ceil(
+              (audioRef.current?.currentTime / audioRef.current.duration) *
+                3000,
+            ).toString();
           }}
           onEnded={() => {
             setIsPlaying(false);
           }}
         ></audio>
+
+        <input
+          type="range"
+          min={1}
+          max={3000}
+          defaultValue={1}
+          ref={rangeRef}
+          className="appearance-none w-full h-1 mt-10 border-none outline-none rounded-sm cursor-pointer bg-green-400 slider"
+          onInput={() => {
+            // プログレスバーを直接操作されたときの動作
+            if (
+              !audioRef.current?.currentTime ||
+              !audioRef.current?.duration ||
+              !rangeRef.current?.value
+            ) {
+              return;
+            }
+
+            audioRef.current.currentTime =
+              (audioRef.current.duration * parseInt(rangeRef.current.value)) /
+              3000;
+          }}
+        />
+        <div className="flex justify-between mt-2">
+          <span className="text-green-400">{currentTime}</span>
+          <span className="text-green-400">{totalTime}</span>
+        </div>
         <div className="flex justify-center">
-          <div className="h-20 mt-10 flex justify-between items-center w-60">
-            <PlayButton
-              audioRef={audioRef}
-              isPlaying={isPlaying}
-              setIsPlaying={setIsPlaying}
-            ></PlayButton>
-            <p className="text-green-400 ml-6">{`${currentTime} / ${totalTime}`}</p>
-          </div>
+          <PlayButton
+            audioRef={audioRef}
+            isPlaying={isPlaying}
+            setIsPlaying={setIsPlaying}
+          ></PlayButton>
         </div>
       </div>
     </Layout>
@@ -191,6 +218,16 @@ export const getServerSideProps: GetServerSideProps<SoundInfoProps> = async (
     SoundFavorite: { userId: number }[];
   } = await result.json();
 
+  // 中央に表示する画像を決定
+  let imageUrl: string;
+  if (soundInfo.user?.image) {
+    // リクエストされた音声で、なおかつ顔写真が設定されていたら、それを中央に表示する
+    imageUrl = soundInfo.user.image;
+  } else {
+    // 上記以外の場合、予め用意した画像をランダムに表示する
+    imageUrl = `/playing/${Math.floor(Math.random() * 3)}.webp`;
+  }
+
   return {
     props: {
       soundInfo: {
@@ -203,10 +240,10 @@ export const getServerSideProps: GetServerSideProps<SoundInfoProps> = async (
           ? {
               userId: soundInfo.user.id,
               userName: soundInfo.user.name,
-              image: soundInfo.user.image,
             }
           : null,
         favoriteCount: soundInfo.SoundFavorite.length,
+        imageUrl,
       },
     },
   };
@@ -219,11 +256,11 @@ interface SoundInfoProps {
     requestedBy: {
       userId: number;
       userName: string;
-      image: string | null;
     } | null;
     url: string | undefined;
     isMaleVoice: boolean | null;
     playCount: number;
     favoriteCount: number;
+    imageUrl: string;
   };
 }

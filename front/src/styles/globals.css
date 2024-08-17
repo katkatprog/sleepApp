@@ -1,3 +1,24 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* 音声再生ページ プログレスバーのつまみのスタイリング */
+.slider {
+  @apply /* Chrome, Edge, Opera用 */
+  [&::-webkit-slider-thumb]:appearance-none 
+  [&::-webkit-slider-thumb]:h-5
+  [&::-webkit-slider-thumb]:w-5 
+  [&::-webkit-slider-thumb]:rounded-full 
+  [&::-webkit-slider-thumb]:bg-green-500
+  [&::-webkit-slider-thumb]:border-4
+  [&::-webkit-slider-thumb]:border-solid
+
+  /* Firefox用 */
+  [&::-moz-range-thumb]:appearance-none 
+  [&::-moz-range-thumb]:h-5
+  [&::-moz-range-thumb]:w-5 
+  [&::-moz-range-thumb]:rounded-full 
+  [&::-moz-range-thumb]:bg-green-500
+  [&::-moz-range-thumb]:border-4
+  [&::-moz-range-thumb]:border-solid;
+}
