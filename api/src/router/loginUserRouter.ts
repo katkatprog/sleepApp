@@ -44,10 +44,8 @@ loginUserRouter.get("/", async (req, res) => {
 
 // ログインユーザー情報(name, email)の編集
 // トークンが無い、不正ならエラー
-// また、トークン内のユーザーIDとbodyのユーザーIDが一致しなければエラー
 loginUserRouter.put(
   "/",
-  body("id").notEmpty().withMessage("idが入力されていません。"),
   body("name").notEmpty().withMessage("お名前が入力されていません。"),
   body("email")
     .notEmpty()
@@ -57,16 +55,11 @@ loginUserRouter.put(
   checkReq,
   checkJwt,
   async (req, res) => {
-    // トークン内のユーザーIDとbodyのユーザーIDが一致しなければエラー
-    if (res.locals.userId !== req.body.id) {
-      return res.status(401).send("認証情報が正しくありません。");
-    }
-
     // ユーザー情報を更新し、結果を返却する
     try {
       const result = await prisma.user.update({
         select: { id: true, email: true, name: true, hashedPassword: false },
-        where: { id: req.body.id as number },
+        where: { id: res.locals.userId as number },
         data: {
           name: req.body.name as string,
           email: req.body.email as string,
@@ -86,23 +79,17 @@ loginUserRouter.put(
 
 // 退会（ログインユーザー情報の削除）
 // トークンが無い、不正ならエラー
-// また、トークン内のユーザーIDとbodyのユーザーIDが不一致、およびbodyのパスワードがDBのものと不一致ならエラー
+// また、bodyのパスワードがDBのものと不一致ならエラー
 loginUserRouter.delete(
   "/",
-  body("id").notEmpty().withMessage("idが入力されていません。"),
   body("password").notEmpty().withMessage("パスワードが入力されていません。"),
   checkReq,
   checkJwt,
   async (req, res) => {
-    // トークン内のユーザーIDとbodyのユーザーIDが一致しなければエラー
-    if (res.locals.userId !== req.body.id) {
-      return res.status(401).send("認証情報が正しくありません。");
-    }
-
     // ユーザー情報を更新し、結果を返却する
     try {
       const user = await prisma.user.findUnique({
-        where: { id: req.body.id as number },
+        where: { id: res.locals.userId as number },
       });
       if (!user) {
         return res.status(404).send("指定のユーザーが存在しません。");
@@ -116,7 +103,7 @@ loginUserRouter.delete(
         // パスワードが正しいならば、退会続行
         // ユーザー情報削除
         await prisma.user.delete({
-          where: { id: req.body.id as number },
+          where: { id: res.locals.userId as number },
         });
 
         // DBのrelationの設定により、Userの削除に併せてSoundReqQueueの情報も削除される
