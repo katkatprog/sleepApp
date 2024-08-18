@@ -120,7 +120,6 @@ const MyPage = () => {
                                 "content-type": "application/json",
                               },
                               body: JSON.stringify({
-                                // id: context.loginUser.id,
                                 name: nameRef.current?.value,
                                 email: emailRef.current?.value,
                               }),
@@ -220,7 +219,6 @@ const MyPage = () => {
                                 "content-type": "application/json",
                               },
                               body: JSON.stringify({
-                                // id: context.loginUser.id,
                                 password: passwordRef.current?.value,
                               }),
                             },
