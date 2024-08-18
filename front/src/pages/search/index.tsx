@@ -4,6 +4,7 @@ import { ArrowLongRightIcon } from "@/components/icons/ArrowLongRightIcon";
 import { SearchIcon } from "@/components/icons/SearchIcon";
 import { SoundInfo } from "@prisma/client";
 import { GetServerSideProps } from "next";
+import Head from "next/head";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
@@ -18,6 +19,9 @@ const SearchPage = (props: SoundsListProps) => {
 
   return (
     <Layout>
+      <Head>
+        <title>{`${router.query.q ? `${router.query.q} - ` : ""} 検索 / Prehnite`}</title>
+      </Head>
       <form
         onSubmit={(e) => {
           e.preventDefault();
