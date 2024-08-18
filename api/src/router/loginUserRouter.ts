@@ -51,12 +51,35 @@ loginUserRouter.put(
     .notEmpty()
     .withMessage("メールアドレスが入力されていません。")
     .isEmail()
-    .withMessage("メールアドレスの形式が正しくありません。"),
+    .withMessage("メールアドレスの形式が正しくありません。")
+    .custom((email) => {
+      // emailは環境変数GUEST_EMAILのアドレスではないことが正しい
+      if (email === (process.env.GUEST_EMAIL || "guest@example.com")) {
+        throw new Error();
+      }
+      return true;
+    })
+    .withMessage("そのメールアドレスに変更することはできません。"),
   checkReq,
   checkJwt,
   async (req, res) => {
     // ユーザー情報を更新し、結果を返却する
     try {
+      // 編集前のメールアドレスがゲストユーザーのものならエラー
+      const current = await prisma.user.findUnique({
+        where: { id: res.locals.userId as number },
+        select: { email: true },
+      });
+      if (
+        current &&
+        current.email === (process.env.GUEST_EMAIL || "guest@example.com")
+      ) {
+        return res
+          .status(400)
+          .send("そのユーザー情報を変更することはできません。");
+      }
+
+      // ユーザー情報編集
       const result = await prisma.user.update({
         select: { id: true, email: true, name: true, hashedPassword: false },
         where: { id: res.locals.userId as number },
@@ -94,6 +117,11 @@ loginUserRouter.delete(
       if (!user) {
         return res.status(404).send("指定のユーザーが存在しません。");
       }
+
+      if (user.email === (process.env.GUEST_EMAIL || "guest@example.com")) {
+        return res.status(400).send("そのユーザーを削除することはできません。");
+      }
+
       // パスワード照合
       const isMatch = await bcrypt.compare(
         req.body.password as string,
