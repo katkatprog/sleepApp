@@ -125,3 +125,14 @@ export const arrayShuffle = (inArray: string[]) => {
   }
   return outArray;
 };
+
+// S3のURLをCloudFrontのURLに変換する
+export const changeToCloudfrontUrl = (
+  s3Url: string,
+  cloudfrontDomain: string,
+) => {
+  const tmpArray = s3Url.split("/");
+  const fileName = tmpArray[tmpArray.length - 1];
+
+  return `${cloudfrontDomain}/${fileName}`;
+};

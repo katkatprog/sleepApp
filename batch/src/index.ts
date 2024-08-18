@@ -4,10 +4,16 @@ import {
   generateAudio,
   generateWordsList,
   saveSoundInfo,
+  changeToCloudfrontUrl,
   wordsToSSML,
 } from "./func";
 
 const main = async () => {
+  if (!process.env.CLOUD_FRONT_DOMAIN) {
+    console.log("環境変数に不備があります");
+    return;
+  }
+
   const prisma = new PrismaClient();
   try {
     console.log("音声作成＆DB保存処理を開始します。");
@@ -36,7 +42,12 @@ const main = async () => {
           ? "Kazuha"
           : "Tomoko"; // 話し手決定
       const s3Url = await generateAudio(ssml, speaker); // 音声作成＆URL発行
-      await saveSoundInfo(s3Url, queueInfo.isMaleVoice, prisma, queueInfo);
+      await saveSoundInfo(
+        changeToCloudfrontUrl(s3Url, process.env.CLOUD_FRONT_DOMAIN),
+        queueInfo.isMaleVoice,
+        prisma,
+        queueInfo,
+      );
     }
 
     // 処理したキューのレコードを削除
@@ -62,14 +73,22 @@ const main = async () => {
 
     // 男性ボイス作成
     const s3UrlMale = await generateAudio(ssml, "Takumi");
-    await saveSoundInfo(s3UrlMale, true, prisma);
+    await saveSoundInfo(
+      changeToCloudfrontUrl(s3UrlMale, process.env.CLOUD_FRONT_DOMAIN),
+      true,
+      prisma,
+    );
 
     // 女性ボイス作成
     const s3UrlFemale = await generateAudio(
       ssml,
       Math.random() > 0.5 ? "Kazuha" : "Tomoko",
     );
-    await saveSoundInfo(s3UrlFemale, false, prisma);
+    await saveSoundInfo(
+      changeToCloudfrontUrl(s3UrlFemale, process.env.CLOUD_FRONT_DOMAIN),
+      false,
+      prisma,
+    );
     console.log("日次の音声作成を終了します。");
     // ---------------------[End]日時の音声作成---------------------------
 
