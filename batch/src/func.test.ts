@@ -1,5 +1,10 @@
 import { GoogleGenerativeAI } from "@google/generative-ai";
-import { arrayShuffle, generateWordsList, wordsToSSML } from "./func";
+import {
+  arrayShuffle,
+  generateWordsList,
+  changeToCloudfrontUrl,
+  wordsToSSML,
+} from "./func";
 
 jest.mock("@google/generative-ai"); //モジュール全体をモック
 const MockGoogleGenerativeAI = GoogleGenerativeAI as jest.Mock; // TypeScriptでは型変換する必要がある
@@ -27,6 +32,7 @@ describe("単語リスト生成処理のテスト(半角カンマ)", () => {
   });
 
   it("正しくstring型配列を生成できることのテスト(半角カンマ)", async () => {
+    process.env.GEMINI_API_KEY = "dummy";
     const result = await generateWordsList();
     expect(result).toEqual(["テーブル", "椅子", "コンピュータ"]);
   });
@@ -55,6 +61,7 @@ describe("単語リスト生成処理のテスト(全角カンマ)", () => {
   });
 
   it("正しくstring型配列を生成できることのテスト(全角カンマ)", async () => {
+    process.env.GEMINI_API_KEY = "dummy";
     const result = await generateWordsList();
     expect(result).toEqual(["テーブル", "椅子", "コンピュータ"]);
   });
@@ -83,5 +90,15 @@ describe("配列シャッフル処理のテスト", () => {
       const existEle = outputArray.find((output) => output === input); //要素が存在すればその要素、存在しなければundefinedが返ってくる
       expect(existEle).not.toBe(undefined);
     });
+  });
+});
+
+describe("S3のURLをCloudFrontのURLに変換できるかのテスト", () => {
+  it("正しく変換できるかのテスト", () => {
+    const cloudFrontUrl = changeToCloudfrontUrl(
+      "https://dummy.s3.ap-northeast-1.amazonaws.com/1.jpg",
+      "https://dummy.cloudfront.net",
+    );
+    expect(cloudFrontUrl).toBe("https://dummy.cloudfront.net/1.jpg");
   });
 });
