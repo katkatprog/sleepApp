@@ -154,3 +154,52 @@ authRouter.post("/logout", (req, res) => {
   });
   return res.status(200).send("OK");
 });
+
+// ゲストログイン
+authRouter.post("/guest-login", async (req, res) => {
+  try {
+    // ゲスト用emailをキーにデータ取得
+    let user = await prisma.user.findUnique({
+      where: { email: process.env.GUEST_EMAIL || "guest@example.com" },
+    });
+
+    // ゲストユーザーが存在しない場合、作成する
+    if (!user) {
+      const hashedPassword = await bcrypt.hash(
+        process.env.GUEST_PASSWORD || "P@ssw0rd",
+        10,
+      );
+
+      user = await prisma.user.create({
+        data: {
+          email: process.env.GUEST_EMAIL || "guest@example.com",
+          name: "ゲストユーザー",
+          hashedPassword,
+        },
+      });
+    }
+
+    // jwt発行
+    const token = jwt.sign(
+      {
+        // ペイロードにはユーザーIDを含める
+        userId: user.id,
+      },
+      process.env.JWT_SECRET || "",
+      { expiresIn: process.env.JWT_EXPIRE || "24h" },
+    );
+
+    res.cookie("token", token, {
+      httpOnly: true,
+      sameSite: "none",
+      secure: true,
+      path: "/",
+    });
+
+    return res.status(200).send("OK");
+  } catch (error) {
+    console.log("エラー発生");
+    console.log(error);
+    return res.status(500).send("想定外のエラーが発生しました。");
+  }
+});
