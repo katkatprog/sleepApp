@@ -65,6 +65,21 @@ loginUserRouter.put(
   async (req, res) => {
     // ユーザー情報を更新し、結果を返却する
     try {
+      // 編集前のメールアドレスがゲストユーザーのものならエラー
+      const current = await prisma.user.findUnique({
+        where: { id: res.locals.userId as number },
+        select: { email: true },
+      });
+      if (
+        current &&
+        current.email === (process.env.GUEST_EMAIL || "guest@example.com")
+      ) {
+        return res
+          .status(400)
+          .send("そのユーザー情報を変更することはできません。");
+      }
+
+      // ユーザー情報編集
       const result = await prisma.user.update({
         select: { id: true, email: true, name: true, hashedPassword: false },
         where: { id: res.locals.userId as number },
