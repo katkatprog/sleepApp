@@ -17,7 +17,7 @@ const config: Config = {
     fontFamily: {
       // Googleフォント「Noto Sans Japanese」の設定
       // クラス名「font-noto-sans-jp」で呼び出せるようになる
-      "noto-sans-jp": ["Noto Sans JP"],
+      "noto-sans-jp": ["Noto\\ Sans\\ JP"],
     },
   },
   plugins: [],
