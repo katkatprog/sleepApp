@@ -25,13 +25,13 @@ const RequestPage = () => {
 
   return (
     <>
+      <Head>
+        <title>音声をリクエストする / Prehnite</title>
+      </Head>
       {isLoading ? (
         <Loading propClassName="h-80 flex justify-center items-center"></Loading>
       ) : (
         <Layout>
-          <Head>
-            <title>音声をリクエストする / Prehnite</title>
-          </Head>
           <div className="px-8 pt-10">
             <div className="flex justify-center">
               <div className="flex-col max-w-xs w-full">
