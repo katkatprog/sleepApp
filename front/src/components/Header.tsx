@@ -28,7 +28,7 @@ export const Header = () => {
           ></Image>
         </Link>
         {/* ダミー要素 */}
-        <div></div>
+        <div className="w-7"></div>
       </div>
     </header>
   );
