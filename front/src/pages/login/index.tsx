@@ -114,13 +114,59 @@ const LoginPage = () => {
               >
                 ログイン
               </button>
-
-              <Link href={"/signup"}>
-                <p className="text-green-400 hover:text-green-300 mt-2">
-                  アカウントをお持ちではない方
-                </p>
-              </Link>
             </form>
+            <Link href={"/signup"}>
+              <p className="text-green-400 hover:text-green-300 mt-2">
+                アカウントをお持ちではない方
+              </p>
+            </Link>
+            <button
+              type="submit"
+              className="mt-12 bg-blue-600 hover:bg-blue-500 font-bold w-full py-2 rounded-md transition"
+              onClick={async () => {
+                try {
+                  const result = await fetch(
+                    `${process.env.NEXT_PUBLIC_API_URL}/auth/guest-login`,
+                    {
+                      method: "POST",
+                      headers: {
+                        "content-type": "application/json",
+                      },
+                      credentials: "include",
+                    },
+                  );
+                  if (result.status === 200) {
+                    router.push(`/search`);
+                    toast.success("ゲストログインしました。", {
+                      autoClose: 5000,
+                    });
+                  } else {
+                    toast.error(
+                      "ゲストログインに失敗しました。再度お試しください。",
+                    );
+                  }
+                } catch (error) {
+                  toast.error(
+                    "ゲストログインに失敗しました。再度お試しください。",
+                  );
+                }
+
+                // ログインユーザーの情報を取得する
+                try {
+                  const result = await fetch(
+                    `${process.env.NEXT_PUBLIC_API_URL}/login-user/`,
+                    {
+                      credentials: "include",
+                    },
+                  );
+                  if (context.setLoginUser) {
+                    context.setLoginUser(await result.json());
+                  }
+                } catch (error) {}
+              }}
+            >
+              ゲストログイン
+            </button>
           </div>
         </div>
       </div>

@@ -44,14 +44,18 @@ const MyPage = () => {
                       <EmailIcon propClassName="w-6 h-6"></EmailIcon>
                       <p className="ml-2">{context.loginUser?.email}</p>
                     </div>
-                    <button
-                      className="mt-6 border-green-400 border-2 text-green-400 hover:bg-neutral-700 font-bold px-12 py-2 rounded-md transition w-full"
-                      onClick={() => {
-                        setMode("edit");
-                      }}
-                    >
-                      プロフィールを編集する
-                    </button>
+                    {context.loginUser.email !==
+                      (process.env.NEXT_PUBLIC_GUEST_EMAIL ||
+                        "guest@example.com") && (
+                      <button
+                        className="mt-6 border-green-400 border-2 text-green-400 hover:bg-neutral-700 font-bold px-12 py-2 rounded-md transition w-full"
+                        onClick={() => {
+                          setMode("edit");
+                        }}
+                      >
+                        プロフィールを編集する
+                      </button>
+                    )}
                     <button
                       className="mt-6 border-green-400 border-2 text-green-400 hover:bg-neutral-700 font-bold px-12 py-2 rounded-md transition w-full"
                       onClick={async () => {
@@ -89,14 +93,18 @@ const MyPage = () => {
                     >
                       ログアウト
                     </button>
-                    <button
-                      className="mt-12 border-red-400 border-2 text-red-400 hover:bg-neutral-700 font-bold px-12 py-2 rounded-md transition w-full"
-                      onClick={() => {
-                        setMode("delete");
-                      }}
-                    >
-                      退会する
-                    </button>
+                    {context.loginUser.email !==
+                      (process.env.NEXT_PUBLIC_GUEST_EMAIL ||
+                        "guest@example.com") && (
+                      <button
+                        className="mt-12 border-red-400 border-2 text-red-400 hover:bg-neutral-700 font-bold px-12 py-2 rounded-md transition w-full"
+                        onClick={() => {
+                          setMode("delete");
+                        }}
+                      >
+                        退会する
+                      </button>
+                    )}
                   </>
                 )}
                 {mode === "edit" && (
