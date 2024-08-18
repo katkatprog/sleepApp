@@ -11,6 +11,7 @@ import {
   useState,
 } from "react";
 import { Loading } from "@/components/Loading";
+import Head from "next/head";
 
 export const LoginUserContext = createContext<{
   loginUser: LoginUser | null;
@@ -50,7 +51,12 @@ export default function App({ Component, pageProps }: AppProps) {
       {/* Layoutで囲われている全ページでLoginUserをグローバル的に使えるように設定 */}
       <LoginUserContext.Provider value={{ loginUser, setLoginUser }}>
         {isLoading ? (
-          <Loading propClassName="h-80 flex justify-center items-center"></Loading>
+          <>
+            <Loading propClassName="h-80 flex justify-center items-center"></Loading>
+            <Head>
+              <title>Prehnite</title>
+            </Head>
+          </>
         ) : (
           <Component {...pageProps} />
         )}
