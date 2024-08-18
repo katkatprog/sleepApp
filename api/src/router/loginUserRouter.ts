@@ -51,7 +51,15 @@ loginUserRouter.put(
     .notEmpty()
     .withMessage("メールアドレスが入力されていません。")
     .isEmail()
-    .withMessage("メールアドレスの形式が正しくありません。"),
+    .withMessage("メールアドレスの形式が正しくありません。")
+    .custom((email) => {
+      // emailは環境変数GUEST_EMAILのアドレスではないことが正しい
+      if (email === (process.env.GUEST_EMAIL || "guest@example.com")) {
+        throw new Error();
+      }
+      return true;
+    })
+    .withMessage("そのメールアドレスに変更することはできません。"),
   checkReq,
   checkJwt,
   async (req, res) => {
@@ -94,6 +102,11 @@ loginUserRouter.delete(
       if (!user) {
         return res.status(404).send("指定のユーザーが存在しません。");
       }
+
+      if (user.email === (process.env.GUEST_EMAIL || "guest@example.com")) {
+        return res.status(400).send("そのユーザーを削除することはできません。");
+      }
+
       // パスワード照合
       const isMatch = await bcrypt.compare(
         req.body.password as string,

@@ -251,6 +251,19 @@ describe("Integration test", () => {
       expect(res.status).toBe(400);
       expect(res.text).toBe("パスワードの形式が正しくありません。");
     });
+
+    test("[異常系1-7]ゲストユーザーのメールアドレスを登録しようとしている", async () => {
+      // 処理実行
+      const res = await request(app).post("/auth/signup").send({
+        name: "guest",
+        email: "guest@example.com",
+        password: "P@ssw0rd",
+      });
+
+      // 実行結果
+      expect(res.status).toBe(400);
+      expect(res.text).toBe("そのメールアドレスを登録することはできません。");
+    });
   });
 
   test("[異常系2]Signup(email重複)", async () => {
@@ -441,6 +454,20 @@ describe("Integration test", () => {
     // 実行結果
     expect(res.status).toBe(401);
     expect(res.text).toBe("認証情報が正しくありません。");
+  });
+
+  test("[異常系]ログインユーザー編集(token不正)", async () => {
+    // 処理実行
+    // cookieには"dummy"というtokenを含める
+    const res = await request(app).put("/login-user").send({
+      id: 1,
+      name: "guest",
+      email: "guest@example.com",
+    });
+
+    // 実行結果
+    expect(res.status).toBe(400);
+    expect(res.text).toBe("そのメールアドレスに変更することはできません。");
   });
 
   test("[異常系]ログインユーザー削除(パスワードが空)", async () => {

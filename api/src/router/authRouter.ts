@@ -16,7 +16,15 @@ authRouter.post(
     .notEmpty()
     .withMessage("メールアドレスが入力されていません。")
     .isEmail()
-    .withMessage("メールアドレスの形式が正しくありません。"),
+    .withMessage("メールアドレスの形式が正しくありません。")
+    .custom((email) => {
+      // emailは環境変数GUEST_EMAILのアドレスではないことが正しい
+      if (email === (process.env.GUEST_EMAIL || "guest@example.com")) {
+        throw new Error();
+      }
+      return true;
+    })
+    .withMessage("そのメールアドレスを登録することはできません。"),
   body("password")
     .notEmpty()
     .withMessage("パスワードが入力されていません。")
