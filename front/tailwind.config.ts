@@ -14,6 +14,11 @@ const config: Config = {
           "conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))",
       },
     },
+    fontFamily: {
+      // Googleフォント「Noto Sans Japanese」の設定
+      // クラス名「font-noto-sans-jp」で呼び出せるようになる
+      "noto-sans-jp": ["Noto\\ Sans\\ JP"],
+    },
   },
   plugins: [],
 };
