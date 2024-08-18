@@ -17,7 +17,7 @@ export const Header = () => {
           </Link>
         ) : (
           // 未ログイン時はダミー要素
-          <div></div>
+          <div className="w-7"></div>
         )}
         <Link href={"/"}>
           <Image
