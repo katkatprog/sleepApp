@@ -6,6 +6,7 @@ import { useRouter } from "next/router";
 import React, { useContext, useRef, useState } from "react";
 import { toast } from "react-toastify";
 import { LoginUserContext } from "../_app";
+import Head from "next/head";
 
 const SignupPage = () => {
   const router = useRouter();
@@ -17,6 +18,9 @@ const SignupPage = () => {
 
   return (
     <Layout>
+      <Head>
+        <title>新規登録 / Prehnite</title>
+      </Head>
       <div className="px-8 pt-10">
         <div className="flex justify-center">
           <div className="flex-col max-w-xs w-full">

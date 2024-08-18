@@ -1,5 +1,6 @@
 import { Layout } from "@/components/Layout";
 import { SoundReqQueue } from "@prisma/client";
+import Head from "next/head";
 import React, { useEffect, useRef, useState } from "react";
 import { toast } from "react-toastify";
 
@@ -21,6 +22,9 @@ const RequestPage = () => {
 
   return (
     <Layout>
+      <Head>
+        <title>音声をリクエストする / Prehnite</title>
+      </Head>
       <div className="px-8 pt-10">
         <div className="flex justify-center">
           <div className="flex-col max-w-xs w-full">

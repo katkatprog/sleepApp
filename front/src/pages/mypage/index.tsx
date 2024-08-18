@@ -10,6 +10,7 @@ import { User } from "@prisma/client";
 import { EyeSlashIcon } from "@/components/icons/EyeSlashIcon";
 import { EyeIcon } from "@/components/icons/EyeIcon";
 import { useRouter } from "next/router";
+import Head from "next/head";
 
 const MyPage = () => {
   const context = useContext(LoginUserContext);
@@ -22,6 +23,9 @@ const MyPage = () => {
 
   return (
     <Layout>
+      <Head>
+        <title>マイページ / Prehnite</title>
+      </Head>
       <div className="px-8 pt-10">
         <div className="flex justify-center">
           <div className="flex-col max-w-xs w-full">

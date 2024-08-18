@@ -8,6 +8,7 @@ import Image from "next/image";
 import { ArrowLongLeftIcon } from "@/components/icons/ArrowLongLeftIcon";
 import { ArrowLongRightIcon } from "@/components/icons/ArrowLongRightIcon";
 import { useRouter } from "next/router";
+import Head from "next/head";
 
 const FavoritePage = () => {
   const router = useRouter();
@@ -41,6 +42,9 @@ const FavoritePage = () => {
 
   return (
     <Layout>
+      <Head>
+        <title>いいねした音声 / Prehnite</title>
+      </Head>
       <h1 className="text-2xl font-black m-6">いいねした音声</h1>
       {soundsList.length === 0 ? (
         <h1 className="text-center">いいねした音声がありません</h1>

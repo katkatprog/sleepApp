@@ -6,6 +6,7 @@ import { EyeIcon } from "@/components/icons/EyeIcon";
 import React, { useContext, useRef, useState } from "react";
 import { toast } from "react-toastify";
 import { LoginUserContext } from "../_app";
+import Head from "next/head";
 
 const LoginPage = () => {
   const router = useRouter();
@@ -16,6 +17,9 @@ const LoginPage = () => {
 
   return (
     <Layout>
+      <Head>
+        <title>ログイン / Prehnite</title>
+      </Head>
       <div className="px-8 pt-10">
         <div className="flex justify-center">
           <div className="flex-col max-w-xs w-full">

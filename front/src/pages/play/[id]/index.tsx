@@ -10,6 +10,7 @@ import { LoginUserContext } from "@/pages/_app";
 import { useRouter } from "next/router";
 import { HeartIcon } from "@/components/icons/HeartIcon";
 import { toast } from "react-toastify";
+import Head from "next/head";
 
 const PlayPage = ({ soundInfo }: SoundInfoProps) => {
   const audioRef = useRef<HTMLAudioElement>(null);
@@ -51,6 +52,9 @@ const PlayPage = ({ soundInfo }: SoundInfoProps) => {
 
   return (
     <Layout>
+      <Head>
+        <title>{`${soundInfo.name} / Prehnite`}</title>
+      </Head>
       <div className="p-7">
         <div className="flex items-center justify-between">
           <div className="flex items-center">

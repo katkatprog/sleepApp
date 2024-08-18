@@ -1,11 +1,15 @@
 import { Layout } from "@/components/Layout";
 import { LoginIcon } from "@/components/icons/LoginIcon";
 import { SearchIcon } from "@/components/icons/SearchIcon";
+import Head from "next/head";
 import Link from "next/link";
 
 const HomePage = () => {
   return (
     <Layout>
+      <Head>
+        <title>Prehnite</title>
+      </Head>
       <div className="px-8 pt-10">
         <div className="flex justify-center">
           <div
