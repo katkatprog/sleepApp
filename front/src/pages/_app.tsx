@@ -10,6 +10,7 @@ import {
   useEffect,
   useState,
 } from "react";
+import { Loading } from "@/components/Loading";
 
 export const LoginUserContext = createContext<{
   loginUser: LoginUser | null;
@@ -19,6 +20,7 @@ export const LoginUserContext = createContext<{
 export default function App({ Component, pageProps }: AppProps) {
   // 画面ロード時にログインユーザーを取得し、設定する
   const [loginUser, setLoginUser] = useState<LoginUser | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
   useEffect(() => {
     // useEffect内でasync関数を実行するため、即時実行の形にしている
     (async () => {
@@ -29,6 +31,7 @@ export default function App({ Component, pageProps }: AppProps) {
         },
       );
       setLoginUser(await result.json());
+      setIsLoading(false);
     })();
   }, []);
 
@@ -42,7 +45,11 @@ export default function App({ Component, pageProps }: AppProps) {
       />
       {/* Layoutで囲われている全ページでLoginUserをグローバル的に使えるように設定 */}
       <LoginUserContext.Provider value={{ loginUser, setLoginUser }}>
-        <Component {...pageProps} />
+        {isLoading ? (
+          <Loading propClassName="h-80 flex justify-center items-center"></Loading>
+        ) : (
+          <Component {...pageProps} />
+        )}
       </LoginUserContext.Provider>
     </>
   );
