@@ -12,8 +12,11 @@ import "dotenv/config";
 // 単語リストを作成する
 // 引数themeあり：テーマ指定ありの音声作成、なし：テーマ指定無しの音声生成（本日の音声）
 export const generateWordsList = async (theme?: string) => {
+  if (!process.env.GEMINI_API_KEY) {
+    throw new Error("環境変数のGeminiのAPIキーが空欄です");
+  }
   // Gemini連携準備
-  const gemini = new GoogleGenerativeAI(process.env.GEMINI_API_KEY || "");
+  const gemini = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
   const model = gemini.getGenerativeModel({
     model: "gemini-1.5-pro",
     generationConfig: { maxOutputTokens: 1000 }, //過剰生成防止

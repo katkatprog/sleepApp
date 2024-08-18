@@ -9,7 +9,7 @@ import {
 } from "./func";
 
 const main = async () => {
-  if (!process.env.CLOUD_FRONT_DOMAIN) {
+  if (!process.env.CLOUD_FRONT_DOMAIN || !process.env.RECORDS_PER_BATCH) {
     console.log("環境変数に不備があります");
     return;
   }
@@ -24,7 +24,7 @@ const main = async () => {
       orderBy: {
         requestedAt: "asc",
       },
-      take: parseInt(process.env.RECORDS_PER_BATCH || "0"),
+      take: parseInt(process.env.RECORDS_PER_BATCH),
     });
 
     for (const queueInfo of queueList) {
