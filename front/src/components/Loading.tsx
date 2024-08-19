@@ -1,9 +1,18 @@
-import React from "react";
+import Head from "next/head";
+import React, { ReactNode } from "react";
+
+type Props = {
+  children: ReactNode;
+  isLoading: boolean;
+};
 
 // Figmaで作成したローディングアイコンを回転させるだけのコンポーネント
-export const Loading = (props: { propClassName: string }) => {
-  return (
-    <div className={props.propClassName}>
+export const Loading = (props: Props) => {
+  return props.isLoading ? (
+    <div className="h-80 flex justify-center items-center">
+      <Head>
+        <title>Prehnite</title>
+      </Head>
       <svg
         className="animate-spin"
         width="60"
@@ -18,5 +27,7 @@ export const Loading = (props: { propClassName: string }) => {
         />
       </svg>
     </div>
+  ) : (
+    props.children
   );
 };
