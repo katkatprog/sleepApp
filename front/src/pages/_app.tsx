@@ -48,19 +48,12 @@ export default function App({ Component, pageProps }: AppProps) {
         theme={"colored"}
         style={{ width: "100%", maxWidth: "500px" }}
       />
-      {/* Layoutで囲われている全ページでLoginUserをグローバル的に使えるように設定 */}
-      <LoginUserContext.Provider value={{ loginUser, setLoginUser }}>
-        {isLoading ? (
-          <>
-            <Loading propClassName="h-80 flex justify-center items-center"></Loading>
-            <Head>
-              <title>Prehnite</title>
-            </Head>
-          </>
-        ) : (
+      <Loading isLoading={isLoading}>
+        {/* Layoutで囲われている全ページでLoginUserをグローバル的に使えるように設定 */}
+        <LoginUserContext.Provider value={{ loginUser, setLoginUser }}>
           <Component {...pageProps} />
-        )}
-      </LoginUserContext.Provider>
+        </LoginUserContext.Provider>
+      </Loading>
     </>
   );
 }
