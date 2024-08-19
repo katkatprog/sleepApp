@@ -21,6 +21,7 @@ const PlayPage = ({ soundInfo }: SoundInfoProps) => {
   const [currentTime, setCurrentTime] = useState("0:00");
   const [isFavorite, setIsFavorite] = useState(false);
   const [favoriteCount, setFavoriteCount] = useState(soundInfo.favoriteCount); //いいね数はSSRで取得するが、いいねボタンを押した際変更されるので、stateでも保持する
+  const [isCompletedLoadFav, setIsCompletedLoadFav] = useState(false);
   const router = useRouter();
 
   // 音声の全体時間が明らかになったとき、ステートにセットする
@@ -43,6 +44,7 @@ const PlayPage = ({ soundInfo }: SoundInfoProps) => {
         );
         setIsFavorite((await result.json()).status as boolean);
       }
+      setIsCompletedLoadFav(true);
     })();
 
     // 第2引数の配列
@@ -89,36 +91,40 @@ const PlayPage = ({ soundInfo }: SoundInfoProps) => {
         </div>
         <div className="flex justify-between">
           <p>{`${soundInfo.playCount} 回再生`}</p>
-          <button
-            className="flex"
-            onClick={async () => {
-              try {
-                if (context.loginUser) {
-                  await fetch(
-                    `${process.env.NEXT_PUBLIC_API_URL}/sound-favorite/${router.query.id}/`,
-                    {
-                      method: "POST",
-                      credentials: "include",
-                      headers: {
-                        "content-type": "application/json",
+          {isCompletedLoadFav && (
+            <button
+              className="flex"
+              onClick={async () => {
+                try {
+                  if (context.loginUser) {
+                    await fetch(
+                      `${process.env.NEXT_PUBLIC_API_URL}/sound-favorite/${router.query.id}/`,
+                      {
+                        method: "POST",
+                        credentials: "include",
+                        headers: {
+                          "content-type": "application/json",
+                        },
                       },
-                    },
-                  );
-                  setFavoriteCount(() => favoriteCount + (isFavorite ? -1 : 1));
-                  setIsFavorite(() => !isFavorite);
-                } else {
-                  toast.info("いいねするにはログインしてください。");
+                    );
+                    setFavoriteCount(
+                      () => favoriteCount + (isFavorite ? -1 : 1),
+                    );
+                    setIsFavorite(() => !isFavorite);
+                  } else {
+                    toast.info("いいねするにはログインしてください。");
+                  }
+                } catch (error) {
+                  toast.info("いいねできませんでした。再度お試しください。");
                 }
-              } catch (error) {
-                toast.info("いいねできませんでした。再度お試しください。");
-              }
-            }}
-          >
-            <HeartIcon
-              propClassName={`size-6 ${isFavorite && `text-pink-400`}`}
-            ></HeartIcon>
-            <span className="ml-1">{favoriteCount}</span>
-          </button>
+              }}
+            >
+              <HeartIcon
+                propClassName={`size-6 ${isFavorite && `text-pink-400`}`}
+              ></HeartIcon>
+              <span className="ml-1">{favoriteCount}</span>
+            </button>
+          )}
         </div>
         <div className="flex justify-center mt-2">
           <Image
