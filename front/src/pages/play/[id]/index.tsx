@@ -207,7 +207,7 @@ export const getServerSideProps: GetServerSideProps<SoundInfoProps> = async (
 ) => {
   // APIから音声情報を取得
   const result = await fetch(
-    `${process.env.API_URL}/sound-info/single/${context.params?.id}`,
+    `${process.env.NEXT_PUBLIC_API_URL}/sound-info/single/${context.params?.id}`,
   );
 
   if (result.status === 404) {
