@@ -139,7 +139,7 @@ export const getServerSideProps: GetServerSideProps<SoundsListProps> = async (
 ) => {
   // APIから音声リストを取得
   const result = await fetch(
-    `${process.env.API_URL}/sound-info/search?page=${context.query?.page || 1}&q=${context.query?.q || ""}&sort=${context.query?.sort || "created"}`,
+    `${process.env.NEXT_PUBLIC_API_URL}/sound-info/search?page=${context.query?.page || 1}&q=${context.query?.q || ""}&sort=${context.query?.sort || "created"}`,
   );
 
   if (result.status === 404) {
