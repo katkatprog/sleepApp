@@ -126,75 +126,78 @@ const PlayPage = ({ soundInfo }: SoundInfoProps) => {
             </button>
           )}
         </div>
-        <div className="flex justify-center mt-2">
-          <Image
-            src={soundInfo.imageUrl}
-            alt="#"
-            width={"240"}
-            height={"240"}
-            className="rounded-2xl"
-          ></Image>
-        </div>
-        <audio
-          ref={audioRef}
-          src={soundInfo.url}
-          onTimeUpdate={() => {
-            if (
-              !audioRef.current?.currentTime ||
-              !audioRef.current?.duration ||
-              !rangeRef.current
-            ) {
-              return;
-            }
+        <div className="flex justify-center mt-2 max-w-full">
+          <div className="flex flex-col items-center max-w-96 w-5/6">
+            <Image
+              src={soundInfo.imageUrl}
+              alt="#"
+              width={360}
+              height={360}
+              className="rounded-2xl"
+            ></Image>
+            <audio
+              ref={audioRef}
+              src={soundInfo.url}
+              onTimeUpdate={() => {
+                if (
+                  !audioRef.current?.currentTime ||
+                  !audioRef.current?.duration ||
+                  !rangeRef.current
+                ) {
+                  return;
+                }
 
-            const strCurrentTime = secondFormat(
-              audioRef.current?.currentTime || 0,
-            );
-            setCurrentTime(strCurrentTime);
+                const strCurrentTime = secondFormat(
+                  audioRef.current?.currentTime || 0,
+                );
+                setCurrentTime(strCurrentTime);
 
-            // プログレスバーのサムの位置を更新
-            rangeRef.current.value = Math.ceil(
-              (audioRef.current?.currentTime / audioRef.current.duration) *
-                3000,
-            ).toString();
-          }}
-          onEnded={() => {
-            setIsPlaying(false);
-          }}
-        ></audio>
+                // プログレスバーのサムの位置を更新
+                rangeRef.current.value = Math.ceil(
+                  (audioRef.current?.currentTime / audioRef.current.duration) *
+                    3000,
+                ).toString();
+              }}
+              onEnded={() => {
+                setIsPlaying(false);
+              }}
+            ></audio>
 
-        <input
-          type="range"
-          min={1}
-          max={3000}
-          defaultValue={1}
-          ref={rangeRef}
-          className="appearance-none w-full h-1 mt-6 border-none outline-none rounded-sm cursor-pointer bg-green-400 slider"
-          onInput={() => {
-            // プログレスバーを直接操作されたときの動作
-            if (
-              !audioRef.current?.currentTime ||
-              !audioRef.current?.duration ||
-              !rangeRef.current?.value
-            ) {
-              return;
-            }
+            <input
+              type="range"
+              min={1}
+              max={3000}
+              defaultValue={1}
+              ref={rangeRef}
+              className="appearance-none w-full h-1 mt-6 border-none outline-none rounded-sm cursor-pointer bg-green-400 slider"
+              onInput={() => {
+                // プログレスバーを直接操作されたときの動作
+                if (
+                  !audioRef.current?.currentTime ||
+                  !audioRef.current?.duration ||
+                  !rangeRef.current?.value
+                ) {
+                  return;
+                }
 
-            audioRef.current.currentTime =
-              (audioRef.current.duration * parseInt(rangeRef.current.value)) /
-              3000;
-          }}
-        />
-        <div className="flex justify-between mt-2">
-          <span className="text-green-400">{currentTime}</span>
-          <span className="text-green-400">{totalTime}</span>
-        </div>
-        <div className="flex justify-center">
-          <PlayButton
-            audioRef={audioRef}
-            isPlaying={isPlaying}
-            setIsPlaying={setIsPlaying}
-          ></PlayButton>
+                audioRef.current.currentTime =
+                  (audioRef.current.duration *
+                    parseInt(rangeRef.current.value)) /
+                  3000;
+              }}
+            />
+            <div className="flex justify-between mt-2 w-full">
+              <span className="text-green-400">{currentTime}</span>
+              <span className="text-green-400">{totalTime}</span>
+            </div>
+            <div className="flex justify-center">
+              <PlayButton
+                audioRef={audioRef}
+                isPlaying={isPlaying}
+                setIsPlaying={setIsPlaying}
+              ></PlayButton>
+            </div>
+          </div>
         </div>
       </div>
     </Layout>
