@@ -1,8 +1,4 @@
-import {
-  arrayShuffle,
-  changeToCloudfrontUrl,
-  wordsToSSML,
-} from "./func";
+import { arrayShuffle, changeToCloudfrontUrl, wordsToSSML } from "./func";
 
 jest.mock("@google/generative-ai"); //モジュール全体をモック
 
