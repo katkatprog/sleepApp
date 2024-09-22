@@ -8,6 +8,8 @@ import { Prisma, PrismaClient, SoundReqQueue } from "@prisma/client";
 import { DefaultArgs } from "@prisma/client/runtime/library";
 import { GoogleGenerativeAI } from "@google/generative-ai";
 import "dotenv/config";
+import { exec } from "child_process";
+import * as fs from "fs";
 
 // 単語リストを作成する
 // 引数themeあり：テーマ指定ありの音声作成、なし：テーマ指定無しの音声生成（本日の音声）
@@ -35,9 +37,46 @@ export const generateWordsList = async (theme?: string) => {
   resContent = resContent.replaceAll(" ", "").replaceAll("\n", "");
 
   // 返答(文字列)からカンマ区切り部分を抜き出し、それをJavaScriptの配列に変換
-  const wordsList: string[] = resContent.split(/[,、]/);
+  let wordsList = resContent.split(/[,、]/);
   wordsList.shift(); //一番最初のカンマより前の要素は削除
   wordsList.pop(); //一番最後のカンマより後の要素は削除
+
+  try {
+    // 漢字の単語リストをファイルに書き込む(,でつなげた文字列を書き込む)
+    const strWordsList = wordsList.join(",");
+    fs.writeFileSync("tmpWords/inout.txt", strWordsList);
+
+    // pythonスクリプトを実行し、ファイルに書き出した漢字の単語リストをひらがなに変換する
+    await new Promise((resolve, reject) => {
+      exec(
+        ". /path/to/venv/bin/activate && python3 src/convertToHiragana.py && deactivate",
+        (error) => {
+          if (error) {
+            reject();
+          } else {
+            resolve("");
+          }
+        },
+      );
+    });
+
+    // ひらがなの単語リストをファイルから読み込む
+    const strHiraWordsList = fs.readFileSync("tmpWords/inout.txt", {
+      encoding: "utf-8",
+    });
+    const hiraWordsList = strHiraWordsList.split(",");
+
+    // 漢字の単語リスト(ひらがな化実行前)とひらがなの単語リストの長さを見比べ、長さが一致していたら変換成功と判断する
+    if (wordsList.length === hiraWordsList.length) {
+      wordsList = hiraWordsList;
+    } else {
+      throw new Error("");
+    }
+  } catch {
+    console.log(
+      "単語リストのひらがな化に失敗したため、漢字のままreturnします。",
+    );
+  }
 
   console.log(`生成された単語リスト：${wordsList}`);
   console.log(`単語数: ${wordsList.length}`);
