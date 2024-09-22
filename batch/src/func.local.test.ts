@@ -16,7 +16,7 @@ describe("単語リスト生成処理のテスト(半角カンマ)", () => {
             return {
               response: {
                 text: () => {
-                  return "dummy1, テーブル, 椅子, コンピュータ, dummy2";
+                  return "dummy1, 空, テーブル, 椅子, 水, コンピュータ, dummy2";
                 },
               },
             };
@@ -29,7 +29,13 @@ describe("単語リスト生成処理のテスト(半角カンマ)", () => {
   it("正しくstring型配列を生成できることのテスト(半角カンマ)", async () => {
     process.env.GEMINI_API_KEY = "dummy";
     const result = await generateWordsList();
-    expect(result).toEqual(["てーぶる", "いす", "こんぴゅーた"]);
+    expect(result).toEqual([
+      "そら",
+      "みず",
+      "テーブル",
+      "椅子",
+      "コンピュータ",
+    ]);
   });
 });
 
@@ -45,7 +51,7 @@ describe("単語リスト生成処理のテスト(全角カンマ)", () => {
             return {
               response: {
                 text: () => {
-                  return "dummy1、テーブル、椅子、コンピュータ、dummy2";
+                  return "dummy1、 空、 テーブル、 椅子、 水、 コンピュータ、 dummy2";
                 },
               },
             };
@@ -58,6 +64,12 @@ describe("単語リスト生成処理のテスト(全角カンマ)", () => {
   it("正しくstring型配列を生成できることのテスト(全角カンマ)", async () => {
     process.env.GEMINI_API_KEY = "dummy";
     const result = await generateWordsList();
-    expect(result).toEqual(["てーぶる", "いす", "こんぴゅーた"]);
+    expect(result).toEqual([
+      "そら",
+      "みず",
+      "テーブル",
+      "椅子",
+      "コンピュータ",
+    ]);
   });
 });
