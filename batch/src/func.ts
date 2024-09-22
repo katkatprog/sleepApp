@@ -41,10 +41,13 @@ export const generateWordsList = async (theme?: string) => {
   wordsList.shift(); //一番最初のカンマより前の要素は削除
   wordsList.pop(); //一番最後のカンマより後の要素は削除
 
+  // 生成された単語のうち1文字のものをひらがな化の対象としてフィルター（1文字の単語が最も訓読み、音読みの読み間違いが起きやすいため）
+  // 下記のtry-catchでひらがな化を行う
+  let hiraWordsList = wordsList.filter((word) => word.length === 1);
+
   try {
     // 漢字の単語リストをファイルに書き込む(,でつなげた文字列を書き込む)
-    const strWordsList = wordsList.join(",");
-    fs.writeFileSync("tmpWords/inout.txt", strWordsList);
+    fs.writeFileSync("tmpWords/inout.txt", hiraWordsList.join(","));
 
     // pythonスクリプトを実行し、ファイルに書き出した漢字の単語リストをひらがなに変換する
     await new Promise((resolve, reject) => {
@@ -64,19 +67,21 @@ export const generateWordsList = async (theme?: string) => {
     const strHiraWordsList = fs.readFileSync("tmpWords/inout.txt", {
       encoding: "utf-8",
     });
-    const hiraWordsList = strHiraWordsList.split(",");
 
     // 漢字の単語リスト(ひらがな化実行前)とひらがなの単語リストの長さを見比べ、長さが一致していたら変換成功と判断する
-    if (wordsList.length === hiraWordsList.length) {
-      wordsList = hiraWordsList;
+    if (hiraWordsList.length === strHiraWordsList.split(",").length) {
+      hiraWordsList = strHiraWordsList.split(",");
     } else {
       throw new Error("");
     }
   } catch {
-    console.log(
-      "単語リストのひらがな化に失敗したため、漢字のままreturnします。",
-    );
+    console.log("単語リストのひらがな化に失敗したため、漢字のまま進みます。");
   }
+
+  wordsList = [
+    ...hiraWordsList, //ひらがな化した単語リスト
+    ...wordsList.filter((word) => word.length > 1), //ひらがな化をスキップした2文字以上の単語リスト
+  ];
 
   console.log(`生成された単語リスト：${wordsList}`);
   console.log(`単語数: ${wordsList.length}`);
