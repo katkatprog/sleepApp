@@ -34,15 +34,15 @@ const HomePage = () => {
         <h1 className="text-green-400 text-3xl font-black mt-10 text-center">
           About
         </h1>
-        <div className="flex flex-col lg:flex-row-reverse items-center lg:items-start">
+        <div className="flex flex-col items-center xl:flex-row-reverse xl:items-start">
           <Image
             src={"/top/prehnite_about.webp"}
             alt="#"
             width={240}
             height={240}
-            className="rounded-sm lg:w-2/5 mt-4"
+            className="rounded-sm mt-4 xl:w-2/5"
           ></Image>
-          <div className="lg:mr-4">
+          <div className="xl:mr-4">
             <h3 className="mt-4">
               <b className="text-lg">認知シャッフル睡眠法</b>
               とは、ランダムな単語を次々に思い浮かべながら眠りにつく方法です。
@@ -59,15 +59,15 @@ const HomePage = () => {
         <h1 className="text-green-400 text-3xl font-black mt-10 text-center">
           Points
         </h1>
-        <div className="flex flex-col lg:flex-row-reverse items-center lg:items-start">
+        <div className="flex flex-col items-center xl:flex-row-reverse xl:items-start">
           <Image
             src={"/top/prehnite_shuffle.webp"}
             alt="#"
             width={240}
             height={240}
-            className="rounded-sm lg:w-2/5 mt-4"
+            className="rounded-sm mt-4 xl:w-2/5"
           ></Image>
-          <div className="lg:mr-4 mt-4">
+          <div className="mt-4 xl:mr-4">
             <li className="text-lg font-bold">
               AIが単語読み上げ音声を自動生成
             </li>
@@ -79,15 +79,15 @@ const HomePage = () => {
             </p>
           </div>
         </div>
-        <div className="flex flex-col lg:flex-row-reverse items-center lg:items-start mb-24">
+        <div className="mb-24 flex flex-col items-center xl:flex-row-reverse xl:items-start">
           <Image
             src={"/top/prehnite_request.webp"}
             alt="#"
             width={240}
             height={240}
-            className="rounded-sm lg:w-2/5 mt-4"
+            className="rounded-sm mt-4 xl:w-2/5"
           ></Image>
-          <div className="lg:mr-4 mt-4">
+          <div className="mt-4 xl:mr-4">
             <li>
               <span className="rounded-md px-1 bg-green-900 text-green-100 border-green-100 border text-sm">
                 要ログイン
