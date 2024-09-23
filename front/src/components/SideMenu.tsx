@@ -3,16 +3,13 @@ import React, { useContext } from "react";
 import { SearchIcon } from "./icons/SearchIcon";
 import { PlusIcon } from "./icons/PlusIcon";
 import { HeartIcon } from "./icons/HeartIcon";
-import { LogoutIcon } from "./icons/LogoutIcon";
 import { LoginIcon } from "./icons/LoginIcon";
-import { toast } from "react-toastify";
-import { useRouter } from "next/router";
 import { LoginUserContext } from "@/pages/_app";
 import Image from "next/image";
 import { UserIcon } from "./icons/UserIcon";
+import { LogoutButton } from "./LogoutButton";
 
 export const SideMenu = () => {
-  const router = useRouter();
   const context = useContext(LoginUserContext);
 
   return (
@@ -45,38 +42,7 @@ export const SideMenu = () => {
         )}
         {context.loginUser ? (
           // ログイン状態
-          <button
-            className="mt-4 flex items-center"
-            onClick={async () => {
-              try {
-                const result = await fetch(
-                  `${process.env.NEXT_PUBLIC_API_URL}/auth/logout/`,
-                  {
-                    method: "POST",
-                    headers: {
-                      "content-type": "application/json",
-                    },
-                    credentials: "include",
-                  },
-                );
-                if (result.status === 200) {
-                  router.push("/");
-                  toast.success("ログアウトしました。", { autoClose: 5000 });
-                  // contextのloginUserをnullに設定
-                  if (context.setLoginUser) {
-                    context.setLoginUser(null);
-                  }
-                } else {
-                  toast.error("ログアウトに失敗しました。再度お試しください。");
-                }
-              } catch (error) {
-                toast.error("ログアウトに失敗しました。再度お試しください。");
-              }
-            }}
-          >
-            <LogoutIcon propClassName="w-9 h-9 p-1 rounded-full stroke-2 hover:bg-neutral-700 transition"></LogoutIcon>
-            <p>ログアウト</p>
-          </button>
+          <LogoutButton></LogoutButton>
         ) : (
           // 未ログイン状態
           <Link href={"/login"} className="mt-4 flex items-center">
