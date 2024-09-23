@@ -58,7 +58,7 @@ const FavoritePage = () => {
             ) : (
               soundsList.map((sound) => (
                 <Link href={`/play/${sound.id}`} key={sound.id}>
-                  <div className="h-20 px-4 pt-2 border-b flex justify-between items-start border-neutral-700 hover:bg-neutral-700 transition">
+                  <div className="h-20 px-8 pt-2 border-b flex justify-between items-start border-neutral-700 hover:bg-neutral-700 transition">
                     <div className="flex pt-2">
                       <h1 className="font-bold mr-2">{sound.name}</h1>
                       {sound.isMaleVoice !== null &&

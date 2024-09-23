@@ -45,8 +45,13 @@ const HomePage = () => {
           <div className="mt-4 xl:mr-4">
             <p>
               <span className="text-lg font-bold">認知シャッフル睡眠法</span>
-              とは、ランダムな単語を次々に思い浮かべながら眠りにつく方法です。
+              とは、以下の例のようにランダムな単語を次々に思い浮かべながら眠りにつく方法です。
             </p>
+            <blockquote className="p-4 my-2 border-s-4 border-neutral-400 bg-neutral-700">
+              <p className="text-center italic">
+                チューリップ、ギター、飛行機…
+              </p>
+            </blockquote>
             <p>
               脈絡のない単語を思い浮かべることで、脳は考えることをやめ休息モードに切り替わるため、眠りやすくなります。
             </p>
@@ -102,7 +107,9 @@ const HomePage = () => {
               好きなテーマでの単語読み上げ音声をリクエストすることができます。
             </p>
             <p>例えば、「夏」というテーマでリクエストした場合、</p>
-            <p className="text-center">海、夏祭り、風鈴、…</p>
+            <blockquote className="p-4 my-2 border-s-4 border-neutral-400 bg-neutral-700">
+              <p className="text-center italic">海、夏祭り、風鈴、…</p>
+            </blockquote>
             <p>というようにテーマに沿った単語が読み上げられます。</p>
           </div>
         </div>
