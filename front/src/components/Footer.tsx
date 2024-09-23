@@ -1,71 +1,38 @@
 import Link from "next/link";
 import React, { useContext } from "react";
 import { SearchIcon } from "./icons/SearchIcon";
-import { SettingIcon } from "./icons/SettingIcon";
 import { LoginIcon } from "./icons/LoginIcon";
 import { LoginUserContext } from "@/pages/_app";
-import { LogoutIcon } from "./icons/LogoutIcon";
-import { toast } from "react-toastify";
-import { useRouter } from "next/router";
 import { PlusIcon } from "./icons/PlusIcon";
 import { HeartIcon } from "./icons/HeartIcon";
+import { LogoutButton } from "./LogoutButton";
 
 export const Footer = () => {
-  const router = useRouter();
   const context = useContext(LoginUserContext);
 
   return (
-    <footer className="h-20 bg-neutral-800 border-gray-300 border-t fixed w-full left-0 bottom-0 flex justify-center">
-      <div className="h-14 flex items-center justify-around max-w-2xl w-full">
+    <footer className="h-20 bg-neutral-800 border-gray-300 border-t fixed w-full left-0 bottom-0 flex justify-center lg:hidden">
+      <div className="h-14 flex items-center justify-around max-w-xl w-full">
         <Link href={"/search"}>
-          <SearchIcon propClassName="w-9 h-9 p-1 rounded-full stroke-2 hover:bg-neutral-700 transition"></SearchIcon>
+          <SearchIcon propClassName="w-9 h-9 p-1 rounded-full stroke-2"></SearchIcon>
         </Link>
         {context.loginUser && (
           <>
             <Link href={"/request"}>
-              <PlusIcon prosClassName="w-9 h-9 p-1 rounded-full stroke-2 hover:bg-neutral-700 transition"></PlusIcon>
+              <PlusIcon prosClassName="w-9 h-9 p-1 rounded-full stroke-2"></PlusIcon>
             </Link>
             <Link href={"/favorite"}>
-              <HeartIcon propClassName="w-9 h-9 p-1 rounded-full stroke-2 hover:bg-neutral-700 transition"></HeartIcon>
+              <HeartIcon propClassName="w-9 h-9 p-1 rounded-full stroke-2"></HeartIcon>
             </Link>
           </>
         )}
         {context.loginUser ? (
           // ログイン状態
-          <button
-            onClick={async () => {
-              try {
-                const result = await fetch(
-                  `${process.env.NEXT_PUBLIC_API_URL}/auth/logout/`,
-                  {
-                    method: "POST",
-                    headers: {
-                      "content-type": "application/json",
-                    },
-                    credentials: "include",
-                  },
-                );
-                if (result.status === 200) {
-                  router.push("/");
-                  toast.success("ログアウトしました。", { autoClose: 5000 });
-                  // contextのloginUserをnullに設定
-                  if (context.setLoginUser) {
-                    context.setLoginUser(null);
-                  }
-                } else {
-                  toast.error("ログアウトに失敗しました。再度お試しください。");
-                }
-              } catch (error) {
-                toast.error("ログアウトに失敗しました。再度お試しください。");
-              }
-            }}
-          >
-            <LogoutIcon propClassName="w-9 h-9 p-1 rounded-full stroke-2 hover:bg-neutral-700 transition"></LogoutIcon>
-          </button>
+          <LogoutButton></LogoutButton>
         ) : (
           // 未ログイン状態
           <Link href={"/login"}>
-            <LoginIcon propClassName="w-9 h-9 p-1 rounded-full stroke-2 hover:bg-neutral-700 transition"></LoginIcon>
+            <LoginIcon propClassName="w-9 h-9 p-1 rounded-full stroke-2"></LoginIcon>
           </Link>
         )}
       </div>

@@ -30,7 +30,7 @@ const SearchPage = (props: SoundsListProps) => {
             `/search?q=${inputRef.current?.value || ""}&sort=${selectRef.current?.value}`,
           );
         }}
-        className="flex justify-center items-center mx-3 my-6"
+        className="flex justify-center items-center my-6 mx-3 lg:mx-8"
       >
         <input
           ref={inputRef}
@@ -65,7 +65,7 @@ const SearchPage = (props: SoundsListProps) => {
       ) : (
         props.soundsList.map((sound) => (
           <Link href={`/play/${sound.id}`} key={sound.id}>
-            <div className="h-20 px-4 pt-2 border-b flex justify-between items-start border-neutral-700 hover:bg-neutral-700 transition">
+            <div className="h-20 px-8 pt-2 border-b flex justify-between items-start border-neutral-700 hover:bg-neutral-700 transition">
               <div className="flex pt-2">
                 <h1 className="font-bold mr-2">{sound.name}</h1>
                 {sound.isMaleVoice !== null &&
