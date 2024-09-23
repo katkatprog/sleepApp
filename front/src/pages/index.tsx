@@ -34,25 +34,27 @@ const HomePage = () => {
         <h1 className="text-green-400 text-3xl font-black mt-10 text-center">
           About
         </h1>
-        <div className="flex flex-col items-center xl:flex-row-reverse xl:items-start">
+        <div className="flex flex-col items-center xl:flex-row-reverse xl:items-start mt-4">
           <Image
             src={"/top/prehnite_about.webp"}
             alt="#"
             width={240}
             height={240}
-            className="rounded-sm mt-4 xl:w-2/5"
+            className="rounded-sm xl:w-2/5"
           ></Image>
           <div className="xl:mr-4">
-            <h3 className="mt-4">
-              <b className="text-lg">認知シャッフル睡眠法</b>
+            <p>
+              <span className="text-lg font-bold">認知シャッフル睡眠法</span>
               とは、ランダムな単語を次々に思い浮かべながら眠りにつく方法です。
-              <br />
+            </p>
+            <p>
               脈絡のない単語を思い浮かべることで、脳は考えることをやめ休息モードに切り替わるため、眠りやすくなります。
-            </h3>
-            <h3 className="mt-4">
-              <b className="text-xl">Prehnite</b>
+            </p>
+
+            <p className="mt-4">
+              <span className="text-lg font-bold">Prehnite</span>
               は、認知シャッフル睡眠法を行うための音声プレイヤーで、ランダムに単語を読み上げる音声を再生できます。
-            </h3>
+            </p>
           </div>
         </div>
 
@@ -68,10 +70,10 @@ const HomePage = () => {
             className="rounded-sm mt-4 xl:w-2/5"
           ></Image>
           <div className="mt-4 xl:mr-4">
-            <li className="text-lg font-bold">
+            <h3 className="text-lg font-bold">
               AIが単語読み上げ音声を自動生成
-            </li>
-            <p>
+            </h3>
+            <p className="mt-2">
               毎日1回、AIがランダムに単語を生成し、それを読み上げる音声を作成します。
             </p>
             <p>
@@ -88,15 +90,15 @@ const HomePage = () => {
             className="rounded-sm mt-4 xl:w-2/5"
           ></Image>
           <div className="mt-4 xl:mr-4">
-            <li>
+            <h3>
               <span className="rounded-md px-1 bg-green-900 text-green-100 border-green-100 border text-sm">
                 要ログイン
               </span>
               <span className="text-lg font-bold ml-2">
                 単語のテーマをリクエスト可能
               </span>
-            </li>
-            <p>
+            </h3>
+            <p className="mt-2">
               好きなテーマでの単語読み上げ音声をリクエストすることができます。
             </p>
             <p>例えば、「夏」というテーマでリクエストした場合、</p>
