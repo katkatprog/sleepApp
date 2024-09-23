@@ -18,9 +18,9 @@ const HomePage = () => {
           >
             <h1 className="text-green-400 text-6xl font-black">Prehnite</h1>
             <h3 className="text-lg mt-4 font-bold text-center">
-              新しい認知シャッフル睡眠法で、
+              AIによる単語生成と音声読み上げで実現する
               <br />
-              今日も快適な睡眠を...
+              新しい認知シャッフル睡眠法…
             </h3>
             <Link href={"/search"}>
               <button className="mt-6 bg-green-600 hover:bg-green-500 font-bold px-12 py-4 rounded-md transition">
@@ -31,7 +31,9 @@ const HomePage = () => {
           </div>
         </div>
 
-        <h1 className="text-green-400 text-2xl font-black mt-10 text-center">About</h1>
+        <h1 className="text-green-400 text-3xl font-black mt-10 text-center">
+          About
+        </h1>
         <div className="flex flex-col lg:flex-row-reverse items-center">
           <Image
             src={"/top/prehnite_about.webp"}
