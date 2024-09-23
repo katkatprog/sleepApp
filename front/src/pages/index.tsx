@@ -18,9 +18,9 @@ const HomePage = () => {
           >
             <h1 className="text-green-400 text-6xl font-black">Prehnite</h1>
             <h3 className="text-lg mt-4 font-bold text-center">
-              AIによる単語生成と音声読み上げで実現する
+              AIによる認知シャッフル睡眠法で
               <br />
-              新しい認知シャッフル睡眠法…
+              今日も快適な睡眠を…
             </h3>
             <Link href={"/search"}>
               <button className="mt-6 bg-green-600 hover:bg-green-500 font-bold px-12 py-4 rounded-md transition">
@@ -34,7 +34,7 @@ const HomePage = () => {
         <h1 className="text-green-400 text-3xl font-black mt-10 text-center">
           About
         </h1>
-        <div className="flex flex-col lg:flex-row-reverse items-center">
+        <div className="flex flex-col lg:flex-row-reverse items-center lg:items-start">
           <Image
             src={"/top/prehnite_about.webp"}
             alt="#"
@@ -53,6 +53,55 @@ const HomePage = () => {
               <b className="text-xl">Prehnite</b>
               は、認知シャッフル睡眠法を行うための音声プレイヤーで、ランダムに単語を読み上げる音声を再生できます。
             </h3>
+          </div>
+        </div>
+
+        <h1 className="text-green-400 text-3xl font-black mt-10 text-center">
+          Points
+        </h1>
+        <div className="flex flex-col lg:flex-row-reverse items-center lg:items-start">
+          <Image
+            src={"/top/prehnite_shuffle.webp"}
+            alt="#"
+            width={240}
+            height={240}
+            className="rounded-sm lg:w-2/5 mt-4"
+          ></Image>
+          <div className="lg:mr-4 mt-4">
+            <li className="text-lg font-bold">
+              AIが単語読み上げ音声を自動生成
+            </li>
+            <p>
+              毎日1回、AIがランダムに単語を生成し、それを読み上げる音声を作成します。
+            </p>
+            <p>
+              日々違った音声を使うことで、効果の落ちにくい認知シャッフル睡眠法を実現できます。
+            </p>
+          </div>
+        </div>
+        <div className="flex flex-col lg:flex-row-reverse items-center lg:items-start mb-24">
+          <Image
+            src={"/top/prehnite_request.webp"}
+            alt="#"
+            width={240}
+            height={240}
+            className="rounded-sm lg:w-2/5 mt-4"
+          ></Image>
+          <div className="lg:mr-4 mt-4">
+            <li>
+              <span className="rounded-md px-1 bg-green-900 text-green-100 border-green-100 border text-sm">
+                要ログイン
+              </span>
+              <span className="text-lg font-bold ml-2">
+                単語のテーマをリクエスト可能
+              </span>
+            </li>
+            <p>
+              好きなテーマでの単語読み上げ音声をリクエストすることができます。
+            </p>
+            <p>例えば、「夏」というテーマでリクエストした場合、</p>
+            <p className="text-center">海、夏祭り、風鈴、…</p>
+            <p>というようにテーマに沿った単語が読み上げられます。</p>
           </div>
         </div>
       </div>
