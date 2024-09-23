@@ -8,8 +8,8 @@ export const Header = () => {
   const context = useContext(LoginUserContext);
 
   return (
-    <header className="h-16 bg-neutral-800 border-gray-300 border-b flex items-center justify-center fixed w-full left-0 top-0">
-      <div className="h-14 flex items-center justify-around max-w-2xl w-full">
+    <header className="h-16 bg-neutral-800 border-gray-300 border-b flex items-center justify-center fixed w-full left-0 top-0 lg:hidden">
+      <div className="h-14 flex items-center justify-around max-w-xl w-full">
         {context.loginUser ? (
           // ログイン状態
           <Link href={"/mypage"}>
