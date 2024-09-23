@@ -38,7 +38,7 @@ export const LogoutButton = () => {
         }
       }}
     >
-      <LogoutIcon propClassName="w-9 h-9 p-1 rounded-full stroke-2 hover:bg-neutral-700 transition"></LogoutIcon>
+      <LogoutIcon propClassName="w-9 h-9 p-1 rounded-full stroke-2"></LogoutIcon>
       <p className="hidden lg:inline">ログアウト</p>
     </button>
   );

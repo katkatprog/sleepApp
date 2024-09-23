@@ -25,17 +25,17 @@ export const SideMenu = () => {
           <h1 className="text-green-300 text-2xl font-black ml-2">Prehnite</h1>
         </Link>
         <Link href={"/search"} className="mt-4 flex items-center">
-          <SearchIcon propClassName="w-9 h-9 p-1 rounded-full stroke-2 hover:bg-neutral-700 transition"></SearchIcon>
+          <SearchIcon propClassName="w-9 h-9 p-1 rounded-full stroke-2"></SearchIcon>
           <p>音声を探す</p>
         </Link>
         {context.loginUser && (
           <>
             <Link href={"/request"} className="mt-4 flex items-center">
-              <PlusIcon prosClassName="w-9 h-9 p-1 rounded-full stroke-2 hover:bg-neutral-700 transition"></PlusIcon>
+              <PlusIcon prosClassName="w-9 h-9 p-1 rounded-full stroke-2"></PlusIcon>
               <p>音声をリクエスト</p>
             </Link>
             <Link href={"/favorite"} className="mt-4 flex items-center">
-              <HeartIcon propClassName="w-9 h-9 p-1 rounded-full stroke-2 hover:bg-neutral-700 transition"></HeartIcon>
+              <HeartIcon propClassName="w-9 h-9 p-1 rounded-full stroke-2"></HeartIcon>
               <p>いいねした音声</p>
             </Link>
           </>
@@ -46,7 +46,7 @@ export const SideMenu = () => {
         ) : (
           // 未ログイン状態
           <Link href={"/login"} className="mt-4 flex items-center">
-            <LoginIcon propClassName="w-9 h-9 p-1 rounded-full stroke-2 hover:bg-neutral-700 transition"></LoginIcon>
+            <LoginIcon propClassName="w-9 h-9 p-1 rounded-full stroke-2"></LoginIcon>
             <p>ログイン</p>
           </Link>
         )}
