@@ -34,15 +34,15 @@ const HomePage = () => {
         <h1 className="text-green-400 text-3xl font-black mt-10 text-center">
           About
         </h1>
-        <div className="flex flex-col items-center xl:flex-row-reverse xl:items-start mt-4">
+        <div className="flex flex-col items-center xl:flex-row-reverse xl:items-start">
           <Image
             src={"/top/prehnite_about.webp"}
             alt="#"
             width={240}
             height={240}
-            className="rounded-sm xl:w-2/5"
+            className="rounded-sm mt-4 xl:w-2/5"
           ></Image>
-          <div className="xl:mr-4">
+          <div className="mt-4 xl:mr-4">
             <p>
               <span className="text-lg font-bold">認知シャッフル睡眠法</span>
               とは、ランダムな単語を次々に思い浮かべながら眠りにつく方法です。
@@ -52,7 +52,7 @@ const HomePage = () => {
             </p>
 
             <p className="mt-4">
-              <span className="text-lg font-bold">Prehnite</span>
+              <span className="text-xl font-bold">Prehnite</span>
               は、認知シャッフル睡眠法を行うための音声プレイヤーで、ランダムに単語を読み上げる音声を再生できます。
             </p>
           </div>
