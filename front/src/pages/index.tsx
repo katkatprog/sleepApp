@@ -2,6 +2,7 @@ import { Layout } from "@/components/Layout";
 import { LoginIcon } from "@/components/icons/LoginIcon";
 import { SearchIcon } from "@/components/icons/SearchIcon";
 import Head from "next/head";
+import Image from "next/image";
 import Link from "next/link";
 
 const HomePage = () => {
@@ -30,49 +31,27 @@ const HomePage = () => {
           </div>
         </div>
 
-        <h1 className="text-green-400 text-2xl font-black mt-10">
-          Prehniteとは？
-        </h1>
-        <h3 className="mt-4">
-          Prehnite(プレナイト)は、
-          <b>認知シャッフル睡眠法</b>
-          を行うための音声プレイヤーで、ランダムに単語を読み上げる音声を再生できます。
-          <br />
-          音声は毎日自動生成されるため、
-          <b>日替わりの音声による効果の落ちにくい</b>
-          認知シャッフル睡眠法を実現できます。
-        </h3>
-
-        <h1 className="text-green-400 text-2xl font-black mt-10">
-          認知シャッフル睡眠法とは？
-        </h1>
-        <h3 className="mt-4">
-          認知シャッフル睡眠法とは、
-          <b>ランダムに単語を思い浮かべる動作を繰り返しながら</b>
-          眠りにつく方法です。
-          <br />
-          それを行うことで、
-          <b>眠りに入りやすくなります。</b>
-        </h3>
-
-        <h1 className="text-green-400 text-2xl font-black mt-10">
-          ログインすると？
-        </h1>
-        <h3 className="mt-4">
-          ログインすることで、以下のことを行うことができ、より快適にアプリを使うことができます。
-        </h3>
-        <h3 className="mt-4">
-          <li>自分の好きなテーマの音声作成をリクエスト</li>
-          <li>音声のいいね</li>
-        </h3>
-
-        <div className="flex items-center justify-center mb-16">
-          <Link href={"/login"}>
-            <button className="mt-6 bg-green-600 hover:bg-green-500 font-bold px-12 py-4 rounded-md transition">
-              <LoginIcon propClassName="w-7 h-7 stroke-2 inline-block mr-2"></LoginIcon>
-              ログイン / 新規登録
-            </button>
-          </Link>
+        <h1 className="text-green-400 text-2xl font-black mt-10 text-center">About</h1>
+        <div className="flex flex-col lg:flex-row-reverse items-center">
+          <Image
+            src={"/top/prehnite_about.webp"}
+            alt="#"
+            width={240}
+            height={240}
+            className="rounded-sm lg:w-2/5 mt-4"
+          ></Image>
+          <div className="lg:mr-4">
+            <h3 className="mt-4">
+              <b className="text-lg">認知シャッフル睡眠法</b>
+              とは、ランダムな単語を次々に思い浮かべながら眠りにつく方法です。
+              <br />
+              脈絡のない単語を思い浮かべることで、脳は考えることをやめ休息モードに切り替わるため、眠りやすくなります。
+            </h3>
+            <h3 className="mt-4">
+              <b className="text-xl">Prehnite</b>
+              は、認知シャッフル睡眠法を行うための音声プレイヤーで、ランダムに単語を読み上げる音声を再生できます。
+            </h3>
+          </div>
         </div>
       </div>
     </Layout>
