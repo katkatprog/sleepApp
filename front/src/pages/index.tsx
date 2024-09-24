@@ -42,7 +42,7 @@ const HomePage = () => {
             height={240}
             className="rounded-sm mt-4 xl:w-2/5"
           ></Image>
-          <div className="mt-4 xl:mr-4">
+          <div className="mt-4 max-w-sm xl:mr-4">
             <p>
               <span className="text-lg font-bold">認知シャッフル睡眠法</span>
               とは、以下の例のようにランダムな単語を次々に思い浮かべながら眠りにつく方法です。
@@ -74,7 +74,7 @@ const HomePage = () => {
             height={240}
             className="rounded-sm mt-4 xl:w-2/5"
           ></Image>
-          <div className="mt-4 xl:mr-4">
+          <div className="mt-4 max-w-sm xl:mr-4">
             <h3 className="text-lg font-bold">
               AIが単語読み上げ音声を自動生成
             </h3>
@@ -94,7 +94,7 @@ const HomePage = () => {
             height={240}
             className="rounded-sm mt-4 xl:w-2/5"
           ></Image>
-          <div className="mt-4 xl:mr-4">
+          <div className="mt-4 max-w-sm xl:mr-4">
             <h3>
               <span className="rounded-md px-1 bg-green-900 text-green-100 border-green-100 border text-sm">
                 要ログイン
