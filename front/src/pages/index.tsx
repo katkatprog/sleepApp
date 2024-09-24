@@ -42,7 +42,7 @@ const HomePage = () => {
             height={240}
             className="rounded-sm mt-4 xl:w-2/5"
           ></Image>
-          <div className="mt-4 xl:mr-4">
+          <div className="mt-4 max-w-sm xl:mr-4">
             <p>
               <span className="text-lg font-bold">認知シャッフル睡眠法</span>
               とは、以下の例のようにランダムな単語を次々に思い浮かべながら眠りにつく方法です。
@@ -68,13 +68,13 @@ const HomePage = () => {
         </h1>
         <div className="flex flex-col items-center xl:flex-row-reverse xl:items-start">
           <Image
-            src={"/top/prehnite_shuffle.webp"}
+            src={"/top/prehnite_ai.webp"}
             alt="#"
             width={240}
             height={240}
             className="rounded-sm mt-4 xl:w-2/5"
           ></Image>
-          <div className="mt-4 xl:mr-4">
+          <div className="mt-4 max-w-sm xl:mr-4">
             <h3 className="text-lg font-bold">
               AIが単語読み上げ音声を自動生成
             </h3>
@@ -88,13 +88,13 @@ const HomePage = () => {
         </div>
         <div className="mb-24 flex flex-col items-center xl:flex-row-reverse xl:items-start">
           <Image
-            src={"/top/prehnite_request.webp"}
+            src={"/top/prehnite_summer.webp"}
             alt="#"
             width={240}
             height={240}
             className="rounded-sm mt-4 xl:w-2/5"
           ></Image>
-          <div className="mt-4 xl:mr-4">
+          <div className="mt-4 max-w-sm xl:mr-4">
             <h3>
               <span className="rounded-md px-1 bg-green-900 text-green-100 border-green-100 border text-sm">
                 要ログイン
@@ -108,7 +108,7 @@ const HomePage = () => {
             </p>
             <p>例えば、「夏」というテーマでリクエストした場合、</p>
             <blockquote className="p-4 my-2 border-s-4 border-neutral-400 bg-neutral-700">
-              <p className="text-center italic">海、夏祭り、風鈴、…</p>
+              <p className="text-center italic">海、花火、アイスクリーム、…</p>
             </blockquote>
             <p>というようにテーマに沿った単語が読み上げられます。</p>
           </div>
