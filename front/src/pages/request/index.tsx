@@ -8,19 +8,26 @@ import { toast } from "react-toastify";
 const RequestPage = () => {
   const inputRef = useRef<HTMLInputElement>(null);
   const selectRef = useRef<HTMLSelectElement>(null);
-  const [queueInfo, setQueueInfo] = useState<SoundReqQueue | null>();
+  const [queueInfo, setQueueInfo] = useState<SoundReqQueue | null>(null);
+  const [batchDate, setBatchDate] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const fetchOnLoad = async () => {
+    const result = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/sound-request`,
+      {
+        credentials: "include",
+      },
+    );
+    const resSoundRequest: {
+      queueInfo: SoundReqQueue | null;
+      batchDate: string;
+    } = await result.json();
+    setQueueInfo(resSoundRequest.queueInfo);
+    setBatchDate(resSoundRequest.batchDate);
+    setIsLoading(false);
+  };
   useEffect(() => {
-    (async () => {
-      const result = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/sound-request`,
-        {
-          credentials: "include",
-        },
-      );
-      setQueueInfo(await result.json());
-      setIsLoading(false);
-    })();
+    fetchOnLoad();
   }, []);
 
   return (
@@ -44,6 +51,9 @@ const RequestPage = () => {
                   <p>{`テーマ: ${queueInfo.theme}`}</p>
                   <p>{`ボイス: ${queueInfo.isMaleVoice ? "男性ボイス" : "女性ボイス"}`}</p>
                   <p>{`リクエスト日時: ${new Date(queueInfo.requestedAt).toLocaleString()}`}</p>
+
+                  <h2 className="text-lg font-black mt-4">作成予定日</h2>
+                  <p>{batchDate ? new Date(batchDate).toLocaleString() : ""}</p>
                 </>
               ) : (
                 <>
@@ -80,7 +90,7 @@ const RequestPage = () => {
                           toast.success("音声作成をリクエストしました。", {
                             autoClose: 5000,
                           });
-                          setQueueInfo(await result.json());
+                          fetchOnLoad();
                         } else if (Math.floor(result.status / 100) === 4) {
                           toast.error(await result.text());
                         } else {
@@ -115,6 +125,16 @@ const RequestPage = () => {
                       <option value={0}>女性ボイス</option>
                       <option value={1}>男性ボイス</option>
                     </select>
+
+                    <h2 className="text-lg font-black mt-4">
+                      作成予定日
+                      <span className="text-base font-normal">
+                        (リクエストを出した場合)
+                      </span>
+                    </h2>
+                    <p>
+                      {batchDate ? new Date(batchDate).toLocaleString() : ""}
+                    </p>
 
                     <button
                       type="submit"
