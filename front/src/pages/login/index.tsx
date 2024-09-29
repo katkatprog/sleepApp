@@ -14,6 +14,7 @@ const LoginPage = () => {
   const passwordRef = useRef<HTMLInputElement>(null);
   const [showPassword, setShowPassword] = useState(false);
   const context = useContext(LoginUserContext);
+  const processRef = useRef(false);
 
   return (
     <Layout>
@@ -26,6 +27,11 @@ const LoginPage = () => {
             <h1 className="text-2xl font-black">Prehniteにログイン</h1>
             <form
               onSubmit={async (e) => {
+                if (processRef.current) {
+                  return;
+                }
+                processRef.current = true;
+
                 e.preventDefault();
                 try {
                   const result = await fetch(
@@ -46,11 +52,14 @@ const LoginPage = () => {
                     router.push(`/search`);
                     toast.success("ログインしました。", { autoClose: 5000 });
                   } else if (result.status === 400) {
+                    processRef.current = false;
                     toast.error(await result.text());
                   } else {
+                    processRef.current = false;
                     toast.error("ログインに失敗しました。再度お試しください。");
                   }
                 } catch (error) {
+                  processRef.current = false;
                   toast.error("ログインに失敗しました。再度お試しください。");
                 }
 
@@ -124,6 +133,11 @@ const LoginPage = () => {
               type="submit"
               className="mt-12 bg-blue-600 hover:bg-blue-500 font-bold w-full py-2 rounded-md transition"
               onClick={async () => {
+                if (processRef.current) {
+                  return;
+                }
+                processRef.current = true;
+
                 try {
                   const result = await fetch(
                     `${process.env.NEXT_PUBLIC_API_URL}/auth/guest-login`,
@@ -141,11 +155,13 @@ const LoginPage = () => {
                       autoClose: 5000,
                     });
                   } else {
+                    processRef.current = false;
                     toast.error(
                       "ゲストログインに失敗しました。再度お試しください。",
                     );
                   }
                 } catch (error) {
+                  processRef.current = false;
                   toast.error(
                     "ゲストログインに失敗しました。再度お試しください。",
                   );

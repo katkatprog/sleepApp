@@ -15,6 +15,7 @@ const SignupPage = () => {
   const passwordRef = useRef<HTMLInputElement>(null);
   const [showPassword, setShowPassword] = useState(false);
   const context = useContext(LoginUserContext);
+  const processRef = useRef(false);
 
   return (
     <Layout>
@@ -27,6 +28,11 @@ const SignupPage = () => {
             <h1 className="text-2xl font-black">Prehniteに新規登録</h1>
             <form
               onSubmit={async (e) => {
+                if (processRef.current) {
+                  return;
+                }
+                processRef.current = true;
+
                 e.preventDefault();
                 try {
                   const result = await fetch(
@@ -50,12 +56,15 @@ const SignupPage = () => {
                     });
                     router.push(`/search`);
                   } else if (result.status === 400) {
+                    processRef.current = false;
                     toast.error(await result.text());
                   } else {
+                    processRef.current = false;
                     toast.error("新規登録に失敗しました。再度お試しください。");
                   }
                 } catch (error) {
                   console.log(error);
+                  processRef.current = false;
                   toast.error("新規登録に失敗しました。再度お試しください。");
                 }
 

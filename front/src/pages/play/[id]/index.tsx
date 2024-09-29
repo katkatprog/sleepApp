@@ -23,6 +23,7 @@ const PlayPage = ({ soundInfo }: SoundInfoProps) => {
   const [favoriteCount, setFavoriteCount] = useState(soundInfo.favoriteCount); //いいね数はSSRで取得するが、いいねボタンを押した際変更されるので、stateでも保持する
   const [isCompletedLoadFav, setIsCompletedLoadFav] = useState(false);
   const router = useRouter();
+  const processRef = useRef(false);
 
   // 音声の全体時間が明らかになったとき、ステートにセットする
   useEffect(() => {
@@ -95,6 +96,11 @@ const PlayPage = ({ soundInfo }: SoundInfoProps) => {
             <button
               className="flex"
               onClick={async () => {
+                if (processRef.current) {
+                  return;
+                }
+                processRef.current = true;
+
                 try {
                   if (context.loginUser) {
                     await fetch(
@@ -116,6 +122,8 @@ const PlayPage = ({ soundInfo }: SoundInfoProps) => {
                   }
                 } catch (error) {
                   toast.info("いいねできませんでした。再度お試しください。");
+                } finally {
+                  processRef.current = false;
                 }
               }}
             >

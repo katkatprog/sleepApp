@@ -8,6 +8,7 @@ import { toast } from "react-toastify";
 const RequestPage = () => {
   const inputRef = useRef<HTMLInputElement>(null);
   const selectRef = useRef<HTMLSelectElement>(null);
+  const processRef = useRef(false);
   const [queueInfo, setQueueInfo] = useState<SoundReqQueue | null>(null);
   const [batchDate, setBatchDate] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -60,6 +61,11 @@ const RequestPage = () => {
                   <h1 className="text-2xl font-black">音声をリクエストする</h1>
                   <form
                     onSubmit={async (e) => {
+                      if (processRef.current) {
+                        return;
+                      }
+                      processRef.current = true;
+
                       e.preventDefault();
                       if (
                         !inputRef.current?.value ||
@@ -102,6 +108,8 @@ const RequestPage = () => {
                         toast.error(
                           "音声作成のリクエストに失敗しました。もう一度お試しください。",
                         );
+                      } finally {
+                        processRef.current = false;
                       }
                     }}
                   >
