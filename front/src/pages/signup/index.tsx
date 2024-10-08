@@ -58,28 +58,26 @@ const SignupPage = () => {
                   } else if (result.status === 400) {
                     processRef.current = false;
                     toast.error(await result.text());
+                    return;
                   } else {
-                    processRef.current = false;
-                    toast.error("新規登録に失敗しました。再度お試しください。");
+                    throw new Error();
                   }
-                } catch (error) {
-                  console.log(error);
-                  processRef.current = false;
-                  toast.error("新規登録に失敗しました。再度お試しください。");
-                }
 
-                // ログインユーザーの情報を取得する
-                try {
-                  const result = await fetch(
+                  // ログインユーザーの情報を取得する
+                  const result2 = await fetch(
                     `${process.env.NEXT_PUBLIC_API_URL}/login-user/`,
                     {
                       credentials: "include",
                     },
                   );
                   if (context.setLoginUser) {
-                    context.setLoginUser(await result.json());
+                    context.setLoginUser(await result2.json());
                   }
-                } catch (error) {}
+                } catch (error) {
+                  console.log(error);
+                  processRef.current = false;
+                  toast.error("新規登録に失敗しました。再度お試しください。");
+                }
               }}
             >
               <p className="mt-4">お名前</p>

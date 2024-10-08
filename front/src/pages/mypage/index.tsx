@@ -156,9 +156,7 @@ const MyPage = () => {
                             // 400番台エラーなら、返ってきたメッセージをそのまま表示
                             toast.error(await result.text());
                           } else {
-                            toast.error(
-                              "プロフィール編集できませんでした。もう一度お試しください。",
-                            );
+                            throw new Error();
                           }
                         } catch (error) {
                           toast.error(
@@ -263,10 +261,7 @@ const MyPage = () => {
                             processRef.current = false;
                             toast.error(await result.text());
                           } else {
-                            processRef.current = false;
-                            toast.error(
-                              "退会できませんでした。もう一度お試しください。",
-                            );
+                            throw new Error();
                           }
                         } catch (error) {
                           processRef.current = false;

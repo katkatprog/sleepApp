@@ -48,33 +48,32 @@ const LoginPage = () => {
                       credentials: "include",
                     },
                   );
-                  if (result.status === 200) {
-                    router.push(`/search`);
-                    toast.success("ログインしました。", { autoClose: 5000 });
-                  } else if (result.status === 400) {
+
+                  if (result.status === 400) {
                     processRef.current = false;
                     toast.error(await result.text());
-                  } else {
-                    processRef.current = false;
-                    toast.error("ログインに失敗しました。再度お試しください。");
+                    return;
+                  } else if (result.status !== 200) {
+                    throw new Error();
                   }
-                } catch (error) {
-                  processRef.current = false;
-                  toast.error("ログインに失敗しました。再度お試しください。");
-                }
 
-                // ログインユーザーの情報を取得する
-                try {
-                  const result = await fetch(
+                  // ログインユーザーの情報を取得する
+                  const result2 = await fetch(
                     `${process.env.NEXT_PUBLIC_API_URL}/login-user/`,
                     {
                       credentials: "include",
                     },
                   );
                   if (context.setLoginUser) {
-                    context.setLoginUser(await result.json());
+                    context.setLoginUser(await result2.json());
                   }
-                } catch (error) {}
+
+                  router.push(`/search`);
+                  toast.success("ログインしました。", { autoClose: 5000 });
+                } catch (error) {
+                  processRef.current = false;
+                  toast.error("ログインに失敗しました。再度お試しください。");
+                }
               }}
             >
               <p className="mt-4">メールアドレス</p>
@@ -149,36 +148,31 @@ const LoginPage = () => {
                       credentials: "include",
                     },
                   );
-                  if (result.status === 200) {
-                    router.push(`/search`);
-                    toast.success("ゲストログインしました。", {
-                      autoClose: 5000,
-                    });
-                  } else {
-                    processRef.current = false;
-                    toast.error(
-                      "ゲストログインに失敗しました。再度お試しください。",
-                    );
+                  if (result.status !== 200) {
+                    throw new Error();
                   }
-                } catch (error) {
-                  processRef.current = false;
-                  toast.error(
-                    "ゲストログインに失敗しました。再度お試しください。",
-                  );
-                }
 
-                // ログインユーザーの情報を取得する
-                try {
-                  const result = await fetch(
+                  // ログインユーザーの情報を取得する
+                  const result2 = await fetch(
                     `${process.env.NEXT_PUBLIC_API_URL}/login-user/`,
                     {
                       credentials: "include",
                     },
                   );
                   if (context.setLoginUser) {
-                    context.setLoginUser(await result.json());
+                    context.setLoginUser(await result2.json());
                   }
-                } catch (error) {}
+
+                  router.push(`/search`);
+                  toast.success("ゲストログインしました。", {
+                    autoClose: 5000,
+                  });
+                } catch (error) {
+                  processRef.current = false;
+                  toast.error(
+                    "ゲストログインに失敗しました。再度お試しください。",
+                  );
+                }
               }}
             >
               ゲストログイン

@@ -97,12 +97,13 @@ const RequestPage = () => {
                             autoClose: 5000,
                           });
                           fetchOnLoad();
-                        } else if (Math.floor(result.status / 100) === 4) {
+                        } else if (
+                          400 <= Math.floor(result.status) &&
+                          Math.floor(result.status) < 500
+                        ) {
                           toast.error(await result.text());
                         } else {
-                          toast.error(
-                            "音声作成のリクエストに失敗しました。もう一度お試しください。",
-                          );
+                          throw new Error();
                         }
                       } catch (error) {
                         toast.error(
