@@ -1,5 +1,5 @@
 import { useRouter } from "next/router";
-import React, { useContext } from "react";
+import React, { useContext, useRef } from "react";
 import { toast } from "react-toastify";
 import { LoginUserContext } from "../pages/_app";
 import { LogoutIcon } from "./icons/LogoutIcon";
@@ -7,11 +7,17 @@ import { LogoutIcon } from "./icons/LogoutIcon";
 export const LogoutButton = () => {
   const context = useContext(LoginUserContext);
   const router = useRouter();
+  const processRef = useRef(false);
 
   return (
     <button
       className="flex items-center lg:mt-4"
       onClick={async () => {
+        if (processRef.current) {
+          return;
+        }
+        processRef.current = true;
+
         try {
           const result = await fetch(
             `${process.env.NEXT_PUBLIC_API_URL}/auth/logout/`,
@@ -31,9 +37,10 @@ export const LogoutButton = () => {
               context.setLoginUser(null);
             }
           } else {
-            toast.error("ログアウトに失敗しました。再度お試しください。");
+            throw new Error();
           }
         } catch (error) {
+          processRef.current = false;
           toast.error("ログアウトに失敗しました。再度お試しください。");
         }
       }}

@@ -20,6 +20,7 @@ const MyPage = () => {
   const router = useRouter();
   const [mode, setMode] = useState<"normal" | "edit" | "delete">("normal");
   const [showPassword, setShowPassword] = useState(false);
+  const processRef = useRef(false);
 
   return (
     <Layout>
@@ -59,6 +60,11 @@ const MyPage = () => {
                     <button
                       className="mt-6 border-green-400 border-2 text-green-400 hover:bg-neutral-700 font-bold px-12 py-2 rounded-md transition w-full"
                       onClick={async () => {
+                        if (processRef.current) {
+                          return;
+                        }
+                        processRef.current = true;
+
                         try {
                           const result = await fetch(
                             `${process.env.NEXT_PUBLIC_API_URL}/auth/logout/`,
@@ -80,11 +86,10 @@ const MyPage = () => {
                               context.setLoginUser(null);
                             }
                           } else {
-                            toast.error(
-                              "ログアウトに失敗しました。再度お試しください。",
-                            );
+                            throw new Error();
                           }
                         } catch (error) {
+                          processRef.current = false;
                           toast.error(
                             "ログアウトに失敗しました。再度お試しください。",
                           );
@@ -111,6 +116,11 @@ const MyPage = () => {
                   <>
                     <form
                       onSubmit={async (e) => {
+                        if (processRef.current) {
+                          return;
+                        }
+                        processRef.current = true;
+
                         e.preventDefault();
 
                         if (!context.loginUser || !context.setLoginUser) {
@@ -146,14 +156,14 @@ const MyPage = () => {
                             // 400番台エラーなら、返ってきたメッセージをそのまま表示
                             toast.error(await result.text());
                           } else {
-                            toast.error(
-                              "プロフィール編集できませんでした。もう一度お試しください。",
-                            );
+                            throw new Error();
                           }
                         } catch (error) {
                           toast.error(
                             "プロフィール編集できませんでした。もう一度お試しください。",
                           );
+                        } finally {
+                          processRef.current = false;
                         }
                       }}
                     >
@@ -210,6 +220,11 @@ const MyPage = () => {
                     </p>
                     <form
                       onSubmit={async (e) => {
+                        if (processRef.current) {
+                          return;
+                        }
+                        processRef.current = true;
+
                         e.preventDefault();
 
                         if (!context.loginUser || !context.setLoginUser) {
@@ -243,13 +258,13 @@ const MyPage = () => {
                             router.push("/");
                           } else if (Math.floor(result.status / 100) === 4) {
                             // 400番台エラーなら、返ってきたメッセージをそのまま表示
+                            processRef.current = false;
                             toast.error(await result.text());
                           } else {
-                            toast.error(
-                              "退会できませんでした。もう一度お試しください。",
-                            );
+                            throw new Error();
                           }
                         } catch (error) {
+                          processRef.current = false;
                           toast.error(
                             "退会できませんでした。もう一度お試しください。",
                           );
