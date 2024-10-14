@@ -26,16 +26,18 @@ const FavoritePage = () => {
         },
       );
 
-      if (res.status === 401) {
+      if (res.status === 200) {
+        const data = await res.json();
+        setSoundsList(data.soundsList);
+        setTotalPages(data.totalPages);
+        setIsLoading(false);
+      } else if (res.status === 401) {
         toast.info("ログインが必要です。");
         router.push("/login?redirect_to=favorite");
-        return;
+      } else if (res.status === 404 || res.status === 400) {
+        toast.warn("このページ番号は存在しません。");
+        router.push("/favorite");
       }
-
-      const data = await res.json();
-      setSoundsList(data.soundsList);
-      setTotalPages(data.totalPages);
-      setIsLoading(false);
     })();
 
     // 第2引数の配列
