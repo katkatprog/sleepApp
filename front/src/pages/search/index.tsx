@@ -7,11 +7,10 @@ import { GetServerSideProps } from "next";
 import Head from "next/head";
 import Image from "next/image";
 import Link from "next/link";
-import { notFound } from "next/navigation";
 import { useRouter } from "next/router";
 import { useRef } from "react";
 
-const SearchPage = (props: SoundsListProps) => {
+const SearchPage = ({ soundsList, totalPages }: SSRProps) => {
   const router = useRouter();
   const currentPage = Number(router.query.page || 1);
   const inputRef = useRef<HTMLInputElement>(null);
@@ -60,10 +59,10 @@ const SearchPage = (props: SoundsListProps) => {
         </select>
       </form>
 
-      {props.soundsList.length === 0 ? (
+      {soundsList.length === 0 ? (
         <h1 className="text-center">該当する結果が見つかりませんでした。</h1>
       ) : (
-        props.soundsList.map((sound) => (
+        soundsList.map((sound) => (
           <Link href={`/play/${sound.id}`} key={sound.id}>
             <div className="h-20 px-8 pt-2 border-b flex justify-between items-start border-neutral-700 hover:bg-neutral-700 transition">
               <div className="flex pt-2">
@@ -110,8 +109,8 @@ const SearchPage = (props: SoundsListProps) => {
               <ArrowLongLeftIcon propClassName=""></ArrowLongLeftIcon>
             </button>
           )}
-          {`${currentPage} / ${props.totalPages}`}
-          {currentPage < props.totalPages && (
+          {`${currentPage} / ${totalPages}`}
+          {currentPage < totalPages && (
             <button
               className="rounded-md px-2 py-2 border border-neutral-700 hover:bg-neutral-700 transition ml-4"
               onClick={() => {
@@ -134,12 +133,12 @@ const SearchPage = (props: SoundsListProps) => {
 
 export default SearchPage;
 
-export const getServerSideProps: GetServerSideProps<SoundsListProps> = async (
-  context,
+export const getServerSideProps: GetServerSideProps<SSRProps> = async (
+  ssrCtx,
 ) => {
   // APIから音声リストを取得
   const result = await fetch(
-    `${process.env.NEXT_PUBLIC_API_URL}/sound-info/search?page=${context.query?.page || 1}&q=${context.query?.q || ""}&sort=${context.query?.sort || "created"}`,
+    `${process.env.NEXT_PUBLIC_API_URL}/sound-info/search?page=${ssrCtx.query?.page || 1}&q=${ssrCtx.query?.q || ""}&sort=${ssrCtx.query?.sort || "created"}`,
   );
 
   if (result.status === 404) {
@@ -149,7 +148,7 @@ export const getServerSideProps: GetServerSideProps<SoundsListProps> = async (
     throw new Error("Something went wrong...");
   }
 
-  const response: SoundsListProps = await result.json();
+  const response: SSRProps = await result.json();
 
   return {
     props: {
@@ -159,7 +158,7 @@ export const getServerSideProps: GetServerSideProps<SoundsListProps> = async (
   };
 };
 
-interface SoundsListProps {
+interface SSRProps {
   soundsList: SoundInfo[];
   totalPages: number;
 }

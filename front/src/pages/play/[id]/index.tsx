@@ -5,14 +5,13 @@ import Image from "next/image";
 import React, { useContext, useEffect, useRef, useState } from "react";
 import { SoundInfo } from "@prisma/client";
 import { Layout } from "@/components/Layout";
-import { UserIcon } from "@/components/icons/UserIcon";
 import { LoginUserContext } from "@/pages/_app";
 import { useRouter } from "next/router";
 import { HeartIcon } from "@/components/icons/HeartIcon";
 import { toast } from "react-toastify";
 import Head from "next/head";
 
-const PlayPage = ({ soundInfo }: SoundInfoProps) => {
+const PlayPage = ({ soundInfo }: SSRProps) => {
   const audioRef = useRef<HTMLAudioElement>(null);
   const rangeRef = useRef<HTMLInputElement>(null);
   const context = useContext(LoginUserContext);
@@ -213,12 +212,12 @@ const PlayPage = ({ soundInfo }: SoundInfoProps) => {
 };
 export default PlayPage;
 
-export const getServerSideProps: GetServerSideProps<SoundInfoProps> = async (
-  context,
+export const getServerSideProps: GetServerSideProps<SSRProps> = async (
+  ssrCtx,
 ) => {
   // APIから音声情報を取得
   const result = await fetch(
-    `${process.env.NEXT_PUBLIC_API_URL}/sound-info/single/${context.params?.id}`,
+    `${process.env.NEXT_PUBLIC_API_URL}/sound-info/single/${ssrCtx.params?.id}`,
   );
 
   if (result.status === 404) {
@@ -268,7 +267,7 @@ export const getServerSideProps: GetServerSideProps<SoundInfoProps> = async (
   };
 };
 
-interface SoundInfoProps {
+interface SSRProps {
   soundInfo: {
     name: string;
     createdAt: Date;
