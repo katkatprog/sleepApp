@@ -119,7 +119,8 @@ const PlayPage = ({ soundInfo }: SSRProps) => {
                     );
                     setIsFavorite(() => !isFavorite);
                   } else {
-                    toast.info("いいねするにはログインしてください。");
+                    toast.info("いいねするにはログインが必要です。");
+                    router.push(`/login?redirect_to=${router.query.id}`);
                   }
                 } catch (error) {
                   toast.info("いいねできませんでした。再度お試しください。");

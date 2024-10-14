@@ -23,6 +23,7 @@ const RequestPage = () => {
       );
 
       if (res.status === 401) {
+        toast.info("ログインが必要です。");
         router.push("/login?redirect_to=request");
         return;
       }

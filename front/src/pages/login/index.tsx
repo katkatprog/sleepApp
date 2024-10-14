@@ -68,10 +68,18 @@ const LoginPage = () => {
                     userCtx.setLoginUser(await res2.json());
                   }
 
-                  if (typeof router.query.redirect_to === "string") {
-                    router.push(router.query.redirect_to);
+                  if (
+                    typeof router.query.redirect_to === "string" &&
+                    !isNaN(Number(router.query.redirect_to))
+                  ) {
+                    // redirect_toが数値の場合、音声再生ページに移動
+                    router.push(`/play/${router.query.redirect_to}`);
+                  } else if (typeof router.query.redirect_to === "string") {
+                    // redirect_toで指定されたページに移動
+                    router.push(`/${router.query.redirect_to}`);
                   } else {
-                    router.push(`search`);
+                    // redirect_toの指定が無ければ検索ページに移動
+                    router.push(`/search`);
                   }
                   toast.success("ログインしました。", { autoClose: 5000 });
                 } catch (error) {
@@ -167,10 +175,18 @@ const LoginPage = () => {
                     userCtx.setLoginUser(await res2.json());
                   }
 
-                  if (typeof router.query.redirect_to === "string") {
-                    router.push(router.query.redirect_to);
+                  if (
+                    typeof router.query.redirect_to === "string" &&
+                    !isNaN(Number(router.query.redirect_to))
+                  ) {
+                    // redirect_toが数値の場合、音声再生ページに移動
+                    router.push(`/play/${router.query.redirect_to}`);
+                  } else if (typeof router.query.redirect_to === "string") {
+                    // redirect_toで指定されたページに移動
+                    router.push(`/${router.query.redirect_to}`);
                   } else {
-                    router.push(`search`);
+                    // redirect_toの指定が無ければ検索ページに移動
+                    router.push(`/search`);
                   }
                   toast.success("ゲストログインしました。", {
                     autoClose: 5000,

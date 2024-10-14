@@ -7,6 +7,7 @@ import { ArrowLongLeftIcon } from "@/components/icons/ArrowLongLeftIcon";
 import { ArrowLongRightIcon } from "@/components/icons/ArrowLongRightIcon";
 import { useRouter } from "next/router";
 import Head from "next/head";
+import { toast } from "react-toastify";
 
 const FavoritePage = () => {
   const router = useRouter();
@@ -27,6 +28,7 @@ const FavoritePage = () => {
       );
 
       if (res.status === 401) {
+        toast.info("ログインが必要です。");
         router.push("/login?redirect_to=favorite");
         return;
       }
