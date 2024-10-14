@@ -71,7 +71,7 @@ const MyPage = () => {
                         processRef.current = true;
 
                         try {
-                          const result = await fetch(
+                          const res = await fetch(
                             `${process.env.NEXT_PUBLIC_API_URL}/auth/logout/`,
                             {
                               method: "POST",
@@ -81,7 +81,7 @@ const MyPage = () => {
                               credentials: "include",
                             },
                           );
-                          if (result.status === 200) {
+                          if (res.status === 200) {
                             router.push("/");
                             toast.success("ログアウトしました。", {
                               autoClose: 5000,
@@ -134,7 +134,7 @@ const MyPage = () => {
                         }
 
                         try {
-                          const result = await fetch(
+                          const res = await fetch(
                             `${process.env.NEXT_PUBLIC_API_URL}/login-user`,
                             {
                               method: "PUT",
@@ -148,18 +148,18 @@ const MyPage = () => {
                               }),
                             },
                           );
-                          if (result.status === 200) {
+                          if (res.status === 200) {
                             // 編集モードの終了、userCtxを最新のログインユーザー情報で書き換える
                             toast.success("プロフィールを編集しました。", {
                               autoClose: 5000,
                             });
                             setMode("normal");
                             userCtx.setLoginUser(
-                              (await result.json()) as LoginUser | null,
+                              (await res.json()) as LoginUser | null,
                             );
-                          } else if (Math.floor(result.status / 100) === 4) {
+                          } else if (Math.floor(res.status / 100) === 4) {
                             // 400番台エラーなら、返ってきたメッセージをそのまま表示
-                            toast.error(await result.text());
+                            toast.error(await res.text());
                           } else {
                             throw new Error();
                           }
@@ -238,7 +238,7 @@ const MyPage = () => {
                         }
 
                         try {
-                          const result = await fetch(
+                          const res = await fetch(
                             `${process.env.NEXT_PUBLIC_API_URL}/login-user`,
                             {
                               method: "DELETE",
@@ -251,7 +251,7 @@ const MyPage = () => {
                               }),
                             },
                           );
-                          if (result.status === 200) {
+                          if (res.status === 200) {
                             // userCtxをクリア、トップページに移動
                             toast.success(
                               "退会しました。またのご利用をお待ちしております。",
@@ -261,10 +261,10 @@ const MyPage = () => {
                             );
                             userCtx.setLoginUser(null);
                             router.push("/");
-                          } else if (Math.floor(result.status / 100) === 4) {
+                          } else if (Math.floor(res.status / 100) === 4) {
                             // 400番台エラーなら、返ってきたメッセージをそのまま表示
                             processRef.current = false;
-                            toast.error(await result.text());
+                            toast.error(await res.text());
                           } else {
                             throw new Error();
                           }

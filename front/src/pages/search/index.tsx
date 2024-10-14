@@ -137,23 +137,23 @@ export const getServerSideProps: GetServerSideProps<SSRProps> = async (
   ssrCtx,
 ) => {
   // APIから音声リストを取得
-  const result = await fetch(
+  const res = await fetch(
     `${process.env.NEXT_PUBLIC_API_URL}/sound-info/search?page=${ssrCtx.query?.page || 1}&q=${ssrCtx.query?.q || ""}&sort=${ssrCtx.query?.sort || "created"}`,
   );
 
-  if (result.status === 404) {
+  if (res.status === 404) {
     return { notFound: true };
   }
-  if (result.status !== 200) {
+  if (res.status !== 200) {
     throw new Error("Something went wrong...");
   }
 
-  const response: SSRProps = await result.json();
+  const data: SSRProps = await res.json();
 
   return {
     props: {
-      soundsList: response.soundsList,
-      totalPages: response.totalPages,
+      soundsList: data.soundsList,
+      totalPages: data.totalPages,
     },
   };
 };

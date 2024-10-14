@@ -36,13 +36,13 @@ const PlayPage = ({ soundInfo }: SSRProps) => {
     (async () => {
       // ログインしているなら呼ぶ
       if (userCtx.loginUser) {
-        const result = await fetch(
+        const res = await fetch(
           `${process.env.NEXT_PUBLIC_API_URL}/sound-favorite/${router.query.id}/`,
           {
             credentials: "include",
           },
         );
-        setIsFavorite((await result.json()).status as boolean);
+        setIsFavorite((await res.json()).status as boolean);
       }
       setIsCompletedLoadFav(true);
     })();
@@ -216,14 +216,14 @@ export const getServerSideProps: GetServerSideProps<SSRProps> = async (
   ssrCtx,
 ) => {
   // APIから音声情報を取得
-  const result = await fetch(
+  const res = await fetch(
     `${process.env.NEXT_PUBLIC_API_URL}/sound-info/single/${ssrCtx.params?.id}`,
   );
 
-  if (result.status === 404) {
+  if (res.status === 404) {
     return { notFound: true };
   }
-  if (result.status !== 200) {
+  if (res.status !== 200) {
     throw new Error("Something went wrong...");
   }
 
@@ -234,7 +234,7 @@ export const getServerSideProps: GetServerSideProps<SSRProps> = async (
       image: string | null;
     } | null;
     SoundFavorite: { userId: number }[];
-  } = await result.json();
+  } = await res.json();
 
   // 中央に表示する画像を決定
   let imageUrl: string;

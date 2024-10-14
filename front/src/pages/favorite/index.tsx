@@ -19,21 +19,21 @@ const FavoritePage = () => {
     // async, awaitを使うため、即時実行関数の形にする
     (async () => {
       // ログインしているなら呼ぶ
-      const result = await fetch(
+      const res = await fetch(
         `${process.env.NEXT_PUBLIC_API_URL}/sound-favorite?page=${currentPage}`,
         {
           credentials: "include",
         },
       );
 
-      if (result.status === 401) {
+      if (res.status === 401) {
         router.push("/login");
         return;
       }
 
-      const resultJson = await result.json();
-      setSoundsList(resultJson.soundsList);
-      setTotalPages(resultJson.totalPages);
+      const data = await res.json();
+      setSoundsList(data.soundsList);
+      setTotalPages(data.totalPages);
       setIsLoading(false);
     })();
 
