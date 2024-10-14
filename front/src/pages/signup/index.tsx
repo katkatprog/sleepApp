@@ -51,6 +51,7 @@ const SignupPage = () => {
                     },
                   );
                   if (res.status === 200) {
+                    toast.dismiss(); // 現在出ているメッセージをclose
                     toast.success("新規登録しました。どうぞお楽しみ下さい。", {
                       autoClose: 5000,
                     });
