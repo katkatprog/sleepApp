@@ -35,22 +35,24 @@ const PlayPage = ({ soundInfo }: SSRProps) => {
     // async, awaitを使うため、即時実行関数の形にする
     (async () => {
       // ログインしているなら呼ぶ
-      if (userCtx.loginUser) {
-        const res = await fetch(
-          `${process.env.NEXT_PUBLIC_API_URL}/sound-favorite/${router.query.id}/`,
-          {
-            credentials: "include",
-          },
-        );
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/sound-favorite/${router.query.id}/`,
+        {
+          credentials: "include",
+        },
+      );
+
+      // ステータスが200の場合のみいいね状態をstateに格納、他のステータスの場合はそのまま(falseのまま)
+      if (res.status === 200) {
         setIsFavorite((await res.json()).status as boolean);
       }
       setIsCompletedLoadFav(true);
     })();
 
     // 第2引数の配列
-    // リロード時を考え、ログインユーザーがセットされたときに実行されるようにuserCtx.loginUserを指定
-    // また、別の音声再生ページに遷移したときに実行されるようにrouter.query.id（パスパラメータ）を指定
-  }, [userCtx.loginUser, router.query.id]);
+    // 別の音声再生ページに遷移したときに実行されるようにrouter.query.id（パスパラメータ）を指定
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [router.query.id]);
 
   return (
     <Layout>
