@@ -8,17 +8,17 @@ import { HeartIcon } from "./icons/HeartIcon";
 import { LogoutButton } from "./LogoutButton";
 
 export const Footer = () => {
-  const context = useContext(LoginUserContext);
+  const userCtx = useContext(LoginUserContext);
 
   return (
     <footer className="h-20 bg-neutral-800 border-gray-300 border-t fixed w-full left-0 bottom-0 flex justify-center lg:hidden">
       <div className="h-14 flex items-center justify-around max-w-xl w-full">
-        {!context.isLoading && (
+        {!userCtx.isLoading && (
           <>
             <Link href={"/search"}>
               <SearchIcon propClassName="w-9 h-9 p-1 rounded-full stroke-2"></SearchIcon>
             </Link>
-            {context.loginUser && (
+            {userCtx.loginUser && (
               <>
                 <Link href={"/request"}>
                   <PlusIcon prosClassName="w-9 h-9 p-1 rounded-full stroke-2"></PlusIcon>
@@ -28,7 +28,7 @@ export const Footer = () => {
                 </Link>
               </>
             )}
-            {context.loginUser ? (
+            {userCtx.loginUser ? (
               // ログイン状態
               <LogoutButton></LogoutButton>
             ) : (

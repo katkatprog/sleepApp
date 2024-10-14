@@ -5,17 +5,16 @@ import Image from "next/image";
 import React, { useContext, useEffect, useRef, useState } from "react";
 import { SoundInfo } from "@prisma/client";
 import { Layout } from "@/components/Layout";
-import { UserIcon } from "@/components/icons/UserIcon";
 import { LoginUserContext } from "@/pages/_app";
 import { useRouter } from "next/router";
 import { HeartIcon } from "@/components/icons/HeartIcon";
 import { toast } from "react-toastify";
 import Head from "next/head";
 
-const PlayPage = ({ soundInfo }: SoundInfoProps) => {
+const PlayPage = ({ soundInfo }: SSRProps) => {
   const audioRef = useRef<HTMLAudioElement>(null);
   const rangeRef = useRef<HTMLInputElement>(null);
-  const context = useContext(LoginUserContext);
+  const userCtx = useContext(LoginUserContext);
   const [isPlaying, setIsPlaying] = useState(false);
   const [totalTime, setTotalTime] = useState("0:00");
   const [currentTime, setCurrentTime] = useState("0:00");
@@ -36,22 +35,22 @@ const PlayPage = ({ soundInfo }: SoundInfoProps) => {
     // async, awaitを使うため、即時実行関数の形にする
     (async () => {
       // ログインしているなら呼ぶ
-      if (context.loginUser) {
-        const result = await fetch(
+      if (userCtx.loginUser) {
+        const res = await fetch(
           `${process.env.NEXT_PUBLIC_API_URL}/sound-favorite/${router.query.id}/`,
           {
             credentials: "include",
           },
         );
-        setIsFavorite((await result.json()).status as boolean);
+        setIsFavorite((await res.json()).status as boolean);
       }
       setIsCompletedLoadFav(true);
     })();
 
     // 第2引数の配列
-    // リロード時を考え、ログインユーザーがセットされたときに実行されるようにcontext.loginUserを指定
+    // リロード時を考え、ログインユーザーがセットされたときに実行されるようにuserCtx.loginUserを指定
     // また、別の音声再生ページに遷移したときに実行されるようにrouter.query.id（パスパラメータ）を指定
-  }, [context.loginUser, router.query.id]);
+  }, [userCtx.loginUser, router.query.id]);
 
   return (
     <Layout>
@@ -102,7 +101,7 @@ const PlayPage = ({ soundInfo }: SoundInfoProps) => {
                 processRef.current = true;
 
                 try {
-                  if (context.loginUser) {
+                  if (userCtx.loginUser) {
                     await fetch(
                       `${process.env.NEXT_PUBLIC_API_URL}/sound-favorite/${router.query.id}/`,
                       {
@@ -213,18 +212,18 @@ const PlayPage = ({ soundInfo }: SoundInfoProps) => {
 };
 export default PlayPage;
 
-export const getServerSideProps: GetServerSideProps<SoundInfoProps> = async (
-  context,
+export const getServerSideProps: GetServerSideProps<SSRProps> = async (
+  ssrCtx,
 ) => {
   // APIから音声情報を取得
-  const result = await fetch(
-    `${process.env.NEXT_PUBLIC_API_URL}/sound-info/single/${context.params?.id}`,
+  const res = await fetch(
+    `${process.env.NEXT_PUBLIC_API_URL}/sound-info/single/${ssrCtx.params?.id}`,
   );
 
-  if (result.status === 404) {
+  if (res.status === 404) {
     return { notFound: true };
   }
-  if (result.status !== 200) {
+  if (res.status !== 200) {
     throw new Error("Something went wrong...");
   }
 
@@ -235,7 +234,7 @@ export const getServerSideProps: GetServerSideProps<SoundInfoProps> = async (
       image: string | null;
     } | null;
     SoundFavorite: { userId: number }[];
-  } = await result.json();
+  } = await res.json();
 
   // 中央に表示する画像を決定
   let imageUrl: string;
@@ -268,7 +267,7 @@ export const getServerSideProps: GetServerSideProps<SoundInfoProps> = async (
   };
 };
 
-interface SoundInfoProps {
+interface SSRProps {
   soundInfo: {
     name: string;
     createdAt: Date;

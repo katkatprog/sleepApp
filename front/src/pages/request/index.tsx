@@ -15,24 +15,24 @@ const RequestPage = () => {
   const [isLoading, setIsLoading] = useState(true);
   useEffect(() => {
     (async () => {
-      const result = await fetch(
+      const res = await fetch(
         `${process.env.NEXT_PUBLIC_API_URL}/sound-request`,
         {
           credentials: "include",
         },
       );
 
-      if (result.status === 401) {
+      if (res.status === 401) {
         router.push("/login");
         return;
       }
 
-      const resSoundRequest: {
+      const data: {
         queueInfo: SoundReqQueue | null;
         batchDate: string;
-      } = await result.json();
-      setQueueInfo(resSoundRequest.queueInfo);
-      setBatchDate(resSoundRequest.batchDate);
+      } = await res.json();
+      setQueueInfo(data.queueInfo);
+      setBatchDate(data.batchDate);
       setIsLoading(false);
     })();
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -82,7 +82,7 @@ const RequestPage = () => {
                       }
 
                       try {
-                        const result = await fetch(
+                        const res = await fetch(
                           `${process.env.NEXT_PUBLIC_API_URL}/sound-request`,
                           {
                             method: "POST",
@@ -99,13 +99,13 @@ const RequestPage = () => {
                           },
                         );
 
-                        if (result.status === 200) {
+                        if (res.status === 200) {
                           router.reload();
                         } else if (
-                          400 <= Math.floor(result.status) &&
-                          Math.floor(result.status) < 500
+                          400 <= Math.floor(res.status) &&
+                          Math.floor(res.status) < 500
                         ) {
-                          toast.error(await result.text());
+                          toast.error(await res.text());
                         } else {
                           throw new Error();
                         }

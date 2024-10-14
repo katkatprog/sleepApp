@@ -11,7 +11,7 @@ import { useRouter } from "next/router";
 import Head from "next/head";
 
 const MyPage = () => {
-  const context = useContext(LoginUserContext);
+  const userCtx = useContext(LoginUserContext);
   const nameRef = useRef<HTMLInputElement>(null);
   const emailRef = useRef<HTMLInputElement>(null);
   const passwordRef = useRef<HTMLInputElement>(null);
@@ -21,12 +21,12 @@ const MyPage = () => {
   const processRef = useRef(false);
 
   useEffect(() => {
-    if (!context.isLoading && !context.loginUser) {
+    if (!userCtx.isLoading && !userCtx.loginUser) {
       // 未ログイン（ユーザー情報取得が完了、かつその結果が空）の場合、ログインページに移動
       router.push("login");
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [context.isLoading]);
+  }, [userCtx.isLoading]);
 
   return (
     <Layout>
@@ -36,21 +36,21 @@ const MyPage = () => {
       <div className="px-8 pt-10">
         <div className="flex justify-center">
           <div className="flex-col max-w-xs w-full">
-            {!context.isLoading && context.loginUser && (
+            {!userCtx.isLoading && userCtx.loginUser && (
               <>
                 {mode === "normal" && (
                   <>
                     <h1 className="text-2xl font-black">
-                      {context.loginUser?.name}
+                      {userCtx.loginUser?.name}
                     </h1>
                     <div className="flex justify-center mt-4">
                       <UserIcon propClassName="w-32 h-32 text-neutral-800 bg-gray-300 rounded-full"></UserIcon>
                     </div>
                     <div className="flex mt-4">
                       <EmailIcon propClassName="w-6 h-6"></EmailIcon>
-                      <p className="ml-2">{context.loginUser?.email}</p>
+                      <p className="ml-2">{userCtx.loginUser?.email}</p>
                     </div>
-                    {context.loginUser.email !==
+                    {userCtx.loginUser.email !==
                       (process.env.NEXT_PUBLIC_GUEST_EMAIL ||
                         "guest@example.com") && (
                       <button
@@ -71,7 +71,7 @@ const MyPage = () => {
                         processRef.current = true;
 
                         try {
-                          const result = await fetch(
+                          const res = await fetch(
                             `${process.env.NEXT_PUBLIC_API_URL}/auth/logout/`,
                             {
                               method: "POST",
@@ -81,14 +81,14 @@ const MyPage = () => {
                               credentials: "include",
                             },
                           );
-                          if (result.status === 200) {
+                          if (res.status === 200) {
                             router.push("/");
                             toast.success("ログアウトしました。", {
                               autoClose: 5000,
                             });
-                            // contextのloginUserをnullに設定
-                            if (context.setLoginUser) {
-                              context.setLoginUser(null);
+                            // userCtxのloginUserをnullに設定
+                            if (userCtx.setLoginUser) {
+                              userCtx.setLoginUser(null);
                             }
                           } else {
                             throw new Error();
@@ -103,7 +103,7 @@ const MyPage = () => {
                     >
                       ログアウト
                     </button>
-                    {context.loginUser.email !==
+                    {userCtx.loginUser.email !==
                       (process.env.NEXT_PUBLIC_GUEST_EMAIL ||
                         "guest@example.com") && (
                       <button
@@ -128,13 +128,13 @@ const MyPage = () => {
 
                         e.preventDefault();
 
-                        if (!context.loginUser || !context.setLoginUser) {
-                          // contextの読み込みが完了していない場合は途中終了（特にエラーメッセージ等は出さない）
+                        if (!userCtx.loginUser || !userCtx.setLoginUser) {
+                          // userCtxの読み込みが完了していない場合は途中終了（特にエラーメッセージ等は出さない）
                           return;
                         }
 
                         try {
-                          const result = await fetch(
+                          const res = await fetch(
                             `${process.env.NEXT_PUBLIC_API_URL}/login-user`,
                             {
                               method: "PUT",
@@ -148,18 +148,18 @@ const MyPage = () => {
                               }),
                             },
                           );
-                          if (result.status === 200) {
-                            // 編集モードの終了、contextを最新のログインユーザー情報で書き換える
+                          if (res.status === 200) {
+                            // 編集モードの終了、userCtxを最新のログインユーザー情報で書き換える
                             toast.success("プロフィールを編集しました。", {
                               autoClose: 5000,
                             });
                             setMode("normal");
-                            context.setLoginUser(
-                              (await result.json()) as LoginUser | null,
+                            userCtx.setLoginUser(
+                              (await res.json()) as LoginUser | null,
                             );
-                          } else if (Math.floor(result.status / 100) === 4) {
+                          } else if (Math.floor(res.status / 100) === 4) {
                             // 400番台エラーなら、返ってきたメッセージをそのまま表示
-                            toast.error(await result.text());
+                            toast.error(await res.text());
                           } else {
                             throw new Error();
                           }
@@ -182,7 +182,7 @@ const MyPage = () => {
                         className="h-10 bg-neutral-800 border-2 border-neutral-700 placeholder:text-gray-600 rounded-lg pl-2 outline-none w-full"
                         placeholder="Input your name..."
                         required={true}
-                        defaultValue={context.loginUser.name}
+                        defaultValue={userCtx.loginUser.name}
                       />
 
                       <p className="mt-4">メールアドレス</p>
@@ -192,7 +192,7 @@ const MyPage = () => {
                         className="h-10 bg-neutral-800 border-2 border-neutral-700 placeholder:text-gray-600 rounded-lg pl-2 outline-none w-full"
                         placeholder="Input your email..."
                         required={true}
-                        defaultValue={context.loginUser.email}
+                        defaultValue={userCtx.loginUser.email}
                       />
                       <button
                         className="mt-6 bg-green-600 hover:bg-green-500 font-bold w-full py-2 rounded-md transition"
@@ -232,13 +232,13 @@ const MyPage = () => {
 
                         e.preventDefault();
 
-                        if (!context.loginUser || !context.setLoginUser) {
-                          // contextの読み込みが完了していない場合は途中終了（特にエラーメッセージ等は出さない）
+                        if (!userCtx.loginUser || !userCtx.setLoginUser) {
+                          // userCtxの読み込みが完了していない場合は途中終了（特にエラーメッセージ等は出さない）
                           return;
                         }
 
                         try {
-                          const result = await fetch(
+                          const res = await fetch(
                             `${process.env.NEXT_PUBLIC_API_URL}/login-user`,
                             {
                               method: "DELETE",
@@ -251,20 +251,20 @@ const MyPage = () => {
                               }),
                             },
                           );
-                          if (result.status === 200) {
-                            // contextをクリア、トップページに移動
+                          if (res.status === 200) {
+                            // userCtxをクリア、トップページに移動
                             toast.success(
                               "退会しました。またのご利用をお待ちしております。",
                               {
                                 autoClose: 5000,
                               },
                             );
-                            context.setLoginUser(null);
+                            userCtx.setLoginUser(null);
                             router.push("/");
-                          } else if (Math.floor(result.status / 100) === 4) {
+                          } else if (Math.floor(res.status / 100) === 4) {
                             // 400番台エラーなら、返ってきたメッセージをそのまま表示
                             processRef.current = false;
-                            toast.error(await result.text());
+                            toast.error(await res.text());
                           } else {
                             throw new Error();
                           }

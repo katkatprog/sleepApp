@@ -24,13 +24,13 @@ export default function App({ Component, pageProps }: AppProps) {
     // useEffect内でasync関数を実行するため、即時実行の形にしている
     (async () => {
       try {
-        const result = await fetch(
+        const res = await fetch(
           `${process.env.NEXT_PUBLIC_API_URL}/login-user/`,
           {
             credentials: "include",
           },
         );
-        setLoginUser(await result.json());
+        setLoginUser(await res.json());
       } catch (error) {
       } finally {
         setIsLoading(false);

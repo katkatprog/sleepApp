@@ -5,7 +5,7 @@ import { LoginUserContext } from "../pages/_app";
 import { LogoutIcon } from "./icons/LogoutIcon";
 
 export const LogoutButton = () => {
-  const context = useContext(LoginUserContext);
+  const userCtx = useContext(LoginUserContext);
   const router = useRouter();
   const processRef = useRef(false);
 
@@ -19,7 +19,7 @@ export const LogoutButton = () => {
         processRef.current = true;
 
         try {
-          const result = await fetch(
+          const res = await fetch(
             `${process.env.NEXT_PUBLIC_API_URL}/auth/logout/`,
             {
               method: "POST",
@@ -29,12 +29,12 @@ export const LogoutButton = () => {
               credentials: "include",
             },
           );
-          if (result.status === 200) {
+          if (res.status === 200) {
             router.push("/");
             toast.success("ログアウトしました。", { autoClose: 5000 });
-            // contextのloginUserをnullに設定
-            if (context.setLoginUser) {
-              context.setLoginUser(null);
+            // userCtxのloginUserをnullに設定
+            if (userCtx.setLoginUser) {
+              userCtx.setLoginUser(null);
             }
           } else {
             throw new Error();

@@ -13,7 +13,7 @@ const LoginPage = () => {
   const emailRef = useRef<HTMLInputElement>(null);
   const passwordRef = useRef<HTMLInputElement>(null);
   const [showPassword, setShowPassword] = useState(false);
-  const context = useContext(LoginUserContext);
+  const userCtx = useContext(LoginUserContext);
   const processRef = useRef(false);
 
   return (
@@ -34,7 +34,7 @@ const LoginPage = () => {
 
                 e.preventDefault();
                 try {
-                  const result = await fetch(
+                  const res = await fetch(
                     `${process.env.NEXT_PUBLIC_API_URL}/auth/login`,
                     {
                       method: "POST",
@@ -49,23 +49,23 @@ const LoginPage = () => {
                     },
                   );
 
-                  if (result.status === 400) {
+                  if (res.status === 400) {
                     processRef.current = false;
-                    toast.error(await result.text());
+                    toast.error(await res.text());
                     return;
-                  } else if (result.status !== 200) {
+                  } else if (res.status !== 200) {
                     throw new Error();
                   }
 
                   // ログインユーザーの情報を取得する
-                  const result2 = await fetch(
+                  const res2 = await fetch(
                     `${process.env.NEXT_PUBLIC_API_URL}/login-user/`,
                     {
                       credentials: "include",
                     },
                   );
-                  if (context.setLoginUser) {
-                    context.setLoginUser(await result2.json());
+                  if (userCtx.setLoginUser) {
+                    userCtx.setLoginUser(await res2.json());
                   }
 
                   router.push(`/search`);
@@ -138,7 +138,7 @@ const LoginPage = () => {
                 processRef.current = true;
 
                 try {
-                  const result = await fetch(
+                  const res = await fetch(
                     `${process.env.NEXT_PUBLIC_API_URL}/auth/guest-login`,
                     {
                       method: "POST",
@@ -148,19 +148,19 @@ const LoginPage = () => {
                       credentials: "include",
                     },
                   );
-                  if (result.status !== 200) {
+                  if (res.status !== 200) {
                     throw new Error();
                   }
 
                   // ログインユーザーの情報を取得する
-                  const result2 = await fetch(
+                  const res2 = await fetch(
                     `${process.env.NEXT_PUBLIC_API_URL}/login-user/`,
                     {
                       credentials: "include",
                     },
                   );
-                  if (context.setLoginUser) {
-                    context.setLoginUser(await result2.json());
+                  if (userCtx.setLoginUser) {
+                    userCtx.setLoginUser(await res2.json());
                   }
 
                   router.push(`/search`);
