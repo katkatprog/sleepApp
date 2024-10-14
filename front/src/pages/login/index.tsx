@@ -76,10 +76,10 @@ const LoginPage = () => {
                     router.push(`/play/${router.query.redirect_to}`);
                   } else if (typeof router.query.redirect_to === "string") {
                     // redirect_toで指定されたページに移動
-                    router.push(router.query.redirect_to);
+                    router.push(`/${router.query.redirect_to}`);
                   } else {
                     // redirect_toの指定が無ければ検索ページに移動
-                    router.push(`search`);
+                    router.push(`/search`);
                   }
                   toast.success("ログインしました。", { autoClose: 5000 });
                 } catch (error) {
@@ -183,10 +183,10 @@ const LoginPage = () => {
                     router.push(`/play/${router.query.redirect_to}`);
                   } else if (typeof router.query.redirect_to === "string") {
                     // redirect_toで指定されたページに移動
-                    router.push(router.query.redirect_to);
+                    router.push(`/${router.query.redirect_to}`);
                   } else {
                     // redirect_toの指定が無ければ検索ページに移動
-                    router.push(`search`);
+                    router.push(`/search`);
                   }
                   toast.success("ゲストログインしました。", {
                     autoClose: 5000,
