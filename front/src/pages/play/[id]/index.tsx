@@ -20,7 +20,7 @@ const PlayPage = ({ soundInfo }: SSRProps) => {
   const [currentTime, setCurrentTime] = useState("0:00");
   const [isFavorite, setIsFavorite] = useState(false);
   const [favoriteCount, setFavoriteCount] = useState(soundInfo.favoriteCount); //いいね数はSSRで取得するが、いいねボタンを押した際変更されるので、stateでも保持する
-  const [isCompletedLoadFav, setIsCompletedLoadFav] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const router = useRouter();
   const processRef = useRef(false);
 
@@ -46,7 +46,7 @@ const PlayPage = ({ soundInfo }: SSRProps) => {
       if (res.status === 200) {
         setIsFavorite((await res.json()).status as boolean);
       }
-      setIsCompletedLoadFav(true);
+      setIsLoading(false);
     })();
 
     // 第2引数の配列
@@ -93,7 +93,7 @@ const PlayPage = ({ soundInfo }: SSRProps) => {
         </div>
         <div className="flex justify-between">
           <p>{`${soundInfo.playCount} 回再生`}</p>
-          {isCompletedLoadFav && (
+          {!isLoading && (
             <button
               className="flex"
               onClick={async () => {
