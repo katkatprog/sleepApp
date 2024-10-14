@@ -23,7 +23,7 @@ const MyPage = () => {
   useEffect(() => {
     if (!userCtx.isLoading && !userCtx.loginUser) {
       // 未ログイン（ユーザー情報取得が完了、かつその結果が空）の場合、ログインページに移動
-      router.push("login");
+      router.push("/login?redirect_to=mypage");
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [userCtx.isLoading]);

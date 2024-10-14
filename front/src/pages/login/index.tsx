@@ -68,7 +68,11 @@ const LoginPage = () => {
                     userCtx.setLoginUser(await res2.json());
                   }
 
-                  router.push(`/search`);
+                  if (typeof router.query.redirect_to === "string") {
+                    router.push(router.query.redirect_to);
+                  } else {
+                    router.push(`search`);
+                  }
                   toast.success("ログインしました。", { autoClose: 5000 });
                 } catch (error) {
                   processRef.current = false;
@@ -163,7 +167,11 @@ const LoginPage = () => {
                     userCtx.setLoginUser(await res2.json());
                   }
 
-                  router.push(`/search`);
+                  if (typeof router.query.redirect_to === "string") {
+                    router.push(router.query.redirect_to);
+                  } else {
+                    router.push(`search`);
+                  }
                   toast.success("ゲストログインしました。", {
                     autoClose: 5000,
                   });

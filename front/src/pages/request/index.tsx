@@ -23,7 +23,7 @@ const RequestPage = () => {
       );
 
       if (res.status === 401) {
-        router.push("/login");
+        router.push("/login?redirect_to=request");
         return;
       }
 
