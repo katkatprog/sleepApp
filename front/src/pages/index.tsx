@@ -1,5 +1,4 @@
 import { Layout } from "@/components/Layout";
-import { LoginIcon } from "@/components/icons/LoginIcon";
 import { SearchIcon } from "@/components/icons/SearchIcon";
 import Head from "next/head";
 import Image from "next/image";
