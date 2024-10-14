@@ -1,4 +1,3 @@
-import { Layout } from "@/components/Layout";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { EyeSlashIcon } from "@/components/icons/EyeSlashIcon";
@@ -17,7 +16,7 @@ const LoginPage = () => {
   const processRef = useRef(false);
 
   return (
-    <Layout>
+    <>
       <Head>
         <title>ログイン / Prehnite</title>
       </Head>
@@ -206,7 +205,7 @@ const LoginPage = () => {
           </div>
         </div>
       </div>
-    </Layout>
+    </>
   );
 };
 

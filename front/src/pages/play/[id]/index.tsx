@@ -4,7 +4,6 @@ import { GetServerSideProps } from "next";
 import Image from "next/image";
 import React, { useContext, useEffect, useRef, useState } from "react";
 import { SoundInfo } from "@prisma/client";
-import { Layout } from "@/components/Layout";
 import { LoginUserContext } from "@/pages/_app";
 import { useRouter } from "next/router";
 import { HeartIcon } from "@/components/icons/HeartIcon";
@@ -55,7 +54,7 @@ const PlayPage = ({ soundInfo }: SSRProps) => {
   }, [router.query.id]);
 
   return (
-    <Layout>
+    <>
       <Head>
         <title>{`${soundInfo.name} / Prehnite`}</title>
       </Head>
@@ -210,7 +209,7 @@ const PlayPage = ({ soundInfo }: SSRProps) => {
           </div>
         </div>
       </div>
-    </Layout>
+    </>
   );
 };
 export default PlayPage;

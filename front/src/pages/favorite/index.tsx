@@ -1,4 +1,3 @@
-import { Layout } from "@/components/Layout";
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import { SoundInfo } from "@prisma/client";
@@ -45,7 +44,7 @@ const FavoritePage = () => {
   }, [currentPage]);
 
   return (
-    <Layout>
+    <>
       <Head>
         <title>いいねした音声 / Prehnite</title>
       </Head>
@@ -112,7 +111,7 @@ const FavoritePage = () => {
           </div>
         </>
       )}
-    </Layout>
+    </>
   );
 };
 
