@@ -5,7 +5,7 @@ import { LoginUserContext } from "../pages/_app";
 import { LogoutIcon } from "./icons/LogoutIcon";
 
 export const LogoutButton = () => {
-  const context = useContext(LoginUserContext);
+  const userCtx = useContext(LoginUserContext);
   const router = useRouter();
   const processRef = useRef(false);
 
@@ -32,9 +32,9 @@ export const LogoutButton = () => {
           if (result.status === 200) {
             router.push("/");
             toast.success("ログアウトしました。", { autoClose: 5000 });
-            // contextのloginUserをnullに設定
-            if (context.setLoginUser) {
-              context.setLoginUser(null);
+            // userCtxのloginUserをnullに設定
+            if (userCtx.setLoginUser) {
+              userCtx.setLoginUser(null);
             }
           } else {
             throw new Error();

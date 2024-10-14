@@ -10,11 +10,11 @@ import { UserIcon } from "./icons/UserIcon";
 import { LogoutButton } from "./LogoutButton";
 
 export const SideMenu = () => {
-  const context = useContext(LoginUserContext);
+  const userCtx = useContext(LoginUserContext);
 
   return (
     <aside className="flex-col items-start justify-between border-gray-300 border-r hidden lg:flex lg:min-w-48 h-screen sticky top-0">
-      {!context.isLoading && (
+      {!userCtx.isLoading && (
         <>
           <div className="mt-5">
             <Link href={"/"} className="flex items-center">
@@ -32,7 +32,7 @@ export const SideMenu = () => {
               <SearchIcon propClassName="w-9 h-9 p-1 rounded-full stroke-2"></SearchIcon>
               <p>音声を探す</p>
             </Link>
-            {context.loginUser && (
+            {userCtx.loginUser && (
               <>
                 <Link href={"/request"} className="mt-4 flex items-center">
                   <PlusIcon prosClassName="w-9 h-9 p-1 rounded-full stroke-2"></PlusIcon>
@@ -44,7 +44,7 @@ export const SideMenu = () => {
                 </Link>
               </>
             )}
-            {context.loginUser ? (
+            {userCtx.loginUser ? (
               // ログイン状態
               <LogoutButton></LogoutButton>
             ) : (
@@ -57,11 +57,11 @@ export const SideMenu = () => {
           </div>
 
           <div className="flex mb-10">
-            {context.loginUser ? (
+            {userCtx.loginUser ? (
               // ログイン状態
               <Link href={"/mypage"} className="flex items-center mt-48">
                 <UserIcon propClassName="w-7 h-7 text-neutral-800 bg-gray-300 rounded-full"></UserIcon>
-                <p className="ml-2">{context.loginUser.name}</p>
+                <p className="ml-2">{userCtx.loginUser.name}</p>
               </Link>
             ) : (
               // 未ログイン時はダミー要素

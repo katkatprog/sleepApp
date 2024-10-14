@@ -14,7 +14,7 @@ import Head from "next/head";
 const PlayPage = ({ soundInfo }: SSRProps) => {
   const audioRef = useRef<HTMLAudioElement>(null);
   const rangeRef = useRef<HTMLInputElement>(null);
-  const context = useContext(LoginUserContext);
+  const userCtx = useContext(LoginUserContext);
   const [isPlaying, setIsPlaying] = useState(false);
   const [totalTime, setTotalTime] = useState("0:00");
   const [currentTime, setCurrentTime] = useState("0:00");
@@ -35,7 +35,7 @@ const PlayPage = ({ soundInfo }: SSRProps) => {
     // async, awaitを使うため、即時実行関数の形にする
     (async () => {
       // ログインしているなら呼ぶ
-      if (context.loginUser) {
+      if (userCtx.loginUser) {
         const result = await fetch(
           `${process.env.NEXT_PUBLIC_API_URL}/sound-favorite/${router.query.id}/`,
           {
@@ -48,9 +48,9 @@ const PlayPage = ({ soundInfo }: SSRProps) => {
     })();
 
     // 第2引数の配列
-    // リロード時を考え、ログインユーザーがセットされたときに実行されるようにcontext.loginUserを指定
+    // リロード時を考え、ログインユーザーがセットされたときに実行されるようにuserCtx.loginUserを指定
     // また、別の音声再生ページに遷移したときに実行されるようにrouter.query.id（パスパラメータ）を指定
-  }, [context.loginUser, router.query.id]);
+  }, [userCtx.loginUser, router.query.id]);
 
   return (
     <Layout>
@@ -101,7 +101,7 @@ const PlayPage = ({ soundInfo }: SSRProps) => {
                 processRef.current = true;
 
                 try {
-                  if (context.loginUser) {
+                  if (userCtx.loginUser) {
                     await fetch(
                       `${process.env.NEXT_PUBLIC_API_URL}/sound-favorite/${router.query.id}/`,
                       {

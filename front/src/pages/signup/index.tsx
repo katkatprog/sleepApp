@@ -14,7 +14,7 @@ const SignupPage = () => {
   const emailRef = useRef<HTMLInputElement>(null);
   const passwordRef = useRef<HTMLInputElement>(null);
   const [showPassword, setShowPassword] = useState(false);
-  const context = useContext(LoginUserContext);
+  const userCtx = useContext(LoginUserContext);
   const processRef = useRef(false);
 
   return (
@@ -70,8 +70,8 @@ const SignupPage = () => {
                       credentials: "include",
                     },
                   );
-                  if (context.setLoginUser) {
-                    context.setLoginUser(await result2.json());
+                  if (userCtx.setLoginUser) {
+                    userCtx.setLoginUser(await result2.json());
                   }
                 } catch (error) {
                   console.log(error);
