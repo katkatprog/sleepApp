@@ -13,8 +13,8 @@ import {
 export const LoginUserContext = createContext<{
   loginUser: LoginUser | null;
   setLoginUser: Dispatch<SetStateAction<LoginUser | null>> | null;
-  isLoadingUser: boolean;
-}>({ loginUser: null, setLoginUser: null, isLoadingUser: true });
+  isLoading: boolean;
+}>({ loginUser: null, setLoginUser: null, isLoading: true });
 
 export default function App({ Component, pageProps }: AppProps) {
   // 画面ロード時にログインユーザーを取得し、設定する
@@ -47,9 +47,7 @@ export default function App({ Component, pageProps }: AppProps) {
         style={{ width: "100%", maxWidth: "500px" }}
       />
       {/* Layoutで囲われている全ページでLoginUserをグローバル的に使えるように設定 */}
-      <LoginUserContext.Provider
-        value={{ loginUser, setLoginUser, isLoadingUser: isLoading }}
-      >
+      <LoginUserContext.Provider value={{ loginUser, setLoginUser, isLoading }}>
         <Component {...pageProps} />
       </LoginUserContext.Provider>
     </>

@@ -21,12 +21,12 @@ const MyPage = () => {
   const processRef = useRef(false);
 
   useEffect(() => {
-    if (!context.isLoadingUser && !context.loginUser) {
+    if (!context.isLoading && !context.loginUser) {
       // 未ログイン（ユーザー情報取得が完了、かつその結果が空）の場合、ログインページに移動
       router.push("login");
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [context.isLoadingUser]);
+  }, [context.isLoading]);
 
   return (
     <Layout>
@@ -36,7 +36,7 @@ const MyPage = () => {
       <div className="px-8 pt-10">
         <div className="flex justify-center">
           <div className="flex-col max-w-xs w-full">
-            {!context.isLoadingUser && context.loginUser && (
+            {!context.isLoading && context.loginUser && (
               <>
                 {mode === "normal" && (
                   <>
