@@ -1,9 +1,7 @@
 import { Layout } from "@/components/Layout";
-import React, { useContext, useRef, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import { LoginUserContext } from "../_app";
 import { EmailIcon } from "@/components/icons/EmailIcon";
-import Link from "next/link";
-import { LoginIcon } from "@/components/icons/LoginIcon";
 import { UserIcon } from "@/components/icons/UserIcon";
 import { toast } from "react-toastify";
 import { User } from "@prisma/client";
@@ -22,6 +20,14 @@ const MyPage = () => {
   const [showPassword, setShowPassword] = useState(false);
   const processRef = useRef(false);
 
+  useEffect(() => {
+    if (!context.isLoading && !context.loginUser) {
+      // 未ログイン（ユーザー情報取得が完了、かつその結果が空）の場合、ログインページに移動
+      router.push("login");
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [context.isLoading]);
+
   return (
     <Layout>
       <Head>
@@ -30,8 +36,7 @@ const MyPage = () => {
       <div className="px-8 pt-10">
         <div className="flex justify-center">
           <div className="flex-col max-w-xs w-full">
-            {context.loginUser ? (
-              // ログイン状態
+            {!context.isLoading && context.loginUser && (
               <>
                 {mode === "normal" && (
                   <>
@@ -318,20 +323,7 @@ const MyPage = () => {
                   </>
                 )}
               </>
-            ) : (
-              // 未ログイン状態
-              <>
-                <p>ログインしてください</p>
-                <div className="flex items-center justify-center">
-                  <Link href={"/login"}>
-                    <button className="mt-6 bg-green-600 hover:bg-green-500 font-bold px-12 py-2 rounded-md transition">
-                      <LoginIcon propClassName="w-7 h-7 stroke-2 inline-block mr-2"></LoginIcon>
-                      ログイン
-                    </button>
-                  </Link>
-                </div>
-              </>
-            )}{" "}
+            )}
           </div>
         </div>
       </div>

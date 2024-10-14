@@ -1,7 +1,7 @@
 import { Layout } from "@/components/Layout";
-import { Loading } from "@/components/Loading";
 import { SoundReqQueue } from "@prisma/client";
 import Head from "next/head";
+import { useRouter } from "next/router";
 import React, { useEffect, useRef, useState } from "react";
 import { toast } from "react-toastify";
 
@@ -9,34 +9,41 @@ const RequestPage = () => {
   const inputRef = useRef<HTMLInputElement>(null);
   const selectRef = useRef<HTMLSelectElement>(null);
   const processRef = useRef(false);
+  const router = useRouter();
   const [queueInfo, setQueueInfo] = useState<SoundReqQueue | null>(null);
   const [batchDate, setBatchDate] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
-  const fetchOnLoad = async () => {
-    const result = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/sound-request`,
-      {
-        credentials: "include",
-      },
-    );
-    const resSoundRequest: {
-      queueInfo: SoundReqQueue | null;
-      batchDate: string;
-    } = await result.json();
-    setQueueInfo(resSoundRequest.queueInfo);
-    setBatchDate(resSoundRequest.batchDate);
-    setIsLoading(false);
-  };
   useEffect(() => {
-    fetchOnLoad();
+    (async () => {
+      const result = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/sound-request`,
+        {
+          credentials: "include",
+        },
+      );
+
+      if (result.status === 401) {
+        router.push("/login");
+        return;
+      }
+
+      const resSoundRequest: {
+        queueInfo: SoundReqQueue | null;
+        batchDate: string;
+      } = await result.json();
+      setQueueInfo(resSoundRequest.queueInfo);
+      setBatchDate(resSoundRequest.batchDate);
+      setIsLoading(false);
+    })();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
-    <Loading isLoading={isLoading}>
+    <Layout>
       <Head>
         <title>音声をリクエストする / Prehnite</title>
       </Head>
-      <Layout>
+      {!isLoading && (
         <div className="px-8 pt-10">
           <div className="flex justify-center">
             <div className="flex-col max-w-xs w-full">
@@ -93,10 +100,7 @@ const RequestPage = () => {
                         );
 
                         if (result.status === 200) {
-                          toast.success("音声作成をリクエストしました。", {
-                            autoClose: 5000,
-                          });
-                          fetchOnLoad();
+                          router.reload();
                         } else if (
                           400 <= Math.floor(result.status) &&
                           Math.floor(result.status) < 500
@@ -157,8 +161,8 @@ const RequestPage = () => {
             </div>
           </div>
         </div>
-      </Layout>
-    </Loading>
+      )}
+    </Layout>
   );
 };
 
