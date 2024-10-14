@@ -5,21 +5,23 @@ import Image from "next/image";
 import React, { useContext, useEffect, useRef, useState } from "react";
 import { SoundInfo } from "@prisma/client";
 import { Layout } from "@/components/Layout";
+import { UserIcon } from "@/components/icons/UserIcon";
 import { LoginUserContext } from "@/pages/_app";
 import { useRouter } from "next/router";
 import { HeartIcon } from "@/components/icons/HeartIcon";
 import { toast } from "react-toastify";
 import Head from "next/head";
 
-const PlayPage = ({ soundInfo, isFavoriteInit }: SoundInfoProps) => {
+const PlayPage = ({ soundInfo }: SoundInfoProps) => {
   const audioRef = useRef<HTMLAudioElement>(null);
   const rangeRef = useRef<HTMLInputElement>(null);
   const context = useContext(LoginUserContext);
   const [isPlaying, setIsPlaying] = useState(false);
   const [totalTime, setTotalTime] = useState("0:00");
   const [currentTime, setCurrentTime] = useState("0:00");
-  const [isFavorite, setIsFavorite] = useState(isFavoriteInit);
+  const [isFavorite, setIsFavorite] = useState(false);
   const [favoriteCount, setFavoriteCount] = useState(soundInfo.favoriteCount); //いいね数はSSRで取得するが、いいねボタンを押した際変更されるので、stateでも保持する
+  const [isCompletedLoadFav, setIsCompletedLoadFav] = useState(false);
   const router = useRouter();
   const processRef = useRef(false);
 
@@ -28,6 +30,28 @@ const PlayPage = ({ soundInfo, isFavoriteInit }: SoundInfoProps) => {
     const strTotalTime = secondFormat(audioRef.current?.duration || 0);
     setTotalTime(strTotalTime);
   }, [audioRef.current?.duration]);
+
+  // いいね状態を取得する
+  useEffect(() => {
+    // async, awaitを使うため、即時実行関数の形にする
+    (async () => {
+      // ログインしているなら呼ぶ
+      if (context.loginUser) {
+        const result = await fetch(
+          `${process.env.NEXT_PUBLIC_API_URL}/sound-favorite/${router.query.id}/`,
+          {
+            credentials: "include",
+          },
+        );
+        setIsFavorite((await result.json()).status as boolean);
+      }
+      setIsCompletedLoadFav(true);
+    })();
+
+    // 第2引数の配列
+    // リロード時を考え、ログインユーザーがセットされたときに実行されるようにcontext.loginUserを指定
+    // また、別の音声再生ページに遷移したときに実行されるようにrouter.query.id（パスパラメータ）を指定
+  }, [context.loginUser, router.query.id]);
 
   return (
     <Layout>
@@ -68,43 +92,47 @@ const PlayPage = ({ soundInfo, isFavoriteInit }: SoundInfoProps) => {
         </div>
         <div className="flex justify-between">
           <p>{`${soundInfo.playCount} 回再生`}</p>
-          <button
-            className="flex"
-            onClick={async () => {
-              if (processRef.current) {
-                return;
-              }
-              processRef.current = true;
-
-              try {
-                if (context.loginUser) {
-                  await fetch(
-                    `${process.env.NEXT_PUBLIC_API_URL}/sound-favorite/${router.query.id}/`,
-                    {
-                      method: "POST",
-                      credentials: "include",
-                      headers: {
-                        "content-type": "application/json",
-                      },
-                    },
-                  );
-                  setFavoriteCount(() => favoriteCount + (isFavorite ? -1 : 1));
-                  setIsFavorite(() => !isFavorite);
-                } else {
-                  toast.info("いいねするにはログインしてください。");
+          {isCompletedLoadFav && (
+            <button
+              className="flex"
+              onClick={async () => {
+                if (processRef.current) {
+                  return;
                 }
-              } catch (error) {
-                toast.info("いいねできませんでした。再度お試しください。");
-              } finally {
-                processRef.current = false;
-              }
-            }}
-          >
-            <HeartIcon
-              propClassName={`size-6 ${isFavorite && `text-pink-400`}`}
-            ></HeartIcon>
-            <span className="ml-1">{favoriteCount}</span>
-          </button>
+                processRef.current = true;
+
+                try {
+                  if (context.loginUser) {
+                    await fetch(
+                      `${process.env.NEXT_PUBLIC_API_URL}/sound-favorite/${router.query.id}/`,
+                      {
+                        method: "POST",
+                        credentials: "include",
+                        headers: {
+                          "content-type": "application/json",
+                        },
+                      },
+                    );
+                    setFavoriteCount(
+                      () => favoriteCount + (isFavorite ? -1 : 1),
+                    );
+                    setIsFavorite(() => !isFavorite);
+                  } else {
+                    toast.info("いいねするにはログインしてください。");
+                  }
+                } catch (error) {
+                  toast.info("いいねできませんでした。再度お試しください。");
+                } finally {
+                  processRef.current = false;
+                }
+              }}
+            >
+              <HeartIcon
+                propClassName={`size-6 ${isFavorite && `text-pink-400`}`}
+              ></HeartIcon>
+              <span className="ml-1">{favoriteCount}</span>
+            </button>
+          )}
         </div>
         <div className="flex justify-center mt-2 max-w-full">
           <div className="flex flex-col items-center max-w-96 w-5/6">
@@ -189,19 +217,9 @@ export const getServerSideProps: GetServerSideProps<SoundInfoProps> = async (
   context,
 ) => {
   // APIから音声情報を取得
-  const [result, result2] = await Promise.all([
-    fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/sound-info/single/${context.params?.id}`,
-    ),
-    fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/sound-favorite/${context.query.id}/`,
-      {
-        headers: {
-          Cookie: `token=${context.req.cookies.token}`,
-        },
-      },
-    ),
-  ]);
+  const result = await fetch(
+    `${process.env.NEXT_PUBLIC_API_URL}/sound-info/single/${context.params?.id}`,
+  );
 
   if (result.status === 404) {
     return { notFound: true };
@@ -218,11 +236,6 @@ export const getServerSideProps: GetServerSideProps<SoundInfoProps> = async (
     } | null;
     SoundFavorite: { userId: number }[];
   } = await result.json();
-
-  let isFavorite = false;
-  if (result2.status === 200) {
-    isFavorite = (await result2.json()).status;
-  }
 
   // 中央に表示する画像を決定
   let imageUrl: string;
@@ -251,7 +264,6 @@ export const getServerSideProps: GetServerSideProps<SoundInfoProps> = async (
         favoriteCount: soundInfo.SoundFavorite.length,
         imageUrl,
       },
-      isFavoriteInit: isFavorite,
     },
   };
 };
@@ -270,5 +282,4 @@ interface SoundInfoProps {
     favoriteCount: number;
     imageUrl: string;
   };
-  isFavoriteInit: boolean;
 }
