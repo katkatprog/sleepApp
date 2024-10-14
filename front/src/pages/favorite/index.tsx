@@ -27,7 +27,7 @@ const FavoritePage = () => {
       );
 
       if (res.status === 401) {
-        router.push("/login");
+        router.push("/login?redirect_to=favorite");
         return;
       }
 
