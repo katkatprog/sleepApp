@@ -1,4 +1,3 @@
-import { Layout } from "@/components/Layout";
 import React, { useContext, useEffect, useRef, useState } from "react";
 import { LoginUserContext } from "../_app";
 import { EmailIcon } from "@/components/icons/EmailIcon";
@@ -31,7 +30,7 @@ const MyPage = () => {
   }, [userCtx.isLoading]);
 
   return (
-    <Layout>
+    <>
       <Head>
         <title>マイページ / Prehnite</title>
       </Head>
@@ -329,7 +328,7 @@ const MyPage = () => {
           </div>
         </div>
       </div>
-    </Layout>
+    </>
   );
 };
 

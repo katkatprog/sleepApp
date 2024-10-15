@@ -1,4 +1,3 @@
-import { Layout } from "@/components/Layout";
 import { ArrowLongLeftIcon } from "@/components/icons/ArrowLongLeftIcon";
 import { ArrowLongRightIcon } from "@/components/icons/ArrowLongRightIcon";
 import { SearchIcon } from "@/components/icons/SearchIcon";
@@ -17,7 +16,7 @@ const SearchPage = ({ soundsList, totalPages }: SSRProps) => {
   const selectRef = useRef<HTMLSelectElement>(null);
 
   return (
-    <Layout>
+    <>
       <Head>
         <title>{`${router.query.q ? `${router.query.q} - ` : ""} 検索 / Prehnite`}</title>
       </Head>
@@ -127,7 +126,7 @@ const SearchPage = ({ soundsList, totalPages }: SSRProps) => {
           )}
         </div>
       </div>
-    </Layout>
+    </>
   );
 };
 

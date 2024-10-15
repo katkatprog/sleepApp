@@ -1,4 +1,3 @@
-import { Layout } from "@/components/Layout";
 import { EyeIcon } from "@/components/icons/EyeIcon";
 import { EyeSlashIcon } from "@/components/icons/EyeSlashIcon";
 import Link from "next/link";
@@ -18,7 +17,7 @@ const SignupPage = () => {
   const processRef = useRef(false);
 
   return (
-    <Layout>
+    <>
       <Head>
         <title>新規登録 / Prehnite</title>
       </Head>
@@ -164,7 +163,7 @@ const SignupPage = () => {
           </div>
         </div>
       </div>
-    </Layout>
+    </>
   );
 };
 

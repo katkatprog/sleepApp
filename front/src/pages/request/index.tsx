@@ -1,4 +1,3 @@
-import { Layout } from "@/components/Layout";
 import { SoundReqQueue } from "@prisma/client";
 import Head from "next/head";
 import { useRouter } from "next/router";
@@ -40,7 +39,7 @@ const RequestPage = () => {
   }, []);
 
   return (
-    <Layout>
+    <>
       <Head>
         <title>音声をリクエストする / Prehnite</title>
       </Head>
@@ -163,7 +162,7 @@ const RequestPage = () => {
           </div>
         </div>
       )}
-    </Layout>
+    </>
   );
 };
 

@@ -9,6 +9,7 @@ import {
   useEffect,
   useState,
 } from "react";
+import { Layout } from "@/components/Layout";
 
 export const LoginUserContext = createContext<{
   loginUser: LoginUser | null;
@@ -48,7 +49,9 @@ export default function App({ Component, pageProps }: AppProps) {
       />
       {/* Layoutで囲われている全ページでLoginUserをグローバル的に使えるように設定 */}
       <LoginUserContext.Provider value={{ loginUser, setLoginUser, isLoading }}>
-        <Component {...pageProps} />
+        <Layout>
+          <Component {...pageProps} />
+        </Layout>
       </LoginUserContext.Provider>
     </>
   );

@@ -1,4 +1,3 @@
-import { Layout } from "@/components/Layout";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { EyeSlashIcon } from "@/components/icons/EyeSlashIcon";
@@ -17,7 +16,7 @@ const LoginPage = () => {
   const processRef = useRef(false);
 
   return (
-    <Layout>
+    <>
       <Head>
         <title>ログイン / Prehnite</title>
       </Head>
@@ -68,7 +67,10 @@ const LoginPage = () => {
                     userCtx.setLoginUser(await res2.json());
                   }
 
-                  if (
+                  if (router.query.redirect_to === "favorite") {
+                    // redirect_toがfavoriteの場合、いいね音声ページの1ページ目に移動
+                    router.push(`/favorite/1`);
+                  } else if (
                     typeof router.query.redirect_to === "string" &&
                     !isNaN(Number(router.query.redirect_to))
                   ) {
@@ -176,7 +178,10 @@ const LoginPage = () => {
                     userCtx.setLoginUser(await res2.json());
                   }
 
-                  if (
+                  if (router.query.redirect_to === "favorite") {
+                    // redirect_toがfavoriteの場合、いいね音声ページの1ページ目に移動
+                    router.push(`/favorite/1`);
+                  } else if (
                     typeof router.query.redirect_to === "string" &&
                     !isNaN(Number(router.query.redirect_to))
                   ) {
@@ -206,7 +211,7 @@ const LoginPage = () => {
           </div>
         </div>
       </div>
-    </Layout>
+    </>
   );
 };
 

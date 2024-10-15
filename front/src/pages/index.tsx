@@ -1,4 +1,3 @@
-import { Layout } from "@/components/Layout";
 import { SearchIcon } from "@/components/icons/SearchIcon";
 import Head from "next/head";
 import Image from "next/image";
@@ -6,7 +5,7 @@ import Link from "next/link";
 
 const HomePage = () => {
   return (
-    <Layout>
+    <>
       <Head>
         <title>Prehnite</title>
       </Head>
@@ -113,7 +112,7 @@ const HomePage = () => {
           </div>
         </div>
       </div>
-    </Layout>
+    </>
   );
 };
 
