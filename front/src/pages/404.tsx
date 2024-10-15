@@ -14,13 +14,15 @@ const Custom404 = () => {
             <h1 className="text-2xl font-black mb-2">404 Not Found</h1>
             <p>このページは存在しません。</p>
             <p>URLにお間違いがないかご確認ください。</p>
-            <Image
-              src="/error/prehnite_error.webp"
-              alt="#"
-              width={320}
-              height={320}
-              className="rounded-2xl mt-4"
-            ></Image>
+            <div className="flex justify-center">
+              <Image
+                src="/error/prehnite_error.webp"
+                alt="#"
+                width={270}
+                height={270}
+                className="rounded-2xl mt-4"
+              ></Image>
+            </div>
           </div>
         </div>
       </div>

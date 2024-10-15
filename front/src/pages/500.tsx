@@ -16,13 +16,15 @@ const Custom500 = () => {
             </h1>
             <p>申し訳ございません。</p>
             <p>何らかのエラーが発生しました。再度お試しください。</p>
-            <Image
-              src="/error/prehnite_error.webp"
-              alt="#"
-              width={320}
-              height={320}
-              className="rounded-2xl mt-4"
-            ></Image>
+            <div className="flex justify-center">
+              <Image
+                src="/error/prehnite_error.webp"
+                alt="#"
+                width={270}
+                height={270}
+                className="rounded-2xl mt-4"
+              ></Image>
+            </div>
           </div>
         </div>
       </div>
