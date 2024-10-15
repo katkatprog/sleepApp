@@ -23,7 +23,7 @@ export const Footer = () => {
                 <Link href={"/request"}>
                   <PlusIcon prosClassName="w-9 h-9 p-1 rounded-full stroke-2"></PlusIcon>
                 </Link>
-                <Link href={"/favorite"}>
+                <Link href={"/favorite/1"}>
                   <HeartIcon propClassName="w-9 h-9 p-1 rounded-full stroke-2"></HeartIcon>
                 </Link>
               </>

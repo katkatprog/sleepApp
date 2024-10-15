@@ -38,7 +38,7 @@ export const SideMenu = () => {
                   <PlusIcon prosClassName="w-9 h-9 p-1 rounded-full stroke-2"></PlusIcon>
                   <p>音声をリクエスト</p>
                 </Link>
-                <Link href={"/favorite"} className="mt-4 flex items-center">
+                <Link href={"/favorite/1"} className="mt-4 flex items-center">
                   <HeartIcon propClassName="w-9 h-9 p-1 rounded-full stroke-2"></HeartIcon>
                   <p>いいねした音声</p>
                 </Link>

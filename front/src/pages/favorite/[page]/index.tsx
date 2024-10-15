@@ -10,17 +10,18 @@ import { toast } from "react-toastify";
 
 const FavoritePage = () => {
   const router = useRouter();
-  const currentPage = Number(router.query.page || 1);
   const [soundsList, setSoundsList] = useState<SoundInfo[]>([]);
   const [totalPages, setTotalPages] = useState(1);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
+    if (!router.isReady) return;
+
     // async, awaitを使うため、即時実行関数の形にする
     (async () => {
       // ログインしているなら呼ぶ
       const res = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/sound-favorite?page=${currentPage}`,
+        `${process.env.NEXT_PUBLIC_API_URL}/sound-favorite?page=${router.query.page}`,
         {
           credentials: "include",
         },
@@ -36,14 +37,14 @@ const FavoritePage = () => {
         router.push("/login?redirect_to=favorite");
       } else if (res.status === 404 || res.status === 400) {
         toast.warn("このページ番号は存在しません。");
-        router.push("/favorite");
+        router.push("/favorite/1");
       }
     })();
 
     // 第2引数の配列
-    // お気に入りのページが変わったとき(e.g. 1ページ目 → 2ページ目)に実行されるようにcurrentPageを指定
+    // お気に入りのページが変わったとき(e.g. 1ページ目 → 2ページ目)に実行されるようにrouter.query.pageを指定
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [currentPage]);
+  }, [router.query.page]);
 
   return (
     <>
@@ -88,22 +89,22 @@ const FavoritePage = () => {
           )}
           <div className="h-28 pt-4 flex items-start justify-center">
             <div className="flex items-center">
-              {currentPage > 1 && (
+              {Number(router.query.page) > 1 && (
                 <button
                   className="rounded-md px-2 py-2 border border-neutral-700 hover:bg-neutral-700 transition mr-4"
                   onClick={() => {
-                    router.push(`/favorite?page=${currentPage - 1}`);
+                    router.push(`/favorite/${Number(router.query.page) - 1}`);
                   }}
                 >
                   <ArrowLongLeftIcon propClassName=""></ArrowLongLeftIcon>
                 </button>
               )}
-              {`${currentPage} / ${totalPages}`}
-              {currentPage < totalPages && (
+              {`${router.query.page} / ${totalPages}`}
+              {Number(router.query.page) < totalPages && (
                 <button
                   className="rounded-md px-2 py-2 border border-neutral-700 hover:bg-neutral-700 transition ml-4"
                   onClick={() => {
-                    router.push(`/favorite?page=${currentPage + 1}`);
+                    router.push(`/favorite/${Number(router.query.page) + 1}`);
                   }}
                 >
                   <ArrowLongRightIcon propClassName=""></ArrowLongRightIcon>
