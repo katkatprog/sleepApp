@@ -9,9 +9,8 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import { useRef } from "react";
 
-const SearchPage = ({ soundsList, totalPages }: SSRProps) => {
+const SearchPage = ({ soundsList, totalPages, currentPage }: SSRProps) => {
   const router = useRouter();
-  const currentPage = Number(router.query.page || 1);
   const inputRef = useRef<HTMLInputElement>(null);
   const selectRef = useRef<HTMLSelectElement>(null);
 
@@ -153,7 +152,7 @@ export const getServerSideProps: GetServerSideProps<SSRProps> = async (
     props: {
       soundsList: data.soundsList,
       totalPages: data.totalPages,
-      currentPage: ssrCtx.params?.page,
+      currentPage: Number(ssrCtx.params?.page),
     },
   };
 };
@@ -161,4 +160,5 @@ export const getServerSideProps: GetServerSideProps<SSRProps> = async (
 interface SSRProps {
   soundsList: SoundInfo[];
   totalPages: number;
+  currentPage: number;
 }
