@@ -1,4 +1,4 @@
-import "@/styles/globals.css";
+import "./styles/globals.css";
 import type { AppProps } from "next/app";
 import { ToastContainer } from "react-toastify";
 import { User } from "@prisma/client";
@@ -9,7 +9,7 @@ import {
   useEffect,
   useState,
 } from "react";
-import { Layout } from "@/components/Layout";
+import { Layout } from "../components/Layout";
 
 export const LoginUserContext = createContext<{
   loginUser: LoginUser | null;

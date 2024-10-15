@@ -1,12 +1,13 @@
-import { ArrowLongLeftIcon } from "@/components/icons/ArrowLongLeftIcon";
-import { ArrowLongRightIcon } from "@/components/icons/ArrowLongRightIcon";
-import { SearchIcon } from "@/components/icons/SearchIcon";
+import { ArrowLongLeftIcon } from "../../../components/icons/ArrowLongLeftIcon";
+import { ArrowLongRightIcon } from "../../../components/icons/ArrowLongRightIcon";
+import { SearchIcon } from "../../../components/icons/SearchIcon";
 import { SoundInfo } from "@prisma/client";
 import { GetServerSideProps } from "next";
 import Head from "next/head";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
+import React from "react";
 import { useRef } from "react";
 
 const SearchPage = ({ soundsList, totalPages, currentPage }: SSRProps) => {

@@ -1,11 +1,11 @@
 import React, { useContext, useEffect, useRef, useState } from "react";
 import { LoginUserContext } from "../_app";
-import { EmailIcon } from "@/components/icons/EmailIcon";
-import { UserIcon } from "@/components/icons/UserIcon";
+import { EmailIcon } from "../../components/icons/EmailIcon";
+import { UserIcon } from "../../components/icons/UserIcon";
 import { toast } from "react-toastify";
 import { User } from "@prisma/client";
-import { EyeSlashIcon } from "@/components/icons/EyeSlashIcon";
-import { EyeIcon } from "@/components/icons/EyeIcon";
+import { EyeSlashIcon } from "../../components/icons/EyeSlashIcon";
+import { EyeIcon } from "../../components/icons/EyeIcon";
 import { useRouter } from "next/router";
 import Head from "next/head";
 

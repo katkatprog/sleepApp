@@ -1,12 +1,12 @@
-import { PlayButton } from "@/components/PlayButton";
-import { secondFormat } from "@/utils/usefulFunctions";
+import { PlayButton } from "../../../components/PlayButton";
+import { secondFormat } from "../../../utils/usefulFunctions";
 import { GetServerSideProps } from "next";
 import Image from "next/image";
 import React, { useContext, useEffect, useRef, useState } from "react";
 import { SoundInfo } from "@prisma/client";
-import { LoginUserContext } from "@/pages/_app";
+import { LoginUserContext } from "../../_app";
 import { useRouter } from "next/router";
-import { HeartIcon } from "@/components/icons/HeartIcon";
+import { HeartIcon } from "../../../components/icons/HeartIcon";
 import { toast } from "react-toastify";
 import Head from "next/head";
 

@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { EyeSlashIcon } from "@/components/icons/EyeSlashIcon";
-import { EyeIcon } from "@/components/icons/EyeIcon";
+import { EyeSlashIcon } from "../../components/icons/EyeSlashIcon";
+import { EyeIcon } from "../../components/icons/EyeIcon";
 import React, { useContext, useRef, useState } from "react";
 import { toast } from "react-toastify";
 import { LoginUserContext } from "../_app";
