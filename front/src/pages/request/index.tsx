@@ -1,3 +1,4 @@
+import { Loading } from "../../components/Loading";
 import { SoundReqQueue } from "@prisma/client";
 import Head from "next/head";
 import { useRouter } from "next/router";
@@ -37,6 +38,10 @@ const RequestPage = () => {
     })();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  if (isLoading) {
+    return <Loading></Loading>;
+  }
 
   return (
     <>

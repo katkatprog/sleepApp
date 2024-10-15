@@ -8,6 +8,7 @@ import { EyeSlashIcon } from "../../components/icons/EyeSlashIcon";
 import { EyeIcon } from "../../components/icons/EyeIcon";
 import { useRouter } from "next/router";
 import Head from "next/head";
+import { Loading } from "../../components/Loading";
 
 const MyPage = () => {
   const userCtx = useContext(LoginUserContext);
@@ -28,6 +29,10 @@ const MyPage = () => {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [userCtx.isLoading]);
+
+  if (userCtx.isLoading) {
+    return <Loading></Loading>;
+  }
 
   return (
     <>

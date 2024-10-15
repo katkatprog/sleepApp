@@ -8,6 +8,7 @@ import { useRouter } from "next/router";
 import Head from "next/head";
 import { toast } from "react-toastify";
 import Custom404 from "../../404";
+import { Loading } from "../../../components/Loading";
 
 const FavoritePage = () => {
   const router = useRouter();
@@ -48,6 +49,10 @@ const FavoritePage = () => {
     // お気に入りのページが変わったとき(e.g. 1ページ目 → 2ページ目)に実行されるように第2引数の配列を指定
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [router.query.page]);
+
+  if (isLoading) {
+    return <Loading></Loading>;
+  }
 
   if (isNotFound) {
     return <Custom404></Custom404>;
