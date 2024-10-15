@@ -81,7 +81,7 @@ const LoginPage = () => {
                     router.push(`/${router.query.redirect_to}`);
                   } else {
                     // redirect_toの指定が無ければ検索ページに移動
-                    router.push(`/search`);
+                    router.push(`/search/1`);
                   }
                   toast.dismiss(); // 現在出ているメッセージをclose
                   toast.success("ログインしました。", { autoClose: 5000 });
@@ -192,7 +192,7 @@ const LoginPage = () => {
                     router.push(`/${router.query.redirect_to}`);
                   } else {
                     // redirect_toの指定が無ければ検索ページに移動
-                    router.push(`/search`);
+                    router.push(`/search/1`);
                   }
                   toast.dismiss(); // 現在出ているメッセージをclose
                   toast.success("ゲストログインしました。", {

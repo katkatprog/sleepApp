@@ -28,7 +28,7 @@ export const SideMenu = () => {
                 Prehnite
               </h1>
             </Link>
-            <Link href={"/search"} className="mt-4 flex items-center">
+            <Link href={"/search/1"} className="mt-4 flex items-center">
               <SearchIcon propClassName="w-9 h-9 p-1 rounded-full stroke-2"></SearchIcon>
               <p>音声を探す</p>
             </Link>
