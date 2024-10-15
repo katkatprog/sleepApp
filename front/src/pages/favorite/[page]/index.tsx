@@ -2,23 +2,28 @@ import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import { SoundInfo } from "@prisma/client";
 import Image from "next/image";
-import { ArrowLongLeftIcon } from "@/components/icons/ArrowLongLeftIcon";
-import { ArrowLongRightIcon } from "@/components/icons/ArrowLongRightIcon";
+import { ArrowLongLeftIcon } from "../../../components/icons/ArrowLongLeftIcon";
+import { ArrowLongRightIcon } from "../../../components/icons/ArrowLongRightIcon";
 import { useRouter } from "next/router";
 import Head from "next/head";
 import { toast } from "react-toastify";
+import Custom404 from "../../404";
 
 const FavoritePage = () => {
   const router = useRouter();
   const [soundsList, setSoundsList] = useState<SoundInfo[]>([]);
   const [totalPages, setTotalPages] = useState(1);
   const [isLoading, setIsLoading] = useState(true);
+  const [isNotFound, setIsNotFound] = useState(false);
 
   useEffect(() => {
-    if (!router.isReady) return;
-
     // async, awaitを使うため、即時実行関数の形にする
     (async () => {
+      if (!router.isReady) return;
+      setSoundsList([]);
+      setIsLoading(true);
+      setIsNotFound(false);
+
       // ログインしているなら呼ぶ
       const res = await fetch(
         `${process.env.NEXT_PUBLIC_API_URL}/sound-favorite?page=${router.query.page}`,
@@ -31,20 +36,22 @@ const FavoritePage = () => {
         const data = await res.json();
         setSoundsList(data.soundsList);
         setTotalPages(data.totalPages);
-        setIsLoading(false);
       } else if (res.status === 401) {
         toast.info("ログインが必要です。");
         router.push("/login?redirect_to=favorite");
       } else if (res.status === 404 || res.status === 400) {
-        toast.warn("このページ番号は存在しません。");
-        router.push("/favorite/1");
+        setIsNotFound(true);
       }
+      setIsLoading(false);
     })();
 
-    // 第2引数の配列
-    // お気に入りのページが変わったとき(e.g. 1ページ目 → 2ページ目)に実行されるようにrouter.query.pageを指定
+    // お気に入りのページが変わったとき(e.g. 1ページ目 → 2ページ目)に実行されるように第2引数の配列を指定
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [router.query.page]);
+
+  if (isNotFound) {
+    return <Custom404></Custom404>;
+  }
 
   return (
     <>
