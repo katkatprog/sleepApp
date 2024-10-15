@@ -54,7 +54,7 @@ const SignupPage = () => {
                     toast.success("新規登録しました。どうぞお楽しみ下さい。", {
                       autoClose: 5000,
                     });
-                    router.push(`/search`);
+                    router.push(`/search/1`);
                   } else if (res.status === 400) {
                     processRef.current = false;
                     toast.error(await res.text());

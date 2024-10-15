@@ -9,9 +9,8 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import { useRef } from "react";
 
-const SearchPage = ({ soundsList, totalPages }: SSRProps) => {
+const SearchPage = ({ soundsList, totalPages, currentPage }: SSRProps) => {
   const router = useRouter();
-  const currentPage = Number(router.query.page || 1);
   const inputRef = useRef<HTMLInputElement>(null);
   const selectRef = useRef<HTMLSelectElement>(null);
 
@@ -25,7 +24,7 @@ const SearchPage = ({ soundsList, totalPages }: SSRProps) => {
           e.preventDefault();
           inputRef.current?.blur();
           router.push(
-            `/search?q=${inputRef.current?.value || ""}&sort=${selectRef.current?.value}`,
+            `/search/1?q=${inputRef.current?.value || ""}&sort=${selectRef.current?.value}`,
           );
         }}
         className="flex justify-center items-center my-6 mx-3 lg:mx-8"
@@ -48,7 +47,7 @@ const SearchPage = ({ soundsList, totalPages }: SSRProps) => {
           onChange={() => {
             selectRef.current?.blur();
             router.push(
-              `/search?q=${inputRef.current?.value || ""}&sort=${selectRef.current?.value}`,
+              `/search/1?q=${inputRef.current?.value || ""}&sort=${selectRef.current?.value}`,
             );
           }}
           defaultValue={router.query.sort || "created"}
@@ -101,7 +100,7 @@ const SearchPage = ({ soundsList, totalPages }: SSRProps) => {
                   inputRef.current.value = (router.query.q || "").toString();
                 }
                 router.push(
-                  `/search?page=${currentPage - 1}&q=${router.query.q || ""}&sort=${router.query.sort || "created"}`,
+                  `/search/${currentPage - 1}?q=${router.query.q || ""}&sort=${router.query.sort || "created"}`,
                 );
               }}
             >
@@ -117,7 +116,7 @@ const SearchPage = ({ soundsList, totalPages }: SSRProps) => {
                   inputRef.current.value = (router.query.q || "").toString();
                 }
                 router.push(
-                  `/search?page=${currentPage + 1}&q=${router.query.q || ""}&sort=${router.query.sort || "created"}`,
+                  `/search/${currentPage + 1}?q=${router.query.q || ""}&sort=${router.query.sort || "created"}`,
                 );
               }}
             >
@@ -137,7 +136,7 @@ export const getServerSideProps: GetServerSideProps<SSRProps> = async (
 ) => {
   // APIから音声リストを取得
   const res = await fetch(
-    `${process.env.NEXT_PUBLIC_API_URL}/sound-info/search?page=${ssrCtx.query?.page || 1}&q=${ssrCtx.query?.q || ""}&sort=${ssrCtx.query?.sort || "created"}`,
+    `${process.env.NEXT_PUBLIC_API_URL}/sound-info/search?page=${ssrCtx.params?.page}&q=${ssrCtx.query?.q || ""}&sort=${ssrCtx.query?.sort || "created"}`,
   );
 
   if (res.status === 404) {
@@ -153,6 +152,7 @@ export const getServerSideProps: GetServerSideProps<SSRProps> = async (
     props: {
       soundsList: data.soundsList,
       totalPages: data.totalPages,
+      currentPage: Number(ssrCtx.params?.page),
     },
   };
 };
@@ -160,4 +160,5 @@ export const getServerSideProps: GetServerSideProps<SSRProps> = async (
 interface SSRProps {
   soundsList: SoundInfo[];
   totalPages: number;
+  currentPage: number;
 }

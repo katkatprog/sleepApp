@@ -15,7 +15,7 @@ export const Footer = () => {
       <div className="h-14 flex items-center justify-around max-w-xl w-full">
         {!userCtx.isLoading && (
           <>
-            <Link href={"/search"}>
+            <Link href={"/search/1"}>
               <SearchIcon propClassName="w-9 h-9 p-1 rounded-full stroke-2"></SearchIcon>
             </Link>
             {userCtx.loginUser && (
