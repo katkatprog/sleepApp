@@ -2,7 +2,7 @@ import Link from "next/link";
 import React, { useContext } from "react";
 import { SearchIcon } from "./icons/SearchIcon";
 import { LoginIcon } from "./icons/LoginIcon";
-import { LoginUserContext } from "@/pages/_app";
+import { LoginUserContext } from "../pages/_app";
 import { PlusIcon } from "./icons/PlusIcon";
 import { HeartIcon } from "./icons/HeartIcon";
 import { LogoutButton } from "./LogoutButton";

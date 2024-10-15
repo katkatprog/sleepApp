@@ -1,5 +1,5 @@
-import { EyeIcon } from "@/components/icons/EyeIcon";
-import { EyeSlashIcon } from "@/components/icons/EyeSlashIcon";
+import { EyeIcon } from "../../components/icons/EyeIcon";
+import { EyeSlashIcon } from "../../components/icons/EyeSlashIcon";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import React, { useContext, useRef, useState } from "react";

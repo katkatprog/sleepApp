@@ -1,4 +1,4 @@
-import { SearchIcon } from "@/components/icons/SearchIcon";
+import { SearchIcon } from "../components/icons/SearchIcon";
 import Head from "next/head";
 import Image from "next/image";
 import Link from "next/link";

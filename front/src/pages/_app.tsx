@@ -9,7 +9,7 @@ import {
   useEffect,
   useState,
 } from "react";
-import { Layout } from "@/components/Layout";
+import { Layout } from "../components/Layout";
 
 export const LoginUserContext = createContext<{
   loginUser: LoginUser | null;

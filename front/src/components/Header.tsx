@@ -2,7 +2,7 @@ import Link from "next/link";
 import React, { useContext } from "react";
 import Image from "next/image";
 import { UserIcon } from "./icons/UserIcon";
-import { LoginUserContext } from "@/pages/_app";
+import { LoginUserContext } from "../pages/_app";
 
 export const Header = () => {
   const userCtx = useContext(LoginUserContext);

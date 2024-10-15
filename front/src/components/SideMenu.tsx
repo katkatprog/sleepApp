@@ -4,7 +4,7 @@ import { SearchIcon } from "./icons/SearchIcon";
 import { PlusIcon } from "./icons/PlusIcon";
 import { HeartIcon } from "./icons/HeartIcon";
 import { LoginIcon } from "./icons/LoginIcon";
-import { LoginUserContext } from "@/pages/_app";
+import { LoginUserContext } from "../pages/_app";
 import Image from "next/image";
 import { UserIcon } from "./icons/UserIcon";
 import { LogoutButton } from "./LogoutButton";
