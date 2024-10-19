@@ -1,9 +1,13 @@
+import { CircleIcon } from "@/components/icons/CircleIcon";
 import { SearchIcon } from "../components/icons/SearchIcon";
 import Head from "next/head";
 import Image from "next/image";
 import Link from "next/link";
+import { useState } from "react";
 
 const HomePage = () => {
+  const [isMovingToSearch, setIsMovingToSearch] = useState(false);
+
   return (
     <>
       <Head>
@@ -21,8 +25,17 @@ const HomePage = () => {
               今日も快適な睡眠を…
             </h3>
             <Link href={"/search/1"}>
-              <button className="mt-6 bg-green-600 hover:bg-green-500 font-bold px-12 py-4 rounded-md transition">
-                <SearchIcon propClassName="w-7 h-7 stroke-2 inline mr-2"></SearchIcon>
+              <button
+                className="mt-6 bg-green-600 hover:bg-green-500 font-bold px-12 py-4 rounded-md transition"
+                onClick={() => {
+                  setIsMovingToSearch(true);
+                }}
+              >
+                {isMovingToSearch ? (
+                  <CircleIcon propClassName="w-7 h-7 stroke-2 inline mr-2 animate-spin"></CircleIcon>
+                ) : (
+                  <SearchIcon propClassName="w-7 h-7 stroke-2 inline mr-2"></SearchIcon>
+                )}
                 音声を探す
               </button>
             </Link>
