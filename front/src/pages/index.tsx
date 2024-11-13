@@ -56,7 +56,7 @@ const HomePage = () => {
           <div className="mt-4 max-w-sm xl:mr-4">
             <p>
               <span className="text-lg font-bold">認知シャッフル睡眠法</span>
-              とは、ランダムな単語を次々に思い浮かべながら眠りにつく方法です。
+              とは、ランダムな単語を次々に思い浮かべながら眠る方法です。
             </p>
             <blockquote className="p-4 my-2 border-s-4 border-neutral-400 bg-neutral-700">
               <p>
@@ -67,7 +67,12 @@ const HomePage = () => {
               </p>
             </blockquote>
             <p>
-              これによって脳が自然と休息モードに切り替わり、眠りやすくなります。
+              これによって脳が自然と休息モードに切り替わり、眠りにつきやすくなります。
+            </p>
+            <br />
+            <p>
+              <span className="text-lg font-bold">Prehnite</span>
+              は、認知シャッフル睡眠法のための単語読み上げ音声を再生できるサービスです。
             </p>
           </div>
         </div>
