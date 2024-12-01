@@ -7,6 +7,8 @@ import { body } from "express-validator";
 import { checkReq } from "../middleware/checkReq";
 import bcrypt from "bcrypt";
 import { PrismaClientKnownRequestError } from "@prisma/client/runtime/library";
+import { PutObjectCommand, S3Client } from "@aws-sdk/client-s3";
+import multer from "multer";
 
 export const loginUserRouter = express.Router();
 
@@ -95,6 +97,48 @@ loginUserRouter.put(
         return res.status(400).send("メールアドレスが登録済です。");
       }
 
+      return res.status(500).send("想定外のエラーが発生しました。");
+    }
+  },
+);
+
+// プロフィール画像投稿
+loginUserRouter.post(
+  "/upload-image",
+  checkJwt,
+  multer().single("profile-img"),
+  async (req, res) => {
+    try {
+      if (!req.file) {
+        return res
+          .status(400)
+          .send("リクエストにファイルが添付されていません。");
+      }
+
+      // S3 クライアントを用意する
+      const client = new S3Client({
+        region: "ap-northeast-1",
+        credentials: {
+          accessKeyId: process.env.AWS_ACCESS_KEY_ID || "",
+          secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY || "",
+        },
+      });
+
+      // S3 にアップロードする処理
+      // S3 バケットへファイルアップロードを行うコマンド(PutObjectCommand)を生成する。
+      //
+      const command = new PutObjectCommand({
+        Bucket: process.env.S3_BUCKET_PROFILE || "",
+        Key: `${res.locals.userId}_profile_${req.file.originalname}`, // 拡張子指定予定（拡張子のフィルタ処理作成次第）
+        Body: req.file.buffer,
+      });
+      const result = await client.send(command);
+
+      // 画像のURLを取得し、それをDBに書き込む処理を今後実装予定
+
+      return res.status(200).send("OK");
+    } catch (error) {
+      // S3 アップロードに失敗した時の処理
       return res.status(500).send("想定外のエラーが発生しました。");
     }
   },
