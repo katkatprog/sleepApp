@@ -40,7 +40,13 @@ loginUserRouter.get("/", async (req, res) => {
 
   const user = await prisma.user.findUnique({
     where: { id: loginUserId },
-    select: { id: true, name: true, email: true, image: true, hashedPassword: false },
+    select: {
+      id: true,
+      name: true,
+      email: true,
+      image: true,
+      hashedPassword: false,
+    },
   });
   return res.status(200).json(user);
 });
@@ -84,7 +90,13 @@ loginUserRouter.put(
 
       // ユーザー情報編集
       const result = await prisma.user.update({
-        select: { id: true, email: true, name: true, hashedPassword: false },
+        select: {
+          id: true,
+          email: true,
+          name: true,
+          image: true,
+          hashedPassword: false,
+        },
         where: { id: res.locals.userId as number },
         data: {
           name: req.body.name as string,
@@ -150,7 +162,7 @@ loginUserRouter.post(
       });
 
       // S3 にアップロードする処理
-      const imageFileName = `profile_img_${res.locals.userId}${path.extname(req.file.originalname)}`; // profile_img_<ユーザーID>.<拡張子>
+      const imageFileName = `${res.locals.userId}-${crypto.randomUUID()}${path.extname(req.file.originalname)}`; // <ユーザーID>-<シリアルナンバー>.<拡張子>
       const command = new PutObjectCommand({
         Bucket: process.env.S3_BUCKET_PROFILE || "",
         Key: imageFileName,
