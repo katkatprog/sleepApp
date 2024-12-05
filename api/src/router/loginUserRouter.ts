@@ -9,6 +9,7 @@ import bcrypt from "bcrypt";
 import { PrismaClientKnownRequestError } from "@prisma/client/runtime/library";
 import { PutObjectCommand, S3Client } from "@aws-sdk/client-s3";
 import multer from "multer";
+import path from "path";
 
 export const loginUserRouter = express.Router();
 
@@ -126,11 +127,11 @@ loginUserRouter.post(
 
       // S3 にアップロードする処理
       // S3 バケットへファイルアップロードを行うコマンド(PutObjectCommand)を生成する。
-      //
       const command = new PutObjectCommand({
         Bucket: process.env.S3_BUCKET_PROFILE || "",
-        Key: `${res.locals.userId}_profile_${req.file.originalname}`, // 拡張子指定予定（拡張子のフィルタ処理作成次第）
+        Key: `profile_img_${res.locals.userId}${path.extname(req.file.originalname)}`, // profile_img_<ユーザーID>.<拡張子>
         Body: req.file.buffer,
+        ContentType: req.file.mimetype, // これを指定しないと、ファイルURLに直接アクセスしたときにダウンロードになってしまう
       });
       const result = await client.send(command);
 
