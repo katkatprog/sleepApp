@@ -151,22 +151,25 @@ const MyPage = () => {
                       }
 
                       try {
-                        const res = await fetch(
-                          `${process.env.NEXT_PUBLIC_API_URL}/login-user`,
-                          {
-                            method: "PUT",
-                            credentials: "include",
-                            headers: {
-                              "content-type": "application/json",
+                        // プロフィール編集用のAPI呼び出しを準備
+                        const promiseList = [
+                          fetch(
+                            `${process.env.NEXT_PUBLIC_API_URL}/login-user`,
+                            {
+                              method: "PUT",
+                              credentials: "include",
+                              headers: {
+                                "content-type": "application/json",
+                              },
+                              body: JSON.stringify({
+                                name: nameRef.current?.value,
+                                email: emailRef.current?.value,
+                              }),
                             },
-                            body: JSON.stringify({
-                              name: nameRef.current?.value,
-                              email: emailRef.current?.value,
-                            }),
-                          },
-                        );
+                          ),
+                        ];
 
-                        let updatedImageUrl = "";
+                        // 画像が指定されていれば、画像アップロード用のAPI呼び出しも準備
                         if (
                           profileRef.current &&
                           profileRef.current.files &&
@@ -178,35 +181,61 @@ const MyPage = () => {
                             profileRef.current.files[0],
                             profileRef.current.files[0].name,
                           );
-                          const res2 = await fetch(
-                            `${process.env.NEXT_PUBLIC_API_URL}/login-user/upload-image`,
-                            {
-                              method: "POST",
-                              credentials: "include",
-                              headers: new Headers(),
-                              body: formdata,
-                              redirect: "follow",
-                            },
+                          promiseList.push(
+                            fetch(
+                              `${process.env.NEXT_PUBLIC_API_URL}/login-user/upload-image`,
+                              {
+                                method: "POST",
+                                credentials: "include",
+                                headers: new Headers(),
+                                body: formdata,
+                              },
+                            ),
                           );
-                          updatedImageUrl = (await res2.json()).image as string;
                         }
 
-                        if (res.status === 200) {
+                        // APIを並列で呼び出し
+                        // ※uploadResは、画像アップロード用のAPI(promiseListの2番目要素)があればレスポンス、無ければundefinedとなる
+                        const [editRes, uploadRes] =
+                          await Promise.all(promiseList);
+
+                        if (editRes.status === 200 && !uploadRes) {
+                          // 処理成功（プロフィール編集のみ場合）
                           // 編集モードの終了、userCtxを最新のログインユーザー情報で書き換える
                           toast.success("プロフィールを編集しました。", {
                             autoClose: 5000,
                           });
                           setMode("normal");
-
+                          userCtx.setLoginUser(
+                            (await editRes.json()) as LoginUser,
+                          );
+                        } else if (
+                          editRes.status === 200 &&
+                          uploadRes &&
+                          uploadRes.status === 200
+                        ) {
+                          // 処理成功（プロフィール編集、画像アップロード両方を実行した場合）
+                          // 編集モードの終了、userCtxを最新のログインユーザー情報、画像情報で書き換える
+                          toast.success("プロフィールを編集しました。", {
+                            autoClose: 5000,
+                          });
+                          setMode("normal");
                           const updatedUserInfo =
-                            (await res.json()) as LoginUser;
-                          if (updatedImageUrl) {
-                            updatedUserInfo.image = updatedImageUrl;
-                          }
+                            (await editRes.json()) as LoginUser;
+                          updatedUserInfo.image = (await uploadRes.json())
+                            .image as string;
                           userCtx.setLoginUser(updatedUserInfo);
-                        } else if (Math.floor(res.status / 100) === 4) {
-                          // 400番台エラーなら、返ってきたメッセージをそのまま表示
-                          toast.error(await res.text());
+                        } else if (Math.floor(editRes.status / 100) === 4) {
+                          // 400番台エラー（プロフィール編集）
+                          // 返ってきたメッセージをそのまま表示
+                          toast.error(await editRes.text());
+                        } else if (
+                          uploadRes &&
+                          Math.floor(uploadRes.status / 100) === 4
+                        ) {
+                          // 400番台エラー（画像アップロード）
+                          // 返ってきたメッセージをそのまま表示
+                          toast.error(await uploadRes.text());
                         } else {
                           throw new Error();
                         }
