@@ -126,6 +126,20 @@ loginUserRouter.post(
         return res.status(400).send("ファイルの形式が不正です。");
       }
 
+      // 編集前のメールアドレスがゲストユーザーのものならエラー
+      const targetUser = await prisma.user.findUnique({
+        where: { id: res.locals.userId as number },
+        select: { email: true },
+      });
+      if (
+        targetUser &&
+        targetUser.email === (process.env.GUEST_EMAIL || "guest@example.com")
+      ) {
+        return res
+          .status(400)
+          .send("そのユーザー情報を変更することはできません。");
+      }
+
       // S3 クライアントを用意する
       const client = new S3Client({
         region: "ap-northeast-1",
@@ -136,18 +150,25 @@ loginUserRouter.post(
       });
 
       // S3 にアップロードする処理
-      // S3 バケットへファイルアップロードを行うコマンド(PutObjectCommand)を生成する。
+      const imageFileName = `profile_img_${res.locals.userId}${path.extname(req.file.originalname)}`; // profile_img_<ユーザーID>.<拡張子>
       const command = new PutObjectCommand({
         Bucket: process.env.S3_BUCKET_PROFILE || "",
-        Key: `profile_img_${res.locals.userId}${path.extname(req.file.originalname)}`, // profile_img_<ユーザーID>.<拡張子>
+        Key: imageFileName,
         Body: req.file.buffer,
         ContentType: req.file.mimetype, // これを指定しないと、ファイルURLに直接アクセスしたときにダウンロードになってしまう
       });
-      const result = await client.send(command);
+      await client.send(command);
 
-      // 画像のURLを取得し、それをDBに書き込む処理を今後実装予定
+      // 画像のURLをDBに書き込む処理
+      const imageFileUrl = `${process.env.CLOUD_FRONT_DOMAIN}/${imageFileName}`;
+      await prisma.user.update({
+        where: { id: res.locals.userId as number },
+        data: {
+          image: imageFileUrl,
+        },
+      });
 
-      return res.status(200).send("OK");
+      return res.status(200).json({ image: imageFileUrl });
     } catch (error) {
       // S3 アップロードに失敗した時の処理
       return res.status(500).send("想定外のエラーが発生しました。");
