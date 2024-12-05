@@ -116,6 +116,16 @@ loginUserRouter.post(
           .send("リクエストにファイルが添付されていません。");
       }
 
+      if (
+        !(
+          req.file.mimetype === "image/jpeg" ||
+          req.file.mimetype === "image/png" ||
+          req.file.mimetype === "image/webp"
+        )
+      ) {
+        return res.status(400).send("ファイルの形式が不正です。");
+      }
+
       // S3 クライアントを用意する
       const client = new S3Client({
         region: "ap-northeast-1",
