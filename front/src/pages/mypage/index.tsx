@@ -13,6 +13,7 @@ import Image from "next/image";
 
 const MyPage = () => {
   const userCtx = useContext(LoginUserContext);
+  const profileRef = useRef<HTMLInputElement>(null);
   const nameRef = useRef<HTMLInputElement>(null);
   const emailRef = useRef<HTMLInputElement>(null);
   const passwordRef = useRef<HTMLInputElement>(null);
@@ -164,15 +165,45 @@ const MyPage = () => {
                             }),
                           },
                         );
+
+                        let updatedImageUrl = "";
+                        if (
+                          profileRef.current &&
+                          profileRef.current.files &&
+                          profileRef.current.files.length > 0
+                        ) {
+                          const formdata = new FormData();
+                          formdata.append(
+                            "profile-img",
+                            profileRef.current.files[0],
+                            profileRef.current.files[0].name,
+                          );
+                          const res2 = await fetch(
+                            `${process.env.NEXT_PUBLIC_API_URL}/login-user/upload-image`,
+                            {
+                              method: "POST",
+                              credentials: "include",
+                              headers: new Headers(),
+                              body: formdata,
+                              redirect: "follow",
+                            },
+                          );
+                          updatedImageUrl = (await res2.json()).image as string;
+                        }
+
                         if (res.status === 200) {
                           // 編集モードの終了、userCtxを最新のログインユーザー情報で書き換える
                           toast.success("プロフィールを編集しました。", {
                             autoClose: 5000,
                           });
                           setMode("normal");
-                          userCtx.setLoginUser(
-                            (await res.json()) as LoginUser | null,
-                          );
+
+                          const updatedUserInfo =
+                            (await res.json()) as LoginUser;
+                          if (updatedImageUrl) {
+                            updatedUserInfo.image = updatedImageUrl;
+                          }
+                          userCtx.setLoginUser(updatedUserInfo);
                         } else if (Math.floor(res.status / 100) === 4) {
                           // 400番台エラーなら、返ってきたメッセージをそのまま表示
                           toast.error(await res.text());
@@ -189,6 +220,12 @@ const MyPage = () => {
                     }}
                   >
                     <h1 className="text-2xl font-black">プロフィールを編集</h1>
+                    <input
+                      type="file"
+                      className="mt-4"
+                      name="profile-img"
+                      ref={profileRef}
+                    ></input>
                     <p className="mt-4">お名前</p>
                     <input
                       ref={nameRef}
