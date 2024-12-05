@@ -40,7 +40,7 @@ loginUserRouter.get("/", async (req, res) => {
 
   const user = await prisma.user.findUnique({
     where: { id: loginUserId },
-    select: { id: true, name: true, email: true, hashedPassword: false },
+    select: { id: true, name: true, email: true, image: true, hashedPassword: false },
   });
   return res.status(200).json(user);
 });

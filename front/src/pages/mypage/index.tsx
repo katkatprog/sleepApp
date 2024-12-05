@@ -9,6 +9,7 @@ import { EyeIcon } from "../../components/icons/EyeIcon";
 import { useRouter } from "next/router";
 import Head from "next/head";
 import { Loading } from "../../components/Loading";
+import Image from "next/image";
 
 const MyPage = () => {
   const userCtx = useContext(LoginUserContext);
@@ -49,7 +50,17 @@ const MyPage = () => {
                     {userCtx.loginUser?.name}
                   </h1>
                   <div className="flex justify-center mt-4">
-                    <UserIcon propClassName="w-32 h-32 text-neutral-800 bg-gray-300 rounded-full"></UserIcon>
+                    {userCtx.loginUser?.image ? (
+                      <Image
+                        src={userCtx.loginUser.image}
+                        alt=""
+                        width={128}
+                        height={128}
+                        className="rounded-full"
+                      ></Image>
+                    ) : (
+                      <UserIcon propClassName="w-32 h-32 text-neutral-800 bg-gray-300 rounded-full"></UserIcon>
+                    )}
                   </div>
                   <div className="flex mt-4">
                     <EmailIcon propClassName="w-6 h-6"></EmailIcon>
