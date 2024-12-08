@@ -17,6 +17,7 @@ const MyPage = () => {
   const nameRef = useRef<HTMLInputElement>(null);
   const emailRef = useRef<HTMLInputElement>(null);
   const passwordRef = useRef<HTMLInputElement>(null);
+  const previewRef = useRef<HTMLImageElement>(null);
   const router = useRouter();
   const [mode, setMode] = useState<"normal" | "edit" | "delete">("normal");
   const [showPassword, setShowPassword] = useState(false);
@@ -249,12 +250,89 @@ const MyPage = () => {
                     }}
                   >
                     <h1 className="text-2xl font-black">プロフィールを編集</h1>
-                    <input
-                      type="file"
-                      className="mt-4"
-                      name="profile-img"
-                      ref={profileRef}
-                    ></input>
+                    <div className="m-4 flex justify-between items-center">
+                      {userCtx.loginUser?.image ? (
+                        // 画像ファイルの選択に合わせて表示画像を変える必要があるため、Imageでなくimgにしている
+                        // eslint-disable-next-line @next/next/no-img-element
+                        <img
+                          src={userCtx.loginUser.image}
+                          alt=""
+                          className="h-32 w-32 rounded-full object-cover"
+                          ref={previewRef}
+                        ></img>
+                      ) : (
+                        <UserIcon propClassName="w-32 h-32 text-neutral-800 bg-gray-300 rounded-full"></UserIcon>
+                      )}
+
+                      <label
+                        htmlFor="profile-img"
+                        className="px-4 py-2 rounded-lg border-2 border-neutral-700 hover:cursor-pointer"
+                      >
+                        画像を選択
+                      </label>
+                      <input
+                        type="file"
+                        id="profile-img"
+                        name="profile-img"
+                        accept="image/png, image/jpeg, image/webp"
+                        className="hidden"
+                        ref={profileRef}
+                        onChange={(e) => {
+                          // プロフィール画像 プレビュー機能
+                          // [参考]https://developer.mozilla.org/ja/docs/Web/API/FileReader/readAsDataURL
+                          e.preventDefault();
+                          if (
+                            !(
+                              e.target &&
+                              e.target.files &&
+                              e.target.files.length > 0 &&
+                              profileRef.current &&
+                              profileRef.current.files &&
+                              profileRef.current.files.length > 0
+                            )
+                          ) {
+                            return;
+                          }
+                          const file = e.target.files[0];
+
+                          if (
+                            !["image/png", "image/jpeg", "image/webp"].includes(
+                              file.type,
+                            )
+                          ) {
+                            toast.error(
+                              "画像ファイルはjpg, png, webpである必要があります。",
+                            );
+                            profileRef.current.value = ""; //クリア
+                            return;
+                          }
+
+                          if (file.size > 10000000) {
+                            toast.error(
+                              "画像ファイルは10MG以下である必要があります。",
+                            );
+                            profileRef.current.value = ""; //クリア
+                            return;
+                          }
+
+                          const reader = new FileReader();
+                          reader.onload = () => {
+                            if (
+                              !(
+                                typeof reader.result === "string" &&
+                                previewRef.current
+                              )
+                            ) {
+                              return;
+                            }
+                            // 画像ファイルを base64 文字列に変換
+                            previewRef.current.src = reader.result;
+                          };
+                          // 指定されたFileの内容を読み込む処理。これが無いとプレビューに反映されない
+                          reader.readAsDataURL(file);
+                        }}
+                      ></input>
+                    </div>
                     <p className="mt-4">お名前</p>
                     <input
                       ref={nameRef}
