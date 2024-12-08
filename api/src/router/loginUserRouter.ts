@@ -125,17 +125,21 @@ loginUserRouter.post(
       if (!req.file) {
         return res
           .status(400)
-          .send("リクエストにファイルが添付されていません。");
+          .send("リクエストに画像ファイルが添付されていません。");
       }
 
       if (
-        !(
-          req.file.mimetype === "image/jpeg" ||
-          req.file.mimetype === "image/png" ||
-          req.file.mimetype === "image/webp"
-        )
+        !["image/png", "image/jpeg", "image/webp"].includes(req.file.mimetype)
       ) {
-        return res.status(400).send("ファイルの形式が不正です。");
+        return res
+          .status(400)
+          .send("画像ファイルはjpg, png, webpである必要があります。");
+      }
+
+      if (req.file.size > 10000000) {
+        return res
+          .status(400)
+          .send("画像ファイルは10MG以下である必要があります。");
       }
 
       // 編集前のメールアドレスがゲストユーザーのものならエラー
@@ -162,7 +166,7 @@ loginUserRouter.post(
       });
 
       // S3 にアップロードする処理
-      const imageFileName = `${res.locals.userId}-${crypto.randomUUID()}${path.extname(req.file.originalname)}`; // <ユーザーID>-<シリアルナンバー>.<拡張子>
+      const imageFileName = `${crypto.randomUUID()}${path.extname(req.file.originalname)}`; // <シリアルナンバー>.<拡張子>
       const command = new PutObjectCommand({
         Bucket: process.env.S3_BUCKET_PROFILE || "",
         Key: imageFileName,
