@@ -1,7 +1,6 @@
 import React, { useContext, useEffect, useRef, useState } from "react";
 import { LoginUserContext } from "../_app";
 import { EmailIcon } from "../../components/icons/EmailIcon";
-import { UserIcon } from "../../components/icons/UserIcon";
 import { toast } from "react-toastify";
 import { User } from "@prisma/client";
 import { EyeSlashIcon } from "../../components/icons/EyeSlashIcon";
@@ -9,12 +8,15 @@ import { EyeIcon } from "../../components/icons/EyeIcon";
 import { useRouter } from "next/router";
 import Head from "next/head";
 import { Loading } from "../../components/Loading";
+import Image from "next/image";
 
 const MyPage = () => {
   const userCtx = useContext(LoginUserContext);
+  const profileRef = useRef<HTMLInputElement>(null);
   const nameRef = useRef<HTMLInputElement>(null);
   const emailRef = useRef<HTMLInputElement>(null);
   const passwordRef = useRef<HTMLInputElement>(null);
+  const previewRef = useRef<HTMLImageElement>(null);
   const router = useRouter();
   const [mode, setMode] = useState<"normal" | "edit" | "delete">("normal");
   const [showPassword, setShowPassword] = useState(false);
@@ -49,7 +51,16 @@ const MyPage = () => {
                     {userCtx.loginUser?.name}
                   </h1>
                   <div className="flex justify-center mt-4">
-                    <UserIcon propClassName="w-32 h-32 text-neutral-800 bg-gray-300 rounded-full"></UserIcon>
+                    <div className="relative w-32 h-32">
+                      <Image
+                        src={
+                          userCtx.loginUser?.image || "/etc/defaultProfile.jpg"
+                        }
+                        alt=""
+                        className="rounded-full object-cover"
+                        fill
+                      ></Image>
+                    </div>
                   </div>
                   <div className="flex mt-4">
                     <EmailIcon propClassName="w-6 h-6"></EmailIcon>
@@ -139,32 +150,91 @@ const MyPage = () => {
                       }
 
                       try {
-                        const res = await fetch(
-                          `${process.env.NEXT_PUBLIC_API_URL}/login-user`,
-                          {
-                            method: "PUT",
-                            credentials: "include",
-                            headers: {
-                              "content-type": "application/json",
+                        // プロフィール編集用のAPI呼び出しを準備
+                        const promiseList = [
+                          fetch(
+                            `${process.env.NEXT_PUBLIC_API_URL}/login-user`,
+                            {
+                              method: "PUT",
+                              credentials: "include",
+                              headers: {
+                                "content-type": "application/json",
+                              },
+                              body: JSON.stringify({
+                                name: nameRef.current?.value,
+                                email: emailRef.current?.value,
+                              }),
                             },
-                            body: JSON.stringify({
-                              name: nameRef.current?.value,
-                              email: emailRef.current?.value,
-                            }),
-                          },
-                        );
-                        if (res.status === 200) {
+                          ),
+                        ];
+
+                        // 画像が指定されていれば、画像アップロード用のAPI呼び出しも準備
+                        if (
+                          profileRef.current &&
+                          profileRef.current.files &&
+                          profileRef.current.files.length > 0
+                        ) {
+                          const formdata = new FormData();
+                          formdata.append(
+                            "profile-img",
+                            profileRef.current.files[0],
+                            profileRef.current.files[0].name,
+                          );
+                          promiseList.push(
+                            fetch(
+                              `${process.env.NEXT_PUBLIC_API_URL}/login-user/upload-image`,
+                              {
+                                method: "POST",
+                                credentials: "include",
+                                headers: new Headers(),
+                                body: formdata,
+                              },
+                            ),
+                          );
+                        }
+
+                        // APIを並列で呼び出し
+                        // ※uploadResは、画像アップロード用のAPI(promiseListの2番目要素)があればレスポンス、無ければundefinedとなる
+                        const [editRes, uploadRes] =
+                          await Promise.all(promiseList);
+
+                        if (editRes.status === 200 && !uploadRes) {
+                          // 処理成功（プロフィール編集のみ場合）
                           // 編集モードの終了、userCtxを最新のログインユーザー情報で書き換える
                           toast.success("プロフィールを編集しました。", {
                             autoClose: 5000,
                           });
                           setMode("normal");
                           userCtx.setLoginUser(
-                            (await res.json()) as LoginUser | null,
+                            (await editRes.json()) as LoginUser,
                           );
-                        } else if (Math.floor(res.status / 100) === 4) {
-                          // 400番台エラーなら、返ってきたメッセージをそのまま表示
-                          toast.error(await res.text());
+                        } else if (
+                          editRes.status === 200 &&
+                          uploadRes &&
+                          uploadRes.status === 200
+                        ) {
+                          // 処理成功（プロフィール編集、画像アップロード両方を実行した場合）
+                          // 編集モードの終了、userCtxを最新のログインユーザー情報、画像情報で書き換える
+                          toast.success("プロフィールを編集しました。", {
+                            autoClose: 5000,
+                          });
+                          setMode("normal");
+                          const updatedUserInfo =
+                            (await editRes.json()) as LoginUser;
+                          updatedUserInfo.image = (await uploadRes.json())
+                            .image as string;
+                          userCtx.setLoginUser(updatedUserInfo);
+                        } else if (Math.floor(editRes.status / 100) === 4) {
+                          // 400番台エラー（プロフィール編集）
+                          // 返ってきたメッセージをそのまま表示
+                          toast.error(await editRes.text());
+                        } else if (
+                          uploadRes &&
+                          Math.floor(uploadRes.status / 100) === 4
+                        ) {
+                          // 400番台エラー（画像アップロード）
+                          // 返ってきたメッセージをそのまま表示
+                          toast.error(await uploadRes.text());
                         } else {
                           throw new Error();
                         }
@@ -178,6 +248,89 @@ const MyPage = () => {
                     }}
                   >
                     <h1 className="text-2xl font-black">プロフィールを編集</h1>
+                    <div className="m-4 flex justify-between items-center">
+                      {/* // 画像ファイルの選択に合わせて表示画像を変える必要があるため、Imageでなくimgにしている */}
+                      {
+                        // eslint-disable-next-line @next/next/no-img-element
+                        <img
+                          src={
+                            userCtx?.loginUser?.image ||
+                            "/etc/defaultProfile.jpg"
+                          }
+                          alt=""
+                          className="h-32 w-32 rounded-full object-cover"
+                          ref={previewRef}
+                        ></img>
+                      }
+                      <label
+                        htmlFor="profile-img"
+                        className="px-4 py-2 rounded-lg border-2 border-neutral-700 hover:cursor-pointer"
+                      >
+                        画像を選択
+                      </label>
+                      <input
+                        type="file"
+                        id="profile-img"
+                        name="profile-img"
+                        accept="image/png, image/jpeg, image/webp"
+                        className="hidden"
+                        ref={profileRef}
+                        onChange={(e) => {
+                          // プロフィール画像 プレビュー機能
+                          // [参考]https://developer.mozilla.org/ja/docs/Web/API/FileReader/readAsDataURL
+                          e.preventDefault();
+                          if (
+                            !(
+                              e.target &&
+                              e.target.files &&
+                              e.target.files.length > 0 &&
+                              profileRef.current &&
+                              profileRef.current.files &&
+                              profileRef.current.files.length > 0
+                            )
+                          ) {
+                            return;
+                          }
+                          const file = e.target.files[0];
+
+                          if (
+                            !["image/png", "image/jpeg", "image/webp"].includes(
+                              file.type,
+                            )
+                          ) {
+                            toast.error(
+                              "画像ファイルはjpg, png, webpである必要があります。",
+                            );
+                            profileRef.current.value = ""; //クリア
+                            return;
+                          }
+
+                          if (file.size > 10000000) {
+                            toast.error(
+                              "画像ファイルは10MG以下である必要があります。",
+                            );
+                            profileRef.current.value = ""; //クリア
+                            return;
+                          }
+
+                          const reader = new FileReader();
+                          reader.onload = () => {
+                            if (
+                              !(
+                                typeof reader.result === "string" &&
+                                previewRef.current
+                              )
+                            ) {
+                              return;
+                            }
+                            // 画像ファイルを base64 文字列に変換
+                            previewRef.current.src = reader.result;
+                          };
+                          // 指定されたFileの内容を読み込む処理。これが無いとプレビューに反映されない
+                          reader.readAsDataURL(file);
+                        }}
+                      ></input>
+                    </div>
                     <p className="mt-4">お名前</p>
                     <input
                       ref={nameRef}

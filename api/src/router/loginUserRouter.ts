@@ -7,6 +7,9 @@ import { body } from "express-validator";
 import { checkReq } from "../middleware/checkReq";
 import bcrypt from "bcrypt";
 import { PrismaClientKnownRequestError } from "@prisma/client/runtime/library";
+import { PutObjectCommand, S3Client } from "@aws-sdk/client-s3";
+import multer from "multer";
+import path from "path";
 
 export const loginUserRouter = express.Router();
 
@@ -37,7 +40,13 @@ loginUserRouter.get("/", async (req, res) => {
 
   const user = await prisma.user.findUnique({
     where: { id: loginUserId },
-    select: { id: true, name: true, email: true, hashedPassword: false },
+    select: {
+      id: true,
+      name: true,
+      email: true,
+      image: true,
+      hashedPassword: false,
+    },
   });
   return res.status(200).json(user);
 });
@@ -81,7 +90,13 @@ loginUserRouter.put(
 
       // ユーザー情報編集
       const result = await prisma.user.update({
-        select: { id: true, email: true, name: true, hashedPassword: false },
+        select: {
+          id: true,
+          email: true,
+          name: true,
+          image: true,
+          hashedPassword: false,
+        },
         where: { id: res.locals.userId as number },
         data: {
           name: req.body.name as string,
@@ -95,6 +110,83 @@ loginUserRouter.put(
         return res.status(400).send("メールアドレスが登録済です。");
       }
 
+      return res.status(500).send("想定外のエラーが発生しました。");
+    }
+  },
+);
+
+// プロフィール画像投稿
+loginUserRouter.post(
+  "/upload-image",
+  checkJwt,
+  multer().single("profile-img"),
+  async (req, res) => {
+    try {
+      if (!req.file) {
+        return res
+          .status(400)
+          .send("リクエストに画像ファイルが添付されていません。");
+      }
+
+      if (
+        !["image/png", "image/jpeg", "image/webp"].includes(req.file.mimetype)
+      ) {
+        return res
+          .status(400)
+          .send("画像ファイルはjpg, png, webpである必要があります。");
+      }
+
+      if (req.file.size > 10000000) {
+        return res
+          .status(400)
+          .send("画像ファイルは10MG以下である必要があります。");
+      }
+
+      // 編集前のメールアドレスがゲストユーザーのものならエラー
+      const targetUser = await prisma.user.findUnique({
+        where: { id: res.locals.userId as number },
+        select: { email: true },
+      });
+      if (
+        targetUser &&
+        targetUser.email === (process.env.GUEST_EMAIL || "guest@example.com")
+      ) {
+        return res
+          .status(400)
+          .send("そのユーザー情報を変更することはできません。");
+      }
+
+      // S3 クライアントを用意する
+      const client = new S3Client({
+        region: "ap-northeast-1",
+        credentials: {
+          accessKeyId: process.env.AWS_ACCESS_KEY_ID || "",
+          secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY || "",
+        },
+      });
+
+      // S3 にアップロードする処理
+      const imageFileName = `${crypto.randomUUID()}${path.extname(req.file.originalname)}`; // <シリアルナンバー>.<拡張子>
+      const command = new PutObjectCommand({
+        Bucket: process.env.S3_BUCKET_PROFILE || "",
+        Key: imageFileName,
+        Body: req.file.buffer,
+        ContentType: req.file.mimetype, // これを指定しないと、ファイルURLに直接アクセスしたときにダウンロードになってしまう
+      });
+      await client.send(command);
+
+      // 画像のURLをDBに書き込む処理
+      const imageFileUrl = `${process.env.CLOUD_FRONT_DOMAIN}/${imageFileName}`;
+      await prisma.user.update({
+        where: { id: res.locals.userId as number },
+        data: {
+          image: imageFileUrl,
+        },
+      });
+
+      return res.status(200).json({ image: imageFileUrl });
+    } catch (error) {
+      // S3 アップロードに失敗した時の処理
       return res.status(500).send("想定外のエラーが発生しました。");
     }
   },

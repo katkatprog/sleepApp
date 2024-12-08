@@ -1,7 +1,6 @@
 import Link from "next/link";
 import React, { useContext } from "react";
 import Image from "next/image";
-import { UserIcon } from "./icons/UserIcon";
 import { LoginUserContext } from "../pages/_app";
 
 export const Header = () => {
@@ -13,7 +12,14 @@ export const Header = () => {
         {userCtx.loginUser ? (
           // ログイン状態
           <Link href={"/mypage"}>
-            <UserIcon propClassName="w-7 h-7 text-neutral-800 bg-gray-300 rounded-full"></UserIcon>
+            <div className="relative w-7 h-7">
+              <Image
+                src={userCtx.loginUser.image || "/etc/defaultProfile.jpg"}
+                alt=""
+                className="rounded-full object-cover"
+                fill
+              ></Image>
+            </div>
           </Link>
         ) : (
           // 未ログイン時はダミー要素
