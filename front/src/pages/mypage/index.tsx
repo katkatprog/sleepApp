@@ -53,13 +53,14 @@ const MyPage = () => {
                   </h1>
                   <div className="flex justify-center mt-4">
                     {userCtx.loginUser?.image ? (
-                      <Image
-                        src={userCtx.loginUser.image}
-                        alt=""
-                        width={128}
-                        height={128}
-                        className="rounded-full"
-                      ></Image>
+                      <div className="relative w-32 h-32">
+                        <Image
+                          src={userCtx.loginUser.image}
+                          alt=""
+                          className="rounded-full object-cover"
+                          fill
+                        ></Image>
+                      </div>
                     ) : (
                       <UserIcon propClassName="w-32 h-32 text-neutral-800 bg-gray-300 rounded-full"></UserIcon>
                     )}

@@ -14,13 +14,14 @@ export const Header = () => {
           // ログイン状態
           <Link href={"/mypage"}>
             {userCtx.loginUser?.image ? (
-              <Image
-                src={userCtx.loginUser.image}
-                alt=""
-                width={28}
-                height={28}
-                className="rounded-full"
-              ></Image>
+              <div className="relative w-7 h-7">
+                <Image
+                  src={userCtx.loginUser.image}
+                  alt=""
+                  className="rounded-full object-cover"
+                  fill
+                ></Image>
+              </div>
             ) : (
               <UserIcon propClassName="w-7 h-7 text-neutral-800 bg-gray-300 rounded-full"></UserIcon>
             )}

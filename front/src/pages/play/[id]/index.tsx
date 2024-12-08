@@ -137,13 +137,14 @@ const PlayPage = ({ soundInfo }: SSRProps) => {
         </div>
         <div className="flex justify-center mt-2 max-w-full">
           <div className="flex flex-col items-center max-w-96 w-5/6">
-            <Image
-              src={soundInfo.imageUrl}
-              alt="#"
-              width={360}
-              height={360}
-              className="rounded-2xl"
-            ></Image>
+            <div className="relative w-80 h-80">
+              <Image
+                src={soundInfo.imageUrl}
+                alt="#"
+                className="rounded-2xl object-cover"
+                fill
+              ></Image>
+            </div>
             <audio
               ref={audioRef}
               src={soundInfo.url}

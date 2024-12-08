@@ -61,13 +61,14 @@ export const SideMenu = () => {
               // ログイン状態
               <Link href={"/mypage"} className="flex items-center mt-48">
                 {userCtx.loginUser?.image ? (
-                  <Image
-                    src={userCtx.loginUser.image}
-                    alt=""
-                    width={28}
-                    height={28}
-                    className="rounded-full"
-                  ></Image>
+                  <div className="relative w-7 h-7">
+                    <Image
+                      src={userCtx.loginUser.image}
+                      alt=""
+                      className="rounded-full object-cover"
+                      fill
+                    ></Image>
+                  </div>
                 ) : (
                   <UserIcon propClassName="w-7 h-7 text-neutral-800 bg-gray-300 rounded-full"></UserIcon>
                 )}
