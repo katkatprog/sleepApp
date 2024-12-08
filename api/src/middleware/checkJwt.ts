@@ -28,6 +28,8 @@ export const checkJwt = async (
 
     next();
   } catch (error) {
+    console.log("エラー発生");
+    console.log(error);
     return res.status(401).send("認証情報が正しくありません。");
   }
 };

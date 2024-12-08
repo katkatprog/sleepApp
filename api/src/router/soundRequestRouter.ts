@@ -59,6 +59,8 @@ soundRequestRouter.get("/", checkJwt, async (req, res) => {
       });
     }
   } catch (error) {
+    console.log("エラー発生");
+    console.log(error);
     return res.status(500).send("想定外のエラーが発生しました。");
   }
 });
@@ -90,6 +92,8 @@ soundRequestRouter.post(
           .send("すでにリクエスト済みのため、新たなリクエストはできません。");
       }
 
+      console.log("エラー発生");
+      console.log(error);
       return res.status(500).send("想定外のエラーが発生しました。");
     }
   },
