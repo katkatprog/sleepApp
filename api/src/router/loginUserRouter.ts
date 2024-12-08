@@ -35,6 +35,8 @@ loginUserRouter.get("/", async (req, res) => {
 
     loginUserId = decoded.userId;
   } catch (error) {
+    console.log("エラー発生");
+    console.log(error);
     return res.status(200).json(null);
   }
 
@@ -110,6 +112,8 @@ loginUserRouter.put(
         return res.status(400).send("メールアドレスが登録済です。");
       }
 
+      console.log("エラー発生");
+      console.log(error);
       return res.status(500).send("想定外のエラーが発生しました。");
     }
   },
@@ -187,6 +191,8 @@ loginUserRouter.post(
       return res.status(200).json({ image: imageFileUrl });
     } catch (error) {
       // S3 アップロードに失敗した時の処理
+      console.log("エラー発生");
+      console.log(error);
       return res.status(500).send("想定外のエラーが発生しました。");
     }
   },
@@ -241,6 +247,8 @@ loginUserRouter.delete(
         return res.status(400).send("パスワードが正しくありません。");
       }
     } catch (error) {
+      console.log("エラー発生");
+      console.log(error);
       return res.status(500).send("想定外のエラーが発生しました。");
     }
   },

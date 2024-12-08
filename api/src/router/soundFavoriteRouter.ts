@@ -66,6 +66,8 @@ soundFavoriteRouter.get(
         totalPages,
       });
     } catch (error) {
+      console.log("エラー発生");
+      console.log(error);
       return res.status(500).send("想定外のエラーが発生しました。");
     }
   },
@@ -95,6 +97,8 @@ soundFavoriteRouter.get(
         return res.status(200).json({ status: false });
       }
     } catch (error) {
+      console.log("エラー発生");
+      console.log(error);
       return res.status(500).send("想定外のエラーが発生しました。");
     }
   },
@@ -133,6 +137,8 @@ soundFavoriteRouter.post(
         });
         return res.status(200).send("OK");
       }
+      console.log("エラー発生");
+      console.log(error);
       return res.status(500).send("想定外のエラーが発生しました。");
     }
   },
