@@ -1,7 +1,6 @@
 import React, { useContext, useEffect, useRef, useState } from "react";
 import { LoginUserContext } from "../_app";
 import { EmailIcon } from "../../components/icons/EmailIcon";
-import { UserIcon } from "../../components/icons/UserIcon";
 import { toast } from "react-toastify";
 import { User } from "@prisma/client";
 import { EyeSlashIcon } from "../../components/icons/EyeSlashIcon";
@@ -52,18 +51,16 @@ const MyPage = () => {
                     {userCtx.loginUser?.name}
                   </h1>
                   <div className="flex justify-center mt-4">
-                    {userCtx.loginUser?.image ? (
-                      <div className="relative w-32 h-32">
-                        <Image
-                          src={userCtx.loginUser.image}
-                          alt=""
-                          className="rounded-full object-cover"
-                          fill
-                        ></Image>
-                      </div>
-                    ) : (
-                      <UserIcon propClassName="w-32 h-32 text-neutral-800 bg-gray-300 rounded-full"></UserIcon>
-                    )}
+                    <div className="relative w-32 h-32">
+                      <Image
+                        src={
+                          userCtx.loginUser?.image || "/etc/defaultProfile.jpg"
+                        }
+                        alt=""
+                        className="rounded-full object-cover"
+                        fill
+                      ></Image>
+                    </div>
                   </div>
                   <div className="flex mt-4">
                     <EmailIcon propClassName="w-6 h-6"></EmailIcon>
@@ -252,19 +249,19 @@ const MyPage = () => {
                   >
                     <h1 className="text-2xl font-black">プロフィールを編集</h1>
                     <div className="m-4 flex justify-between items-center">
-                      {userCtx.loginUser?.image ? (
-                        // 画像ファイルの選択に合わせて表示画像を変える必要があるため、Imageでなくimgにしている
+                      {/* // 画像ファイルの選択に合わせて表示画像を変える必要があるため、Imageでなくimgにしている */}
+                      {
                         // eslint-disable-next-line @next/next/no-img-element
                         <img
-                          src={userCtx.loginUser.image}
+                          src={
+                            userCtx?.loginUser?.image ||
+                            "/etc/defaultProfile.jpg"
+                          }
                           alt=""
                           className="h-32 w-32 rounded-full object-cover"
                           ref={previewRef}
                         ></img>
-                      ) : (
-                        <UserIcon propClassName="w-32 h-32 text-neutral-800 bg-gray-300 rounded-full"></UserIcon>
-                      )}
-
+                      }
                       <label
                         htmlFor="profile-img"
                         className="px-4 py-2 rounded-lg border-2 border-neutral-700 hover:cursor-pointer"

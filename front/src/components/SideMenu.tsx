@@ -6,7 +6,6 @@ import { HeartIcon } from "./icons/HeartIcon";
 import { LoginIcon } from "./icons/LoginIcon";
 import { LoginUserContext } from "../pages/_app";
 import Image from "next/image";
-import { UserIcon } from "./icons/UserIcon";
 import { LogoutButton } from "./LogoutButton";
 
 export const SideMenu = () => {
@@ -60,18 +59,14 @@ export const SideMenu = () => {
             {userCtx.loginUser ? (
               // ログイン状態
               <Link href={"/mypage"} className="flex items-center mt-48">
-                {userCtx.loginUser?.image ? (
-                  <div className="relative w-7 h-7">
-                    <Image
-                      src={userCtx.loginUser.image}
-                      alt=""
-                      className="rounded-full object-cover"
-                      fill
-                    ></Image>
-                  </div>
-                ) : (
-                  <UserIcon propClassName="w-7 h-7 text-neutral-800 bg-gray-300 rounded-full"></UserIcon>
-                )}
+                <div className="relative w-7 h-7">
+                  <Image
+                    src={userCtx.loginUser.image || "/etc/defaultProfile.jpg"}
+                    alt=""
+                    className="rounded-full object-cover"
+                    fill
+                  ></Image>
+                </div>
                 <p className="ml-2">{userCtx.loginUser.name}</p>
               </Link>
             ) : (
