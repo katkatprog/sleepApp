@@ -3,9 +3,48 @@ import { prismaMock } from "../prisma/singleton";
 import request from "supertest";
 import { app } from "../app";
 import { PrismaClientKnownRequestError } from "@prisma/client/runtime/library";
+import jwt from "jsonwebtoken";
+import bcrypt from "bcrypt";
+
+// jwtをモック化する
+jest.mock("jsonwebtoken");
+const mockJwt = jest.mocked(jwt);
+
+// bcryptをモック化する
+jest.mock("bcrypt");
+const mockBcrypt = jest.mocked(bcrypt);
 
 describe("Integration test (auth)", () => {
   // prismaMockは各々のテスト前に初期化される(singleton.tsに設定あり)
+
+  beforeAll(() => {
+    // テスト用jwt設定
+    mockJwt.sign.mockImplementation(() => "dummytoken");
+    mockJwt.verify.mockImplementation(() => ({
+      userId: 1,
+    }));
+  });
+
+  test("[正常系]Signup", async () => {
+    prismaMock.user.create.mockResolvedValueOnce({
+      id: 1,
+      name: "kat",
+      email: "katkatprog@example.com",
+      image: null,
+      hashedPassword: "dummyhashedPassword",
+    });
+
+    // 処理実行
+    const res = await request(app).post("/auth/signup").send({
+      name: "kat",
+      email: "katkatprog@example.com",
+      password: "P@ssw0rd",
+    });
+
+    // 実行結果
+    expect(res.status).toBe(200);
+    expect(res.text).toBe("OK");
+  });
 
   // auth
   describe("[異常系1]Signup(バリデーションチェック)", () => {
@@ -134,6 +173,29 @@ describe("Integration test (auth)", () => {
     // 実行結果
     expect(res.status).toBe(500);
     expect(res.text).toBe("想定外のエラーが発生しました。");
+  });
+
+  test("[正常系]Login", async () => {
+    // 事前準備
+    prismaMock.user.findUnique.mockResolvedValueOnce({
+      id: 1,
+      name: "kat",
+      email: "katkatprog@example.com",
+      image: null,
+      hashedPassword: "dummyhashedPassword",
+    });
+    mockBcrypt.compare.mockImplementationOnce(async () => true);
+
+    // 処理実行
+    const res = await request(app).post("/auth/login").send({
+      name: "kat",
+      email: "katkatprog@example.com",
+      password: "P@ssw0rd",
+    });
+
+    // 実行結果
+    expect(res.status).toBe(200);
+    expect(res.text).toBe("OK");
   });
 
   test("[異常系1]Login(リクエストパラメータ欠落)", async () => {
