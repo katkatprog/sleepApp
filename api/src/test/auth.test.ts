@@ -34,7 +34,7 @@ const loginReq = {
 describe("🧪Signup", () => {
   beforeAll(() => {
     // テスト用jwt設定
-    mockJwt.sign.mockImplementation(() => "dummytoken");
+    mockJwt.sign.mockImplementation(() => "validtoken");
     mockJwt.verify.mockImplementation(() => ({
       userId: 1,
     }));
@@ -165,7 +165,7 @@ describe("🧪Signup", () => {
 describe("🧪Login", () => {
   beforeAll(() => {
     // テスト用jwt設定
-    mockJwt.sign.mockImplementation(() => "dummytoken");
+    mockJwt.sign.mockImplementation(() => "validtoken");
     mockJwt.verify.mockImplementation(() => ({
       userId: 1,
     }));
@@ -233,7 +233,7 @@ describe("🧪Logout", () => {
     // 処理実行
     const res = await request(app)
       .post("/auth/logout")
-      .set("Cookie", "token=dummyToken");
+      .set("Cookie", "token=validtoken");
 
     // 実行結果
     expect(res.status).toBe(200);

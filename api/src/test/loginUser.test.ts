@@ -40,7 +40,7 @@ describe("🧪ユーザー取得", () => {
     // 処理実行
     const res = await request(app)
       .get("/login-user")
-      .set("cookie", "token=dummytoken");
+      .set("cookie", "token=validtoken");
 
     // 実行結果
     expect(res.status).toBe(200);
@@ -65,7 +65,7 @@ describe("🧪ユーザー取得", () => {
     // 処理実行
     const res = await request(app)
       .get("/login-user")
-      .set("cookie", "token=invalidtoken");
+      .set("cookie", "token=validtoken");
 
     // 実行結果
     expect(res.status).toBe(200);
@@ -95,7 +95,7 @@ describe("🧪ユーザー編集", () => {
     // 処理実行
     const res = await request(app)
       .put("/login-user")
-      .set("cookie", "token=dummytoken")
+      .set("cookie", "token=validtoken")
       .send({
         id: 1,
         name: "katupdate",
@@ -111,7 +111,7 @@ describe("🧪ユーザー編集", () => {
     // 処理実行
     const res = await request(app)
       .put("/login-user")
-      .set("cookie", "token=dummytoken")
+      .set("cookie", "token=validtoken")
       .send({
         name: "",
         email: "test@example.com",
@@ -126,7 +126,7 @@ describe("🧪ユーザー編集", () => {
     // 処理実行
     const res = await request(app)
       .put("/login-user")
-      .set("cookie", "token=dummytoken")
+      .set("cookie", "token=validtoken")
       .send({
         name: "testuser",
         email: "",
@@ -143,7 +143,7 @@ describe("🧪ユーザー編集", () => {
     // 処理実行
     const res = await request(app)
       .put("/login-user")
-      .set("cookie", "token=dummytoken")
+      .set("cookie", "token=validtoken")
       .send({
         name: "testuser",
         email: "test@",
@@ -180,7 +180,7 @@ describe("🧪ユーザー編集", () => {
     // 処理実行
     const res = await request(app)
       .put("/login-user")
-      .set("cookie", "token=dummytoken")
+      .set("cookie", "token=validtoken")
       .send({
         id: 1,
         name: "guest",
@@ -208,7 +208,7 @@ describe("🧪ユーザー削除", () => {
     // 処理実行
     const res = await request(app)
       .delete("/login-user")
-      .set("cookie", "token=invalidtoken")
+      .set("cookie", "token=validtoken")
       .send({
         password: "P@ssw0rd",
       });
@@ -225,7 +225,7 @@ describe("🧪ユーザー削除", () => {
     // 処理実行
     const res = await request(app)
       .delete("/login-user")
-      .set("cookie", "token=dummytoken")
+      .set("cookie", "token=validtoken")
       .send({
         password: "",
       });

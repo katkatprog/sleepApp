@@ -41,7 +41,7 @@ describe("🧪音声リクエスト情報取得", () => {
     // 処理実行
     const res = await request(app)
       .get("/sound-request")
-      .set("Cookie", "token=dummytoken");
+      .set("Cookie", "token=validtoken");
 
     // 実行結果
     expect(res.status).toBe(200);
@@ -59,7 +59,7 @@ describe("🧪音声リクエスト情報取得", () => {
     // 処理実行
     const res = await request(app)
       .get("/sound-request")
-      .set("Cookie", "token=dummytoken");
+      .set("Cookie", "token=validtoken");
 
     // 実行結果
     expect(res.status).toBe(200);
@@ -100,7 +100,7 @@ describe("🧪音声リクエスト実行", () => {
     // 処理実行
     const res = await request(app)
       .post("/sound-request")
-      .set("Cookie", "token=dummytoken")
+      .set("Cookie", "token=validtoken")
       .send({
         theme: "テスト",
         isMaleVoice: false,
@@ -118,7 +118,7 @@ describe("🧪音声リクエスト実行", () => {
     // 処理実行
     const res = await request(app)
       .post("/sound-request")
-      .set("Cookie", "token=dummytoken")
+      .set("Cookie", "token=validtoken")
       .send({
         isMaleVoice: false,
       });
@@ -132,7 +132,7 @@ describe("🧪音声リクエスト実行", () => {
     // 処理実行
     const res = await request(app)
       .post("/sound-request")
-      .set("Cookie", "token=dummytoken")
+      .set("Cookie", "token=validtoken")
       .send({
         theme: "テスト",
         isMaleVoice: "dummy",
@@ -152,7 +152,7 @@ describe("🧪音声リクエスト実行", () => {
     // 処理実行
     const res = await request(app)
       .post("/sound-request")
-      .set("Cookie", "token=dummytoken")
+      .set("Cookie", "token=validtoken")
       .send({
         theme: "テスト",
         isMaleVoice: false,

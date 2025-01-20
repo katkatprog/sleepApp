@@ -43,7 +43,7 @@ describe("🧪いいねした音声を一覧取得", () => {
     // 処理実行
     const res = await request(app)
       .get("/sound-favorite?page=1")
-      .set("cookie", "token=dummytoken");
+      .set("cookie", "token=validtoken");
 
     // 実行結果
     expect(res.status).toBe(200);
@@ -63,7 +63,7 @@ describe("🧪いいねした音声を一覧取得", () => {
     // 処理実行
     const res = await request(app)
       .get("/sound-favorite")
-      .set("cookie", "token=dummytoken");
+      .set("cookie", "token=validtoken");
 
     // 実行結果
     expect(res.status).toBe(200);
@@ -77,7 +77,7 @@ describe("🧪いいねした音声を一覧取得", () => {
     // 処理実行
     const res = await request(app)
       .get("/sound-favorite?page=invalid")
-      .set("cookie", "token=dummytoken");
+      .set("cookie", "token=validtoken");
 
     // 実行結果
     expect(res.status).toBe(400);
@@ -88,7 +88,7 @@ describe("🧪いいねした音声を一覧取得", () => {
     // 処理実行
     const res = await request(app)
       .get("/sound-favorite?page=0")
-      .set("cookie", "token=dummytoken");
+      .set("cookie", "token=validtoken");
 
     // 実行結果
     expect(res.status).toBe(404);
@@ -103,7 +103,7 @@ describe("🧪いいねした音声を一覧取得", () => {
     // 処理実行
     const res = await request(app)
       .get("/sound-favorite?page=2")
-      .set("cookie", "token=dummytoken");
+      .set("cookie", "token=validtoken");
 
     // 実行結果
     expect(res.status).toBe(404);
@@ -127,7 +127,7 @@ describe("🧪音声のいいね状態を取得", () => {
     // 処理実行
     const res = await request(app)
       .get("/sound-favorite/1")
-      .set("cookie", "token=dummytoken");
+      .set("cookie", "token=validtoken");
 
     // 実行結果
     expect(res.status).toBe(200);
@@ -141,7 +141,7 @@ describe("🧪音声のいいね状態を取得", () => {
     // 処理実行
     const res = await request(app)
       .get("/sound-favorite/1")
-      .set("cookie", "token=dummytoken");
+      .set("cookie", "token=validtoken");
 
     // 実行結果
     expect(res.status).toBe(200);
@@ -152,7 +152,7 @@ describe("🧪音声のいいね状態を取得", () => {
     // 処理実行
     const res = await request(app)
       .get("/sound-favorite/dummy")
-      .set("cookie", "token=dummytoken");
+      .set("cookie", "token=validtoken");
 
     // 実行結果
     expect(res.status).toBe(400);
@@ -189,7 +189,7 @@ describe("🧪音声をいいねする", () => {
     // 処理実行
     const res = await request(app)
       .post("/sound-favorite/1")
-      .set("cookie", "token=dummytoken");
+      .set("cookie", "token=validtoken");
 
     // 実行結果
     expect(res.status).toBe(200);
@@ -200,7 +200,7 @@ describe("🧪音声をいいねする", () => {
     // 処理実行
     const res = await request(app)
       .post("/sound-favorite/dummy")
-      .set("cookie", "token=dummytoken");
+      .set("cookie", "token=validtoken");
 
     // 実行結果
     expect(res.status).toBe(400);
