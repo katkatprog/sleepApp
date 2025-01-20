@@ -8,8 +8,9 @@ import { SoundFavorite } from "@prisma/client";
 jest.mock("jsonwebtoken");
 const jwtMock = jest.mocked(jwt);
 
-describe("Integration test (sound-favorite)", () => {
+describe("🧪いいねした音声を一覧取得", () => {
   // prismaMockは各々のテスト前に初期化される(singleton.tsに設定あり)
+
   beforeAll(() => {
     // テスト用jwt設定
     jwtMock.verify.mockImplementation(() => ({
@@ -17,23 +18,25 @@ describe("Integration test (sound-favorite)", () => {
     }));
   });
 
-  test("[正常系]音声いいね一覧取得", async () => {
+  const soundFavInfo = {
+    userId: 1,
+    soundId: 1,
+    createdAt: "1970-02-01T00:00:00.000Z" as unknown as Date,
+    SoundInfo: {
+      id: 1,
+      name: "test sound",
+      createdAt: "1970-01-01T00:00:00.000Z",
+      url: "https://example.com",
+      isMaleVoice: false,
+      playCount: 10,
+      reqUserId: null,
+    },
+  };
+
+  test("🟢音声いいね一覧取得", async () => {
     // 事前準備
     prismaMock.soundFavorite.findMany.mockResolvedValueOnce([
-      {
-        userId: 1,
-        soundId: 1,
-        createdAt: new Date("1970/2/1"),
-        SoundInfo: {
-          id: 1,
-          name: "test sound",
-          createdAt: "1970-01-01T00:00:00.000Z",
-          url: "https://example.com",
-          isMaleVoice: false,
-          playCount: 10,
-          reqUserId: null,
-        },
-      } as SoundFavorite,
+      soundFavInfo as SoundFavorite,
     ]);
     prismaMock.soundFavorite.count.mockResolvedValueOnce(1);
 
@@ -45,38 +48,15 @@ describe("Integration test (sound-favorite)", () => {
     // 実行結果
     expect(res.status).toBe(200);
     expect(res.body).toEqual({
-      soundsList: [
-        {
-          id: 1,
-          name: "test sound",
-          createdAt: "1970-01-01T00:00:00.000Z",
-          url: "https://example.com",
-          isMaleVoice: false,
-          playCount: 10,
-          reqUserId: null,
-        },
-      ],
+      soundsList: [soundFavInfo.SoundInfo],
       totalPages: 1,
     });
   });
 
-  test("[正常系]音声いいね一覧取得(ページ指定なし)", async () => {
+  test("🟢音声いいね一覧取得(ページ指定なし)", async () => {
     // 事前準備
     prismaMock.soundFavorite.findMany.mockResolvedValueOnce([
-      {
-        userId: 1,
-        soundId: 1,
-        createdAt: new Date("1970/2/1"),
-        SoundInfo: {
-          id: 1,
-          name: "test sound",
-          createdAt: "1970-01-01T00:00:00.000Z",
-          url: "https://example.com",
-          isMaleVoice: false,
-          playCount: 10,
-          reqUserId: null,
-        },
-      } as SoundFavorite,
+      soundFavInfo as SoundFavorite,
     ]);
     prismaMock.soundFavorite.count.mockResolvedValueOnce(1);
 
@@ -88,22 +68,12 @@ describe("Integration test (sound-favorite)", () => {
     // 実行結果
     expect(res.status).toBe(200);
     expect(res.body).toEqual({
-      soundsList: [
-        {
-          id: 1,
-          name: "test sound",
-          createdAt: "1970-01-01T00:00:00.000Z",
-          url: "https://example.com",
-          isMaleVoice: false,
-          playCount: 10,
-          reqUserId: null,
-        },
-      ],
+      soundsList: [soundFavInfo.SoundInfo],
       totalPages: 1,
     });
   });
 
-  test("[異常系]音声いいね一覧取得(ページが不正)", async () => {
+  test("🚨音声いいね一覧取得(ページが不正)", async () => {
     // 処理実行
     const res = await request(app)
       .get("/sound-favorite?page=invalid")
@@ -114,7 +84,7 @@ describe("Integration test (sound-favorite)", () => {
     expect(res.text).toBe("クエリパラメータpageが数字ではありません。");
   });
 
-  test("[異常系]音声いいね一覧取得(ページが0以下)", async () => {
+  test("🚨音声いいね一覧取得(ページが0以下)", async () => {
     // 処理実行
     const res = await request(app)
       .get("/sound-favorite?page=0")
@@ -125,7 +95,7 @@ describe("Integration test (sound-favorite)", () => {
     expect(res.text).toBe("指定の検索ページが見つかりません。");
   });
 
-  test("[異常系]音声いいね一覧取得", async () => {
+  test("🚨音声いいね一覧取得", async () => {
     // 事前準備
     prismaMock.soundFavorite.findMany.mockResolvedValueOnce([]);
     prismaMock.soundFavorite.count.mockResolvedValueOnce(1);
@@ -139,8 +109,18 @@ describe("Integration test (sound-favorite)", () => {
     expect(res.status).toBe(404);
     expect(res.text).toBe("指定の検索ページが見つかりません。");
   });
+});
 
-  test("[正常系]音声いいね状態取得(いいねしている)", async () => {
+describe("🧪音声のいいね状態を取得", () => {
+  // prismaMockは各々のテスト前に初期化される(singleton.tsに設定あり)
+  beforeAll(() => {
+    // テスト用jwt設定
+    jwtMock.verify.mockImplementation(() => ({
+      userId: 1,
+    }));
+  });
+
+  test("🟢音声いいね状態取得(いいねしている)", async () => {
     // 事前準備
     prismaMock.soundFavorite.count.mockResolvedValueOnce(1);
 
@@ -154,7 +134,7 @@ describe("Integration test (sound-favorite)", () => {
     expect(res.body).toEqual({ status: true });
   });
 
-  test("[正常系]音声いいね状態取得(いいねしていない)", async () => {
+  test("🟢音声いいね状態取得(いいねしていない)", async () => {
     // 事前準備
     prismaMock.soundFavorite.count.mockResolvedValueOnce(0);
 
@@ -168,7 +148,7 @@ describe("Integration test (sound-favorite)", () => {
     expect(res.body).toEqual({ status: false });
   });
 
-  test("[異常系]音声いいね状態取得(音声IDが不正)", async () => {
+  test("🚨音声いいね状態取得(音声IDが不正)", async () => {
     // 処理実行
     const res = await request(app)
       .get("/sound-favorite/dummy")
@@ -179,7 +159,7 @@ describe("Integration test (sound-favorite)", () => {
     expect(res.text).toBe("音声IDの形式が正しくありません。");
   });
 
-  test("[異常系]音声いいね状態取得(tokenが不正)", async () => {
+  test("🚨音声いいね状態取得(tokenが不正)", async () => {
     // tokenが不正な場合、verifyでエラーになるためモックする
     jwtMock.verify.mockImplementationOnce(() => {
       throw new Error("");
@@ -194,8 +174,18 @@ describe("Integration test (sound-favorite)", () => {
     expect(res.status).toBe(401);
     expect(res.text).toBe("認証情報が正しくありません。");
   });
+});
 
-  test("[正常系]音声いいね", async () => {
+describe("🧪音声をいいねする", () => {
+  // prismaMockは各々のテスト前に初期化される(singleton.tsに設定あり)
+  beforeAll(() => {
+    // テスト用jwt設定
+    jwtMock.verify.mockImplementation(() => ({
+      userId: 1,
+    }));
+  });
+
+  test("🟢音声いいね", async () => {
     // 処理実行
     const res = await request(app)
       .post("/sound-favorite/1")
@@ -206,7 +196,7 @@ describe("Integration test (sound-favorite)", () => {
     expect(res.text).toEqual("OK");
   });
 
-  test("[異常系]音声いいね(音声IDが不正)", async () => {
+  test("🚨音声いいね(音声IDが不正)", async () => {
     // 処理実行
     const res = await request(app)
       .post("/sound-favorite/dummy")
@@ -217,7 +207,7 @@ describe("Integration test (sound-favorite)", () => {
     expect(res.text).toBe("音声IDの形式が正しくありません。");
   });
 
-  test("[異常系]音声いいね(tokenが不正)", async () => {
+  test("🚨音声いいね(tokenが不正)", async () => {
     // tokenが不正な場合、verifyでエラーになるためモックする
     jwtMock.verify.mockImplementationOnce(() => {
       throw new Error("");
