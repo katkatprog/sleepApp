@@ -57,15 +57,10 @@ describe("🧪ユーザー取得", () => {
   });
 
   test("🟢ログインユーザー取得(token不正なら未ログイン状態として扱う)", async () => {
-    // tokenが不正な場合、verifyでエラーになるためモックする
-    jwtMock.verify.mockImplementationOnce(() => {
-      throw new Error("");
-    });
-
     // 処理実行
     const res = await request(app)
       .get("/login-user")
-      .set("cookie", "token=validtoken");
+      .set("cookie", "token=");
 
     // 実行結果
     expect(res.status).toBe(200);
@@ -155,16 +150,11 @@ describe("🧪ユーザー編集", () => {
   });
 
   test("🚨ログインユーザー編集(token不正)", async () => {
-    // tokenが不正な場合、verifyでエラーになるためモックする
-    jwtMock.verify.mockImplementationOnce(() => {
-      throw new Error("");
-    });
-
     // 処理実行
     // cookieには"dummy"というtokenを含める
     const res = await request(app)
       .put("/login-user")
-      .set("cookie", "token=invalidtoken")
+      .set("cookie", "token=")
       .send({
         id: 1,
         name: "testuser",
@@ -236,15 +226,10 @@ describe("🧪ユーザー削除", () => {
   });
 
   test("🚨ログインユーザー削除(tokenが不正)", async () => {
-    // tokenが不正な場合、verifyでエラーになるためモックする
-    jwtMock.verify.mockImplementationOnce(() => {
-      throw new Error("");
-    });
-
     // 処理実行
     const res = await request(app)
       .delete("/login-user")
-      .set("cookie", "token=invalidtoken")
+      .set("cookie", "token=")
       .send({
         password: "P@ssw0rd",
       });

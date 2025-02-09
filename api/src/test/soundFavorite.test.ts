@@ -160,15 +160,10 @@ describe("🧪音声のいいね状態を取得", () => {
   });
 
   test("🚨音声いいね状態取得(tokenが不正)", async () => {
-    // tokenが不正な場合、verifyでエラーになるためモックする
-    jwtMock.verify.mockImplementationOnce(() => {
-      throw new Error("");
-    });
-
     // 処理実行
     const res = await request(app)
       .get("/sound-favorite/1")
-      .set("cookie", "token=invalidtoken");
+      .set("cookie", "token=");
 
     // 実行結果
     expect(res.status).toBe(401);
@@ -208,15 +203,10 @@ describe("🧪音声をいいねする", () => {
   });
 
   test("🚨音声いいね(tokenが不正)", async () => {
-    // tokenが不正な場合、verifyでエラーになるためモックする
-    jwtMock.verify.mockImplementationOnce(() => {
-      throw new Error("");
-    });
-
     // 処理実行
     const res = await request(app)
       .post("/sound-favorite/1")
-      .set("cookie", "token=invalidtoken");
+      .set("cookie", "token=");
 
     // 実行結果
     expect(res.status).toBe(401);

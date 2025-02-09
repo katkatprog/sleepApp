@@ -67,15 +67,10 @@ describe("🧪音声リクエスト情報取得", () => {
   });
 
   test("🚨音声リクエスト情報取得(tokenが不正)", async () => {
-    // tokenが不正な場合、verifyでエラーになるためモックする
-    jwtMock.verify.mockImplementationOnce(() => {
-      throw new Error("");
-    });
-
     // 処理実行
     const res = await request(app)
       .get("/sound-request")
-      .set("Cookie", "token=invalidtoken");
+      .set("Cookie", "token=");
 
     // 実行結果
     expect(res.status).toBe(401);
@@ -166,15 +161,10 @@ describe("🧪音声リクエスト実行", () => {
   });
 
   test("🚨音声リクエスト(tokenが不正)", async () => {
-    // tokenが不正な場合、verifyでエラーになるためモックする
-    jwtMock.verify.mockImplementationOnce(() => {
-      throw new Error("");
-    });
-
     // 処理実行
     const res = await request(app)
       .post("/sound-request")
-      .set("Cookie", "token=invalidtoken")
+      .set("Cookie", "token=")
       .send({
         theme: "テスト",
         isMaleVoice: false,
