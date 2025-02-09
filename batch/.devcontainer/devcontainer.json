@@ -22,7 +22,8 @@
           "esbenp.prettier-vscode",
           "MS-CEINTL.vscode-language-pack-ja",
           "dbaeumer.vscode-eslint",
-          "mhutchie.git-graph"
+          "mhutchie.git-graph",
+          "Orta.vscode-jest"
         ]
         // "settings": {
         //   "prettier.prettierPath": "./node_modules/prettier"
