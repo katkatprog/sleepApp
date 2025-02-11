@@ -23,7 +23,8 @@
           "MS-CEINTL.vscode-language-pack-ja",
           "dbaeumer.vscode-eslint",
           "mhutchie.git-graph",
-          "humao.rest-client"
+          "humao.rest-client",
+          "Orta.vscode-jest"
         ]
         // "settings": {
         //   "prettier.prettierPath": "./node_modules/prettier"
