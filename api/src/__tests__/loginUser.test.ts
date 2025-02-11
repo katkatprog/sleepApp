@@ -58,9 +58,7 @@ describe("🧪ユーザー取得", () => {
 
   test("🟢ログインユーザー取得(token不正なら未ログイン状態として扱う)", async () => {
     // 処理実行
-    const res = await request(app)
-      .get("/login-user")
-      .set("cookie", "token=");
+    const res = await request(app).get("/login-user").set("cookie", "token=");
 
     // 実行結果
     expect(res.status).toBe(200);
