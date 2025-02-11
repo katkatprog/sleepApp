@@ -92,7 +92,9 @@ const HomePage = () => {
             className="rounded-sm mb-4 xl:w-2/5"
           ></Image>
           <div className="max-w-sm xl:mr-4">
-            <p>Prehniteでは、AIが認知シャッフル睡眠法用の音声を毎日21:00に自動作成します。</p>
+            <p>
+              Prehniteでは、AIが認知シャッフル睡眠法用の音声を毎日21:00に自動作成します。
+            </p>
             <p>どういった単語が登場するかは、音声が作られるまでお楽しみ…</p>
           </div>
         </div>
