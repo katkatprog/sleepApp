@@ -11,7 +11,7 @@
     "checkformat": "prettier --check .",
     "ci": "yarn format && yarn lint",
     "db-pull": "./node_modules/.bin/dotenv -e .env.local -- yarn prisma db pull",
-    "test": "jest"
+    "test": "jest src/__tests__/*.test.tsx"
   },
   "dependencies": {
     "heroicons": "^2.1.1",

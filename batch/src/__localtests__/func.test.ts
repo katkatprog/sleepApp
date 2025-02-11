@@ -1,5 +1,5 @@
 import { GoogleGenerativeAI } from "@google/generative-ai";
-import { generateWordsList } from "./func";
+import { generateWordsList } from "../func";
 
 jest.mock("@google/generative-ai"); //モジュール全体をモック
 const MockGoogleGenerativeAI = GoogleGenerativeAI as jest.Mock; // TypeScriptでは型変換する必要がある
