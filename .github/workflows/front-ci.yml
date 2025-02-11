@@ -21,3 +21,12 @@ jobs:
 
       - name: do integrate
         run: yarn && yarn checkformat && yarn lint
+        
+  # テスト実行
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: do test
+        run: yarn && yarn test
