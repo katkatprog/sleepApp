@@ -48,16 +48,14 @@ const main = async () => {
         prisma,
         queueInfo,
       );
-    }
 
-    // 処理したキューのレコードを削除
-    await prisma.soundReqQueue.deleteMany({
-      where: {
-        userId: {
-          in: queueList.map((queue) => queue.userId),
+      // 処理したキューのレコードを削除
+      await prisma.soundReqQueue.delete({
+        where: {
+          userId: queueInfo.userId,
         },
-      },
-    });
+      });
+    }
 
     console.log("リクエストされている音声作成を終了します。");
     // ---------------------[End]リクエストの音声作成----------------------------
