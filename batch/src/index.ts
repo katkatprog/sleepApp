@@ -48,16 +48,14 @@ const main = async () => {
         prisma,
         queueInfo,
       );
-    }
 
-    // 処理したキューのレコードを削除
-    await prisma.soundReqQueue.deleteMany({
-      where: {
-        userId: {
-          in: queueList.map((queue) => queue.userId),
+      // 処理したキューのレコードを削除
+      await prisma.soundReqQueue.delete({
+        where: {
+          userId: queueInfo.userId,
         },
-      },
-    });
+      });
+    }
 
     console.log("リクエストされている音声作成を終了します。");
     // ---------------------[End]リクエストの音声作成----------------------------
@@ -70,14 +68,6 @@ const main = async () => {
     // ssml(AmazonPollyに登録できる形式)に変換
     const ssml = wordsToSSML(shuffledWordsList);
     console.log("単語生成処理が成功しました。");
-
-    // 男性ボイス作成
-    const s3UrlMale = await generateAudio(ssml, "Takumi");
-    await saveSoundInfo(
-      changeToCloudfrontUrl(s3UrlMale, process.env.CLOUD_FRONT_DOMAIN),
-      true,
-      prisma,
-    );
 
     // 女性ボイス作成
     const s3UrlFemale = await generateAudio(
