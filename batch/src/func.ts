@@ -91,7 +91,7 @@ export const generateWordsList = async (theme?: string) => {
 
 // 単語配列を、Amazon Pollyに読み上げを依頼するためのフォーマットであるSSMLに変換
 export const wordsToSSML = (words: string[]) => {
-  let ssml = `<speak><prosody rate="95%">`;
+  let ssml = `<speak><prosody rate="slow">`;
   words.forEach((word) => {
     ssml += `${word}<break time="6s"/>`;
   });

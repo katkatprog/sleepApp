@@ -13,20 +13,12 @@ defaults:
     working-directory: api
 
 jobs:
-  # CI実行(違反があるならエラーにする)
+  # CI実行
+  # Dockerイメージのビルド時にESLint, Prettierの指摘がある、もしくはテストに通らない場合、後続のデプロイに進まない
   integrate:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
 
       - name: do integrate
-        run: yarn && yarn checkformat && yarn lint
-        
-  # テスト実行
-  test:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: do test
-        run: yarn && yarn test
+        run: docker image build -t api-image:latest .
