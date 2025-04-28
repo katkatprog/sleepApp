@@ -9,8 +9,7 @@
     "checkformat": "prettier --check ./src/**/*.ts",
     "lint": "eslint ./src/**/*.ts",
     "ci": "yarn lint && yarn format",
-    "test": "jest src/__tests__/*.test.ts",
-    "test-local": "jest src/__localtests__/*.test.ts"
+    "test": "jest src/__tests__/*.test.ts"
   },
   "devDependencies": {
     "@types/jest": "^29.5.12",

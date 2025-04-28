@@ -10,5 +10,8 @@ RUN apk add vim git
 
 # ----------本番用設定(start)-----------
 RUN yarn
+RUN yarn checkformat
+RUN yarn lint
+RUN yarn test
 CMD ["sh", "-c", "yarn prisma migrate deploy && yarn start"]
 # ----------本番用設定(end)-------------
