@@ -71,14 +71,6 @@ const main = async () => {
     const ssml = wordsToSSML(shuffledWordsList);
     console.log("単語生成処理が成功しました。");
 
-    // 男性ボイス作成
-    const s3UrlMale = await generateAudio(ssml, "Takumi");
-    await saveSoundInfo(
-      changeToCloudfrontUrl(s3UrlMale, process.env.CLOUD_FRONT_DOMAIN),
-      true,
-      prisma,
-    );
-
     // 女性ボイス作成
     const s3UrlFemale = await generateAudio(
       ssml,
