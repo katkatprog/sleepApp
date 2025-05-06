@@ -9,7 +9,7 @@ import {
 } from "./func";
 
 const main = async () => {
-  if (!process.env.CLOUD_FRONT_DOMAIN_SOUND || !process.env.RECORDS_PER_BATCH) {
+  if (!process.env.CLOUD_FRONT_URL_SOUND || !process.env.RECORDS_PER_BATCH) {
     console.log("環境変数に不備があります");
     return;
   }
@@ -43,7 +43,7 @@ const main = async () => {
           : "Tomoko"; // 話し手決定
       const s3Url = await generateAudio(ssml, speaker); // 音声作成＆URL発行
       await saveSoundInfo(
-        changeToCloudfrontUrl(s3Url, process.env.CLOUD_FRONT_DOMAIN_SOUND),
+        changeToCloudfrontUrl(s3Url, process.env.CLOUD_FRONT_URL_SOUND),
         queueInfo.isMaleVoice,
         prisma,
         queueInfo,
@@ -75,7 +75,7 @@ const main = async () => {
       Math.random() > 0.5 ? "Kazuha" : "Tomoko",
     );
     await saveSoundInfo(
-      changeToCloudfrontUrl(s3UrlFemale, process.env.CLOUD_FRONT_DOMAIN_SOUND),
+      changeToCloudfrontUrl(s3UrlFemale, process.env.CLOUD_FRONT_URL_SOUND),
       false,
       prisma,
     );
