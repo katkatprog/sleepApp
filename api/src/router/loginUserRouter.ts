@@ -180,7 +180,7 @@ loginUserRouter.post(
       await client.send(command);
 
       // 画像のURLをDBに書き込む処理
-      const imageFileUrl = `${process.env.CLOUD_FRONT_DOMAIN}/${imageFileName}`;
+      const imageFileUrl = `${process.env.CLOUD_FRONT_DOMAIN_PROFILE}/${imageFileName}`;
       await prisma.user.update({
         where: { id: res.locals.userId as number },
         data: {

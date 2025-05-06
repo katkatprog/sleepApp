@@ -91,7 +91,7 @@ export const generateWordsList = async (theme?: string) => {
 
 // 単語配列を、Amazon Pollyに読み上げを依頼するためのフォーマットであるSSMLに変換
 export const wordsToSSML = (words: string[]) => {
-  let ssml = `<speak><prosody rate="95%">`; 
+  let ssml = `<speak><prosody rate="95%">`;
   words.forEach((word) => {
     ssml += `${word}<break time="6s"/>`;
   });
@@ -123,7 +123,7 @@ export const generateAudio = async (ssml: string, speaker: VoiceId) => {
     Engine: "neural",
     LanguageCode: "ja-JP",
     OutputFormat: "mp3",
-    OutputS3BucketName: process.env.S3_BUCKET_NAME,
+    OutputS3BucketName: process.env.S3_BUCKET_SOUND,
     Text: ssml,
     TextType: "ssml",
     VoiceId: speaker,
