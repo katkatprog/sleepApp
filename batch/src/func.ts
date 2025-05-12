@@ -22,7 +22,6 @@ export const generateWordsList = async (theme?: string) => {
   const model = gemini.getGenerativeModel(
     {
       model: process.env.GEMINI_MODEL_ID,
-      generationConfig: { maxOutputTokens: 1000 }, //過剰生成防止
     },
     {
       apiVersion: process.env.GEMINI_VERSION,
@@ -45,6 +44,7 @@ export const generateWordsList = async (theme?: string) => {
   let wordsList = resContent.split(/[,、]/);
   wordsList.shift(); //一番最初のカンマより前の要素は削除
   wordsList.pop(); //一番最後のカンマより後の要素は削除
+  wordsList = wordsList.filter((word) => word.length <= 10); //10文字を超える単語については誤生成の可能性が高いため排除
 
   // 生成された単語のうち1文字のものをひらがな化の対象としてフィルター（1文字の単語が最も訓読み、音読みの読み間違いが起きやすいため）
   // 下記のtry-catchでひらがな化を行う
