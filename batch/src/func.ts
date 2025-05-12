@@ -14,15 +14,20 @@ import * as fs from "fs";
 // 単語リストを作成する
 // 引数themeあり：テーマ指定ありの音声作成、なし：テーマ指定無しの音声生成（本日の音声）
 export const generateWordsList = async (theme?: string) => {
-  if (!process.env.GEMINI_API_KEY) {
-    throw new Error("環境変数のGeminiのAPIキーが空欄です");
+  if (!process.env.GEMINI_API_KEY || !process.env.GEMINI_MODEL_ID) {
+    throw new Error("Gemini関連の環境変数で設定されていないものがあります");
   }
   // Gemini連携準備
   const gemini = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
-  const model = gemini.getGenerativeModel({
-    model: "gemini-1.5-pro",
-    generationConfig: { maxOutputTokens: 1000 }, //過剰生成防止
-  });
+  const model = gemini.getGenerativeModel(
+    {
+      model: process.env.GEMINI_MODEL_ID,
+      generationConfig: { maxOutputTokens: 1000 }, //過剰生成防止
+    },
+    {
+      apiVersion: process.env.GEMINI_VERSION,
+    },
+  );
   // Geminiに単語リスト作成依頼
   const prompt = `${theme ? `「${theme}に関する」` : ``}名詞を無作為に200個表示してください。※カンマ区切りで表示してください。※名詞は、できる限り形状のあるものを選んでください。※重複はできる限り避けてください。※ネガティブな単語はできる限り避けてください。`;
   const result = await model.generateContent(prompt);
@@ -181,5 +186,5 @@ export const changeToCloudfrontUrl = (
   const tmpArray = s3Url.split("/");
   const fileName = tmpArray[tmpArray.length - 1];
 
-  return `${cloudfrontDomain}/${fileName}`;
+  return `https://${cloudfrontDomain}/${fileName}`;
 };
