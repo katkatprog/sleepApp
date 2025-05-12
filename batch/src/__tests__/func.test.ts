@@ -32,7 +32,7 @@ describe("S3のURLをCloudFrontのURLに変換できるかのテスト", () => {
   it("正しく変換できるかのテスト", () => {
     const cloudFrontUrl = changeToCloudfrontUrl(
       "https://dummy.s3.ap-northeast-1.amazonaws.com/1.jpg",
-      "https://dummy.cloudfront.net",
+      "dummy.cloudfront.net",
     );
     expect(cloudFrontUrl).toBe("https://dummy.cloudfront.net/1.jpg");
   });

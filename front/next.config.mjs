@@ -4,7 +4,7 @@ const nextConfig = {
   images: {
     remotePatterns: [
       {
-        hostname: process.env.IMAGE_CLOUD_FRONT_HOST || "",
+        hostname: process.env.CLOUD_FRONT_DOMAIN_PROFILE || "",
         protocol: "https",
       },
     ],
