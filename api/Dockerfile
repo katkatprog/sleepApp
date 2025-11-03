@@ -6,7 +6,7 @@ COPY . .
 # ----------本番用設定(end)-------------
 
 RUN apk update && apk upgrade
-RUN apk add vim git
+RUN apk add -no-cache openssl
 
 # ----------本番用設定(start)-----------
 RUN yarn
